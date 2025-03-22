@@ -1,9 +1,8 @@
 package salud.rest.dto.formulario;
 
-import java.util.Collection;
+import java.util.List;
 
 import salud.modelo.Formulario;
-import salud.modelo.encuesta.DatoEncuesta;
 
 public class FormularioDto {
 	
@@ -11,7 +10,7 @@ public class FormularioDto {
 	
 	private String fecha;
 	private String plantilla;
-	private Collection<DatoEncuesta> datos;
+	private List<String> respuestas;
 	
 	// Constructores
 	
@@ -36,20 +35,20 @@ public class FormularioDto {
 	public void setPlantilla(String plantilla) {
 		this.plantilla = plantilla;
 	}
-
-	public Collection<DatoEncuesta> getDatos() {
-		return datos;
-	}
-
-	public void setDatos(Collection<DatoEncuesta> datos) {
-		this.datos = datos;
-	}
 	
+	public List<String> getRespuestas() {
+		return respuestas;
+	}
+
+	public void setRespuestas(List<String> respuestas) {
+		this.respuestas = respuestas;
+	}
+
 	public static FormularioDto from(Formulario formulario) {
 		FormularioDto formularioDto = new FormularioDto();
 		formularioDto.setFecha(formulario.getFecha().toString());
-		formularioDto.setDatos(formulario.getDatos());
-		formularioDto.setPlantilla(formulario.getFormulario().getId());
+		formularioDto.setRespuestas(formulario.getRespuestas());
+		formularioDto.setPlantilla(formulario.getPlantilla().getId());
 		
 		return formularioDto;
 	}

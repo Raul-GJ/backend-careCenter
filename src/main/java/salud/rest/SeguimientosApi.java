@@ -13,19 +13,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
+import salud.rest.dto.formulario.RellenarFormularioDto;
+import salud.rest.dto.seguimiento.CrearSeguimientoDto;
 import salud.rest.dto.seguimiento.SeguimientoDto;
 
 public interface SeguimientosApi {
 
+	// Seguimientos
+	
 	@Operation(summary = "Crear seguimiento", description = "Crea un nuevo seguimiento")
 	@PostMapping
 	public ResponseEntity<SeguimientoDto> crearSeguimiento(
-			@Valid @RequestBody SeguimientoDto seguimientoDto) throws Exception;
+			@Valid @RequestBody CrearSeguimientoDto seguimientoDto) throws Exception;
 	
 	@Operation(summary = "Modificar seguimiento", description = "Modifica los datos de un seguimiento")
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> modificarSeguimiento(
-			@Valid @RequestBody SeguimientoDto seguimientoDto,
+			@Valid @RequestBody CrearSeguimientoDto seguimientoDto,
 			@Valid @PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener seguimiento", description = "Obtiene los datos de un seguimiento")
@@ -41,4 +45,12 @@ public interface SeguimientosApi {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminarSeguimiento(
 			@Valid @PathVariable String id) throws Exception;
+	
+	// Formularios
+	
+	@Operation(summary = "Rellenar formulario", description = "Rellena un formulario")
+	@PatchMapping("/{id}/formulario")
+	public ResponseEntity<Void> rellenarFormulario(
+			@Valid @PathVariable String id,
+			@Valid @RequestBody RellenarFormularioDto formularioDto) throws Exception;
 }

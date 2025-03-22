@@ -12,7 +12,7 @@ public class PlantillaFormularioDto {
 	private String nombre;
 	private String descripcion;
 	private boolean publico;
-	private Collection<PreguntaEncuesta> datos;
+	private Collection<PreguntaEncuesta> preguntas;
 	
 	// Constructores
 	
@@ -46,17 +46,17 @@ public class PlantillaFormularioDto {
 		this.publico = publico;
 	}
 
-	public Collection<PreguntaEncuesta> getDatos() {
-		return datos;
+	public Collection<PreguntaEncuesta> getPreguntas() {
+		return preguntas;
 	}
 
-	public void setDatos(Collection<PreguntaEncuesta> datos) {
-		this.datos = datos;
+	public void setPreguntas(Collection<PreguntaEncuesta> preguntas) {
+		this.preguntas = preguntas;
 	}
 	
 	public static PlantillaFormularioDto from(PlantillaFormulario formulario) {
 		PlantillaFormularioDto formularioDto = new PlantillaFormularioDto();
-		formularioDto.setDatos(formulario.getDatos());	
+		formularioDto.setPreguntas(formulario.getPreguntas());	
 		formularioDto.setNombre(formulario.getNombre());
 		formularioDto.setDescripcion(formulario.getDescripcion());
 		formularioDto.setPublico(formulario.isPublico());

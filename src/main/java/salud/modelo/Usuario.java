@@ -1,10 +1,8 @@
 package salud.modelo;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "usuarios")
-public class Usuario {
+public abstract class Usuario {
 	
 	// Atributos
 	

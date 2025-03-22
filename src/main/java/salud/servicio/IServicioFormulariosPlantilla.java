@@ -14,7 +14,7 @@ public interface IServicioFormulariosPlantilla {
 	public void modificarFormulario(String id, String nombre, String descripcion) 
 			throws EntidadNoEncontrada;
 	
-	public int agregarPregunta(String id, PreguntaEncuesta tipoDatos) throws EntidadNoEncontrada;
+	public int agregarPregunta(String id, PreguntaEncuesta pregunta) throws EntidadNoEncontrada;
 	
 	public void eliminarPregunta(String id, int pos) throws EntidadNoEncontrada;
 	

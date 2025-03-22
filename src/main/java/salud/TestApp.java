@@ -7,12 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import salud.modelo.PlantillaFormulario;
-import salud.modelo.Usuario;
 import salud.modelo.encuesta.ReglaEnum;
 import salud.modelo.encuesta.ReglaRango;
 import salud.modelo.encuesta.PreguntaEncuesta;
 import salud.servicio.IServicioFormulariosPlantilla;
-import salud.servicio.IServicioUsuarios;
 
 public class TestApp {
 
@@ -21,14 +19,6 @@ public class TestApp {
 		ConfigurableApplicationContext contexto = SpringApplication.run(TfgApplication.class, args);
 		
 		System.out.println("Comenzando aplicación");
-		
-		IServicioUsuarios servicioUsuarios = contexto.getBean(IServicioUsuarios.class);
-		
-		String idUsr = servicioUsuarios.altaUsuario("Pedro", "abc", "def", "email1@gmail.com", "123456789");
-		
-		Usuario usuario = servicioUsuarios.obtenerUsuario(idUsr);
-		
-		System.out.println(usuario.getNombre() + ", " + usuario.getId());
 		
 		System.out.println("Prueba de formularios");
 		

@@ -1,5 +1,8 @@
 package salud.modelo;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "medicos")
 public class MedicoFamilia extends Sanitario {
 
 	// Atributos

@@ -32,7 +32,7 @@ public class ControladorMedicos implements MedicosApi {
 	public ResponseEntity<MedicoDto> altaMedico(@Valid MedicoDto medicoDto) {
 		String id = servicioMedicos.altaMedico(medicoDto.getNombre(), 
 				medicoDto.getApellido1(), 
-				medicoDto.getApellido1(), 
+				medicoDto.getApellido2(), 
 				medicoDto.getEmail(), 
 				medicoDto.getTelefono(), 
 				medicoDto.getnCol(),
@@ -48,7 +48,7 @@ public class ControladorMedicos implements MedicosApi {
 		servicioMedicos.modificarMedico(id,
 				medicoDto.getNombre(), 
 				medicoDto.getApellido1(), 
-				medicoDto.getApellido1(), 
+				medicoDto.getApellido2(), 
 				medicoDto.getEmail(), 
 				medicoDto.getTelefono(), 
 				medicoDto.getnCol(),

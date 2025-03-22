@@ -1,6 +1,7 @@
 package salud.rest.dto.seguimiento;
 
 import salud.modelo.Seguimiento;
+import salud.rest.dto.formulario.FormularioDto;
 
 public class SeguimientoDto {
 
@@ -8,7 +9,7 @@ public class SeguimientoDto {
 
 	private String fecha;
 	private String plazo;
-	private String formulario;
+	private FormularioDto formulario;
 	
 	// Constructores
 	
@@ -34,11 +35,11 @@ public class SeguimientoDto {
 		this.plazo = plazo;
 	}
 	
-	public String getFormulario() {
+	public FormularioDto getFormulario() {
 		return formulario;
 	}
 
-	public void setFormulario(String formulario) {
+	public void setFormulario(FormularioDto formulario) {
 		this.formulario = formulario;
 	}
 	
@@ -46,7 +47,7 @@ public class SeguimientoDto {
 		SeguimientoDto seguimientoDto = new SeguimientoDto();
 		seguimientoDto.setFecha(seguimiento.getFecha().toString());
 		seguimientoDto.setPlazo(seguimiento.getPlazo().toString());
-		seguimientoDto.setFormulario(seguimiento.getFormulario().getId());
+		seguimientoDto.setFormulario(FormularioDto.from(seguimiento.getFormulario()));
 		return seguimientoDto;
 	}
 }

@@ -18,7 +18,7 @@ public class PlantillaFormulario {
 	private String nombre;
 	private String descripcion;
 	private boolean publico;
-	private List<PreguntaEncuesta> datos;
+	private List<PreguntaEncuesta> preguntas;
 	
 	// Constructores
 
@@ -27,7 +27,7 @@ public class PlantillaFormulario {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.publico = true;
-		this.datos = new LinkedList<PreguntaEncuesta>();
+		this.preguntas = new LinkedList<PreguntaEncuesta>();
 	}
 	
 	// Métodos
@@ -55,23 +55,6 @@ public class PlantillaFormulario {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-
-	public List<PreguntaEncuesta> getDatos() {
-		return datos;
-	}
-
-	public void setDatos(List<PreguntaEncuesta> datos) {
-		this.datos = datos;
-	}
-	
-	public int addDato(PreguntaEncuesta dato) {
-		this.datos.add(dato);
-		return this.datos.size();
-	}
-	
-	public void removeDato(int pos) {
-		this.datos.remove(pos);
-	}
 	
 	public boolean isPublico() {
 		return publico;
@@ -79,5 +62,26 @@ public class PlantillaFormulario {
 
 	public void setPublico(boolean publico) {
 		this.publico = publico;
+	}
+
+	public List<PreguntaEncuesta> getPreguntas() {
+		return preguntas;
+	}
+	
+	public PreguntaEncuesta getPregunta(int pos) {
+		return preguntas.get(pos);
+	}
+
+	public void setPreguntas(List<PreguntaEncuesta> preguntas) {
+		this.preguntas = preguntas;
+	}
+	
+	public int addPregunta(PreguntaEncuesta dato) {
+		this.preguntas.add(dato);
+		return this.preguntas.size();
+	}
+	
+	public void removePregunta(int pos) {
+		this.preguntas.remove(pos);
 	}
 }

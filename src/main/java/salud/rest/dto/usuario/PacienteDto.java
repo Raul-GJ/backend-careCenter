@@ -16,7 +16,7 @@ public class PacienteDto extends UsuarioDto {
 	private List<String> seguimientos;
 	
 	// Constructores
-	
+
 	public PacienteDto() {
 		super();
 	}
@@ -61,17 +61,15 @@ public class PacienteDto extends UsuarioDto {
 	public void setEspecialistas(List<String> especialistas) {
 		this.especialistas = especialistas;
 	}
-
-
+	
 	public List<String> getSeguimientos() {
 		return seguimientos;
 	}
 
-
 	public void setSeguimientos(List<String> seguimientos) {
 		this.seguimientos = seguimientos;
 	}
-	
+
 	public static PacienteDto from(Paciente paciente) {
 		PacienteDto dto = new PacienteDto();
 		dto.setNombre(paciente.getNombre());
@@ -79,6 +77,7 @@ public class PacienteDto extends UsuarioDto {
 		dto.setApellido2(paciente.getApellido2());
 		dto.setEmail(paciente.getEmail());
 		dto.setTelefono(paciente.getTelefono());
+		dto.setMedicoCabecera(paciente.getMedicoCabecera().getId());
 		
 		List<String> alertas = new LinkedList<String>();
 		List<String> consultas = new LinkedList<String>();

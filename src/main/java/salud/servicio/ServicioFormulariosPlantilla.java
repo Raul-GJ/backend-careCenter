@@ -69,14 +69,14 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 	}
 
 	@Override
-	public int agregarPregunta(String id, PreguntaEncuesta tipoDatos) throws EntidadNoEncontrada {
+	public int agregarPregunta(String id, PreguntaEncuesta pregunta) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
-		if (tipoDatos == null) {
+		if (pregunta == null) {
 			throw new IllegalArgumentException("El tipo de datos no puede ser nulo");
 		}
-		if (tipoDatos.getPregunta() == null || tipoDatos.getPregunta().isEmpty()) {
+		if (pregunta.getPregunta() == null || pregunta.getPregunta().isEmpty()) {
 			throw new IllegalArgumentException("La pregunta no puede ser nula o vacía");
 		}
 		
@@ -85,7 +85,7 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 			throw new EntidadNoEncontrada(id);
 		}
 		PlantillaFormulario formulario = optional.get();
-		int pos = formulario.addDato(tipoDatos);
+		int pos = formulario.addPregunta(pregunta);
 		repositorioFormularios.save(formulario);
 		
 		return pos;
@@ -105,7 +105,7 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 			throw new EntidadNoEncontrada(id);
 		}
 		PlantillaFormulario formulario = optional.get();
-		formulario.removeDato(pos);
+		formulario.removePregunta(pos);
 		repositorioFormularios.save(formulario);
 	}
 

@@ -14,11 +14,11 @@ public class Seguimiento {
 	private String id;
 	private LocalDateTime fecha;
 	private LocalDateTime plazo;
-	private PlantillaFormulario formulario;
+	private Formulario formulario;
 	
 	// Constructores
 	
-	public Seguimiento(LocalDateTime fecha, LocalDateTime plazo, PlantillaFormulario formulario) {
+	public Seguimiento(LocalDateTime fecha, LocalDateTime plazo, Formulario formulario) {
 		super();
 		this.fecha = fecha;
 		this.plazo = plazo;
@@ -51,11 +51,11 @@ public class Seguimiento {
 		this.plazo = plazo;
 	}
 
-	public PlantillaFormulario getFormulario() {
+	public Formulario getFormulario() {
 		return formulario;
 	}
 
-	public void setFormulario(PlantillaFormulario formulario) {
+	public void setFormulario(Formulario formulario) {
 		this.formulario = formulario;
 	}
 }

@@ -1,8 +1,12 @@
 package salud.modelo;
 
 import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.LinkedList;
 
+@Document(collection = "pacientes")
 public class Paciente extends Usuario {
 	
 	// Atributos
@@ -12,19 +16,17 @@ public class Paciente extends Usuario {
 	private List<Consulta> consultas;
 	private List<Especialista> especialistas;
 	private List<Seguimiento> seguimientos;
-	private List<Formulario> formularios;
 	
 	// Constructores
 
 	public Paciente(String nombre, String apellido1, String apellido2, String email, 
 			String telefono, MedicoFamilia medicoCabecera) {
-		super(telefono, telefono, telefono, telefono, telefono);
+		super(nombre, apellido1, apellido2, email, telefono);
 		this.setMedicoCabecera(medicoCabecera);
 		this.alertas = new LinkedList<Alerta>();
 		this.consultas = new LinkedList<Consulta>();
 		this.especialistas = new LinkedList<Especialista>();
 		this.seguimientos = new LinkedList<Seguimiento>();
-		this.formularios = new LinkedList<Formulario>();
 	}
 	
 	// Métodos
@@ -112,26 +114,6 @@ public class Paciente extends Usuario {
 	
 	public void removeSeguimiento(Seguimiento seguimiento) {
 		this.seguimientos.remove(seguimiento);
-	}
-	
-	public List<Formulario> getFormularios() {
-		return formularios;
-	}
-
-	public void setFormularios(List<Formulario> formularios) {
-		this.formularios = formularios;
-	}
-	
-	public Formulario getFormulario(int pos) {
-		return this.formularios.get(pos);
-	}
-	
-	public void addFormulario(Formulario formulario) {
-		this.formularios.add(formulario);
-	}
-	
-	public void removeFormulario(int pos) {
-		this.formularios.remove(pos);
 	}
 	
 }

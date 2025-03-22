@@ -3,6 +3,7 @@ package salud.servicio;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import salud.modelo.Formulario;
 import salud.modelo.PlantillaFormulario;
 import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
@@ -45,7 +47,7 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 			throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
 		}
 		
-		Seguimiento seguimiento = new Seguimiento(fecha, plazo, formulario);
+		Seguimiento seguimiento = new Seguimiento(fecha, plazo, new Formulario(fecha, formulario));
 		
 		return repositorioSeguimientos.save(seguimiento).getId();
 	}
@@ -53,9 +55,6 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 	@Override
 	public void modificarSeguimiento(String id, LocalDateTime fecha, LocalDateTime plazo,
 			PlantillaFormulario formulario) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
 		if (fecha == null) {
 			throw new IllegalArgumentException("La fecha no puede ser nula");
 		}
@@ -63,15 +62,11 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 			throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
 		}
 		
-		Optional<Seguimiento> optional = repositorioSeguimientos.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Seguimiento seguimiento = optional.get();
+		Seguimiento seguimiento = obtenerSeguimiento(id);
 		
 		seguimiento.setFecha(fecha);
 		seguimiento.setPlazo(plazo);
-		seguimiento.setFormulario(formulario);
+		seguimiento.getFormulario().setPlantilla(formulario);
 		
 		repositorioSeguimientos.save(seguimiento);
 
@@ -114,6 +109,15 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 		}
 		
 		repositorioSeguimientos.deleteById(id);
+	}
+
+	@Override
+	public void rellenarFormulario(String id, List<String> respuestas) throws EntidadNoEncontrada {
+		Seguimiento seguimiento = obtenerSeguimiento(id);
+		if (!seguimiento.getFormulario().setRespuestas(respuestas)) {
+			throw new IllegalArgumentException("Los datos introducidos son incorrectos");
+		}
+		repositorioSeguimientos.save(seguimiento);
 	}
 
 }

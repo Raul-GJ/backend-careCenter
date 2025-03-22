@@ -1,6 +1,6 @@
 package salud.modelo;
 
-public class Sanitario extends Usuario {
+public abstract class Sanitario extends Usuario {
 	
 	// Atributos
 	
