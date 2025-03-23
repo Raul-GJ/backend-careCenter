@@ -1,5 +1,7 @@
 package salud.modelo.encuesta;
 
+import java.util.Objects;
+
 public class ReglaNumeral implements ReglaDatoEncuesta {
 	
 	// Atributos
@@ -30,5 +32,22 @@ public class ReglaNumeral implements ReglaDatoEncuesta {
 		} catch (NumberFormatException e) {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(tipoDato);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReglaNumeral other = (ReglaNumeral) obj;
+		return tipoDato == other.tipoDato;
 	}
 }

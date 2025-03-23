@@ -33,7 +33,7 @@ public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi 
 	
 	// Métodos
 	
-	
+	@Override
 	public ResponseEntity<PlantillaFormularioDto> crearPlantillaFormulario(
 			PlantillaFormularioDto formularioDto) {
 		String id = servicioFormulariosPlantilla.altaFormulario(formularioDto.getNombre(), 
@@ -44,6 +44,7 @@ public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi 
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@Override
 	public ResponseEntity<Void> modificarPlantillaFormulario(PlantillaFormularioDto formularioDto,
 			String id) throws Exception {
 		servicioFormulariosPlantilla.modificarFormulario(id, 
@@ -60,36 +61,43 @@ public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi 
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@Override
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoCadenaDto preguntaDto,
 			String id) throws Exception {
 		return agregarPreguntaFormulario(preguntaDto.toPreguntaEncuesta(), id);
 	}
 	
+	@Override
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoNumeralDto preguntaDto,
 			String id) throws Exception {
 		return agregarPreguntaFormulario(preguntaDto.toPreguntaEncuesta(), id);
 	}
 	
+	@Override
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoBooleanoDto preguntaDto,
 			String id) throws Exception {
 		return agregarPreguntaFormulario(preguntaDto.toPreguntaEncuesta(), id);
 	}
 	
+	@Override
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoEnumDto preguntaDto, String id)
 			throws Exception {
 		return agregarPreguntaFormulario(preguntaDto.toPreguntaEncuesta(), id);
 	}
 	
+	@Override
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoRangoDto preguntaDto, String id)
 			throws Exception {
 		return agregarPreguntaFormulario(preguntaDto.toPreguntaEncuesta(), id);
 	}
 	
+	@Override
 	public ResponseEntity<Void> eliminarPreguntaFormulario(int pos, String id) throws Exception {
 		servicioFormulariosPlantilla.eliminarPregunta(id, pos);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Override
 	public ResponseEntity<PlantillaFormularioDto> obtenerPlantillaFormulario(String id) 
 			throws Exception {
 		PlantillaFormularioDto plantillaFormularioDto = PlantillaFormularioDto.from(
@@ -97,12 +105,14 @@ public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi 
 		return ResponseEntity.ok(plantillaFormularioDto);
 	}
 	
+	@Override
 	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla() 
 			throws Exception {
 		Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios();
 		return ResponseEntity.ok(formularios);
 	}
 
+	@Override
 	public ResponseEntity<Void> eliminarPlantillaFormulario(String id) throws Exception {
 		servicioFormulariosPlantilla.eliminarFormulario(id);
 		return ResponseEntity.noContent().build();

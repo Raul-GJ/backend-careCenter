@@ -47,28 +47,6 @@ public class ServicioConsultas implements IServicioConsultas {
 	}
 
 	@Override
-	public void modificarConsulta(String id, String asunto, String mensaje)
-			throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		if (asunto == null || asunto.isEmpty()) {
-			throw new IllegalArgumentException("El asunto no puede ser nulo o vacío");
-		}
-		if (mensaje == null || mensaje.isEmpty()) {
-			throw new IllegalArgumentException("El mensaje no puede ser nulo o vacío");
-		}
-		
-		Optional<Consulta> optional = repositorioConsultas.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Consulta consulta = optional.get();
-		
-		repositorioConsultas.save(consulta);
-	}
-
-	@Override
 	public Consulta obtenerConsulta(String id) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
@@ -108,17 +86,14 @@ public class ServicioConsultas implements IServicioConsultas {
 	}
 
 	@Override
-	public void responderConsulta(String id, String mensaje, LocalDateTime fecha) throws EntidadNoEncontrada {
+	public void responderConsulta(String id, String mensaje) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
 		if (mensaje == null || mensaje.isEmpty()) {
 			throw new IllegalArgumentException("El mensaje no puede ser nulo o vacío");
 		}
-		if (fecha == null) {
-			throw new IllegalArgumentException("La fecha no puede ser nula");
-		}
-		Respuesta respuesta = new Respuesta(mensaje, fecha);
+		Respuesta respuesta = new Respuesta(mensaje, LocalDateTime.now());
 		
 		Optional<Consulta> optional = repositorioConsultas.findById(id);
 		if (optional.isEmpty()) {

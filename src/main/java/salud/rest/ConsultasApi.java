@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
 import salud.rest.dto.consulta.ConsultaDto;
-import salud.rest.dto.consulta.RespuestaDto;
+import salud.rest.dto.consulta.CrearRespuestaDto;
 
 public interface ConsultasApi {
 
@@ -34,6 +34,6 @@ public interface ConsultasApi {
 	@Operation(summary = "Responder consulta", description = "Crea una respuesta para una consulta")
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> responderConsulta(
-			@Valid @RequestBody RespuestaDto respuestaDto,
+			@Valid @RequestBody CrearRespuestaDto respuestaDto,
 			@Valid @PathVariable String id) throws Exception;
 }

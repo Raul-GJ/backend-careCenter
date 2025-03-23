@@ -1,6 +1,7 @@
 package salud.modelo;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -114,6 +115,29 @@ public class Paciente extends Usuario {
 	
 	public void removeSeguimiento(Seguimiento seguimiento) {
 		this.seguimientos.remove(seguimiento);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(alertas, consultas, especialistas, medicoCabecera, seguimientos);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Paciente other = (Paciente) obj;
+		return Objects.equals(alertas, other.alertas) && Objects.equals(consultas, other.consultas)
+				&& Objects.equals(especialistas, other.especialistas)
+				&& Objects.equals(medicoCabecera, other.medicoCabecera)
+				&& Objects.equals(seguimientos, other.seguimientos);
 	}
 	
 }

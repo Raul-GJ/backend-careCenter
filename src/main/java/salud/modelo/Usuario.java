@@ -1,5 +1,7 @@
 package salud.modelo;
 
+import java.util.Objects;
+
 import org.springframework.data.annotation.Id;
 
 public abstract class Usuario {
@@ -73,5 +75,24 @@ public abstract class Usuario {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(apellido1, apellido2, email, id, nombre, telefono);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		return Objects.equals(apellido1, other.apellido1) && Objects.equals(apellido2, other.apellido2)
+				&& Objects.equals(email, other.email) && Objects.equals(id, other.id)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(telefono, other.telefono);
 	}
 }

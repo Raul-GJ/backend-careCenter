@@ -3,6 +3,7 @@ package salud.modelo;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Formulario {
 	
@@ -75,5 +76,29 @@ public class Formulario {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(fecha, plantilla, rellenado, respuestas);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Formulario other = (Formulario) obj;
+		return Objects.equals(fecha, other.fecha) && Objects.equals(plantilla, other.plantilla)
+				&& rellenado == other.rellenado && Objects.equals(respuestas, other.respuestas);
+	}
+
+	@Override
+	public String toString() {
+		return "Formulario [fecha=" + fecha + ", rellenado=" + rellenado + ", plantilla=" + plantilla + ", respuestas="
+				+ respuestas + "]";
 	}
 }

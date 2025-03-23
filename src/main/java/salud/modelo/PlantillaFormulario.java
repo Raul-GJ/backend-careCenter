@@ -1,6 +1,7 @@
 package salud.modelo;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.LinkedList;
 
 import org.springframework.data.annotation.Id;
@@ -83,5 +84,30 @@ public class PlantillaFormulario {
 	
 	public void removePregunta(int pos) {
 		this.preguntas.remove(pos);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(descripcion, id, nombre, preguntas, publico);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PlantillaFormulario other = (PlantillaFormulario) obj;
+		return Objects.equals(descripcion, other.descripcion) && Objects.equals(id, other.id)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(preguntas, other.preguntas)
+				&& publico == other.publico;
+	}
+
+	@Override
+	public String toString() {
+		return "PlantillaFormulario [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", publico="
+				+ publico + ", preguntas=" + preguntas + "]";
 	}
 }

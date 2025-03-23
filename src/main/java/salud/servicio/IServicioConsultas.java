@@ -1,6 +1,5 @@
 package salud.servicio;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.data.domain.Page;
@@ -14,9 +13,6 @@ public interface IServicioConsultas {
 
 	public String altaConsulta(String asunto, String mensaje);
 	
-	public void modificarConsulta(String id, String asunto, String mensaje) 
-			throws EntidadNoEncontrada;
-	
 	public Consulta obtenerConsulta(String id) throws EntidadNoEncontrada;
 	
 	public Collection<ConsultaDto> obtenerConsultas();
@@ -25,5 +21,5 @@ public interface IServicioConsultas {
 	
 	public void eliminarConsulta(String id) throws EntidadNoEncontrada;
 	
-	public void responderConsulta(String id, String mensaje, LocalDateTime fecha) throws EntidadNoEncontrada;
+	public void responderConsulta(String id, String mensaje) throws EntidadNoEncontrada;
 }

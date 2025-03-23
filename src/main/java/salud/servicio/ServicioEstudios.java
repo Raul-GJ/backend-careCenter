@@ -16,7 +16,11 @@ import salud.modelo.Estudio;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
+import salud.repositorio.RepositorioAlertas;
+import salud.repositorio.RepositorioEspecialistas;
 import salud.repositorio.RepositorioEstudios;
+import salud.repositorio.RepositorioPacientes;
+import salud.repositorio.RepositorioSeguimientos;
 import salud.rest.dto.estudio.EstudioDto;
 
 @Service
@@ -26,26 +30,45 @@ public class ServicioEstudios implements IServicioEstudios {
 	// Atributos
 	
 	private RepositorioEstudios repositorioEstudios;
+	private RepositorioPacientes repositorioPacientes;
+	private RepositorioEspecialistas repositorioEspecialistas;
+	private RepositorioSeguimientos repositorioSeguimientos;
+	private RepositorioAlertas repositorioAlertas;
 	
 	// Constructores
 	
-	public ServicioEstudios(RepositorioEstudios repositorioEstudios) {
+	public ServicioEstudios(RepositorioEstudios repositorioEstudios, RepositorioPacientes repositorioPacientes,
+			RepositorioEspecialistas repositorioEspecialistas, RepositorioSeguimientos repositorioSeguimientos,
+			RepositorioAlertas repositorioAlertas) {
 		super();
 		this.repositorioEstudios = repositorioEstudios;
+		this.repositorioPacientes = repositorioPacientes;
+		this.repositorioEspecialistas = repositorioEspecialistas;
+		this.repositorioSeguimientos = repositorioSeguimientos;
+		this.repositorioAlertas = repositorioAlertas;
 	}
 	
 	// Métodos
 	
 	@Override
 	public String altaEstudio(String nombre, String descripcion, LocalDateTime fechaAlta, 
-			LocalDateTime fechaFin) {
+			LocalDateTime fechaFin, String creador) throws EntidadNoEncontrada {
+		if (creador == null || creador.isEmpty()) {
+			throw new IllegalArgumentException("El creador no puede ser nulo o vacío");
+		}
 		
-		Estudio estudio = new Estudio(nombre, descripcion, fechaAlta, fechaFin);
+		Optional<Especialista> optional = repositorioEspecialistas.findById(creador);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(creador);
+		}
+		Especialista especialista = optional.get();
+		
+		Estudio estudio = new Estudio(nombre, descripcion, fechaAlta, fechaFin, especialista);
 		return repositorioEstudios.save(estudio).getId();
 	}
-	
+
 	@Override
-	public void asignarPacientes(String id, Collection<Paciente> pacientes) throws EntidadNoEncontrada {
+	public void asignarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
@@ -55,11 +78,14 @@ public class ServicioEstudios implements IServicioEstudios {
 			throw new EntidadNoEncontrada(id);
 		}
 		Estudio estudio = optional.get();
-		estudio.setPacientes(pacientes);
+		Collection<Paciente> lista = new LinkedList<Paciente>();
+		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
+		estudio.setPacientes(lista);
+		repositorioEstudios.save(estudio);
 	}
 
 	@Override
-	public void asignarEspecialistas(String id, Collection<Especialista> especialistas) throws EntidadNoEncontrada {
+	public void asignarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
@@ -69,11 +95,14 @@ public class ServicioEstudios implements IServicioEstudios {
 			throw new EntidadNoEncontrada(id);
 		}
 		Estudio estudio = optional.get();
-		estudio.setEspecialistas(especialistas);
+		Collection<Especialista> lista = new LinkedList<Especialista>();
+		repositorioEspecialistas.findAllById(especialistas).forEach(e -> lista.add(e));
+		estudio.setEspecialistas(lista);
+		repositorioEstudios.save(estudio);
 	}
 
 	@Override
-	public void asignarSeguimientos(String id, Collection<Seguimiento> seguimientos) throws EntidadNoEncontrada {
+	public void asignarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
@@ -83,11 +112,14 @@ public class ServicioEstudios implements IServicioEstudios {
 			throw new EntidadNoEncontrada(id);
 		}
 		Estudio estudio = optional.get();
-		estudio.setSeguimientos(seguimientos);
+		Collection<Seguimiento> lista = new LinkedList<Seguimiento>();
+		repositorioSeguimientos.findAllById(seguimientos).forEach(s -> lista.add(s));
+		estudio.setSeguimientos(lista);
+		repositorioEstudios.save(estudio);
 	}
 
 	@Override
-	public void asignarAlertas(String id, Collection<Alerta> alertas) throws EntidadNoEncontrada {
+	public void asignarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
@@ -97,7 +129,78 @@ public class ServicioEstudios implements IServicioEstudios {
 			throw new EntidadNoEncontrada(id);
 		}
 		Estudio estudio = optional.get();
-		estudio.setAlertas(alertas);
+		Collection<Alerta> lista = new LinkedList<Alerta>();
+		repositorioAlertas.findAllById(alertas).forEach(a -> lista.add(a));
+		estudio.setAlertas(lista);
+		repositorioEstudios.save(estudio);
+	}
+
+	@Override
+	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Estudio> optional = repositorioEstudios.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Estudio estudio = optional.get();
+		Collection<Paciente> lista = new LinkedList<Paciente>();
+		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
+		estudio.removePacientes(lista);
+		repositorioEstudios.save(estudio);
+	}
+
+	@Override
+	public void eliminarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada {
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Estudio> optional = repositorioEstudios.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Estudio estudio = optional.get();
+		Collection<Especialista> lista = new LinkedList<Especialista>();
+		repositorioEspecialistas.findAllById(especialistas).forEach(e -> lista.add(e));
+		estudio.removeEspecialistas(lista);
+		repositorioEstudios.save(estudio);
+	}
+
+	@Override
+	public void eliminarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada {
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Estudio> optional = repositorioEstudios.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Estudio estudio = optional.get();
+		Collection<Seguimiento> lista = new LinkedList<Seguimiento>();
+		repositorioSeguimientos.findAllById(seguimientos).forEach(s -> lista.add(s));
+		estudio.removeSeguimientos(lista);
+		repositorioEstudios.save(estudio);
+	}
+
+	@Override
+	public void eliminarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Estudio> optional = repositorioEstudios.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Estudio estudio = optional.get();
+		Collection<Alerta> lista = new LinkedList<Alerta>();
+		repositorioAlertas.findAllById(alertas).forEach(a -> lista.add(a));
+		estudio.removeAlertas(lista);
+		repositorioEstudios.save(estudio);
 	}
 
 	@Override

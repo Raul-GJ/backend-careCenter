@@ -1,5 +1,7 @@
 package salud.modelo.encuesta;
 
+import java.util.Objects;
+
 public class PreguntaEncuesta {
 
 	// Atributos
@@ -37,5 +39,22 @@ public class PreguntaEncuesta {
 
 	public void setRegla(ReglaDatoEncuesta regla) {
 		this.regla = regla;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(pregunta, regla);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PreguntaEncuesta other = (PreguntaEncuesta) obj;
+		return Objects.equals(pregunta, other.pregunta) && Objects.equals(regla, other.regla);
 	}
 }

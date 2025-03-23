@@ -1,6 +1,7 @@
 package salud.modelo;
 
 import java.time.DateTimeException;
+import java.util.Objects;
 
 public class Tiempo {
 	
@@ -75,5 +76,22 @@ public class Tiempo {
 			throw new DateTimeException("Segundos inválidos");
 		
 		return new Tiempo(dias, horas, minutos, segundos);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(dias, horas, minutos, segundos);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tiempo other = (Tiempo) obj;
+		return dias == other.dias && horas == other.horas && minutos == other.minutos && segundos == other.segundos;
 	}
 }

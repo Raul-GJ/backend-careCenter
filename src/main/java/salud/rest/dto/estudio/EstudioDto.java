@@ -13,6 +13,7 @@ public class EstudioDto {
 	private String descripcion;
 	private String fechaAlta;
 	private String fechaFin;
+	private String creador;
 	private Collection<String> pacientes;
 	private Collection<String> especialistas;
 	private Collection<String> seguimientos;
@@ -56,6 +57,14 @@ public class EstudioDto {
 
 	public void setFechaFin(String fechaFin) {
 		this.fechaFin = fechaFin;
+	}
+	
+	public String getCreador() {
+		return creador;
+	}
+
+	public void setCreador(String creador) {
+		this.creador = creador;
 	}
 
 	public Collection<String> getPacientes() {
@@ -107,6 +116,7 @@ public class EstudioDto {
 		estudioDto.setDescripcion(estudio.getDescripcion());
 		estudioDto.setFechaAlta(estudio.getFechaAlta().toString());
 		estudioDto.setFechaFin(estudio.getFechaFin().toString());
+		estudioDto.setCreador(estudio.getCreador().getId());
 		
 		estudioDto.setPacientes(pacientes);
 		estudioDto.setEspecialistas(especialistas);

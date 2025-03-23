@@ -1,6 +1,7 @@
 package salud.modelo.encuesta;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class ReglaEnum implements ReglaDatoEncuesta {
 
@@ -46,5 +47,22 @@ public class ReglaEnum implements ReglaDatoEncuesta {
 	@Override
 	public boolean test(String value) {
 		return values.contains(value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(tipoDato, values);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReglaEnum other = (ReglaEnum) obj;
+		return tipoDato == other.tipoDato && Objects.equals(values, other.values);
 	}
 }

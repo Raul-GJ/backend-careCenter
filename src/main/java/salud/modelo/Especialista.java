@@ -1,5 +1,7 @@
 package salud.modelo;
 
+import java.util.Objects;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "especialistas")
@@ -24,6 +26,26 @@ public class Especialista extends Sanitario {
 
 	public void setEspecialidad(String especialidad) {
 		this.especialidad = especialidad;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(especialidad);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Especialista other = (Especialista) obj;
+		return Objects.equals(especialidad, other.especialidad);
 	}
 	
 }

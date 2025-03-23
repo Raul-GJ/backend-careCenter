@@ -1,5 +1,7 @@
 package salud.modelo.encuesta;
 
+import java.util.Objects;
+
 public class ReglaBooleano implements ReglaDatoEncuesta {
 	
 	// Atributos
@@ -35,5 +37,22 @@ public class ReglaBooleano implements ReglaDatoEncuesta {
 	@Override
 	public boolean test(String value) {
 		return Boolean.parseBoolean(value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(nombre, tipoDato);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReglaBooleano other = (ReglaBooleano) obj;
+		return Objects.equals(nombre, other.nombre) && tipoDato == other.tipoDato;
 	}
 }

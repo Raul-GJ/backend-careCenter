@@ -29,6 +29,7 @@ public class ControladorAlertas implements AlertasApi {
 	
 	// Métodos
 	
+	@Override
 	public ResponseEntity<AlertaDto> crearAlerta(AlertaDto alertaDto) {
 		String id = servicioAlertas.altaAlerta(
 				alertaDto.getAsunto(),
@@ -40,6 +41,7 @@ public class ControladorAlertas implements AlertasApi {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@Override
 	public ResponseEntity<Void> modificarAlerta(AlertaDto alertaDto, String id) 
 			throws Exception {
 		servicioAlertas.modificarAlerta(id, 
@@ -50,16 +52,19 @@ public class ControladorAlertas implements AlertasApi {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	public ResponseEntity<AlertaDto> obtenerAlerta(String id) throws Exception {
 		AlertaDto alertaDto = AlertaDto.from(servicioAlertas.obtenerAlerta(id));
 		return ResponseEntity.ok(alertaDto);
 	}
 	
+	@Override
 	public ResponseEntity<Collection<AlertaDto>> obtenerAlertas() throws Exception {
 		Collection<AlertaDto> alertas = servicioAlertas.obtenerAlertas();
 		return ResponseEntity.ok(alertas);
 	}
 
+	@Override
 	public ResponseEntity<Void> eliminarAlerta(String id) throws Exception {
 		servicioAlertas.eliminarAlerta(id);
 		return ResponseEntity.noContent().build();

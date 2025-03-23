@@ -9,9 +9,10 @@ public class ConsultaDto {
 	private String asunto;
 	private String mensaje;
 	private String fecha;
+	private RespuestaDto respuesta;
 	
 	// Constructores
-	
+
 	public ConsultaDto() {
 		
 	}
@@ -42,11 +43,21 @@ public class ConsultaDto {
 		this.fecha = fecha;
 	}
 	
+	public RespuestaDto getRespuesta() {
+		return respuesta;
+	}
+
+	public void setRespuesta(RespuestaDto respuesta) {
+		this.respuesta = respuesta;
+	}
+	
 	public static ConsultaDto from(Consulta consulta) {
 		ConsultaDto consultaDto = new ConsultaDto();
 		consultaDto.setAsunto(consulta.getAsunto());
 		consultaDto.setFecha(consulta.getFecha().toString());
 		consultaDto.setMensaje(consulta.getMensaje());
+		if (consulta.getRespuesta() != null)
+			consultaDto.setRespuesta(RespuestaDto.from(consulta.getRespuesta()));;
 		return consultaDto;
 	}
 }
