@@ -16,6 +16,7 @@ import salud.modelo.Formulario;
 import salud.modelo.PlantillaFormulario;
 import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
+import salud.repositorio.RepositorioFormulariosPlantilla;
 import salud.repositorio.RepositorioSeguimientos;
 import salud.rest.dto.seguimiento.SeguimientoDto;
 
@@ -26,26 +27,35 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 	// Atributos
 	
 	private RepositorioSeguimientos repositorioSeguimientos;
+	private RepositorioFormulariosPlantilla repositorioFormulariosPlantilla;
 	
 	// Constructores
 	
 	@Autowired
-	public ServicioSeguimientos(RepositorioSeguimientos repositorioSeguimientos) {
+	public ServicioSeguimientos(RepositorioSeguimientos repositorioSeguimientos,
+			RepositorioFormulariosPlantilla repositorioFormulariosPlantilla) {
 		super();
 		this.repositorioSeguimientos = repositorioSeguimientos;
+		this.repositorioFormulariosPlantilla = repositorioFormulariosPlantilla;
 	}
 	
 	// Métodos
 	
 	@Override
 	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  
-			PlantillaFormulario formulario) {
+			String plantilla) throws EntidadNoEncontrada {
 		if (fecha == null) {
 			throw new IllegalArgumentException("La fecha no puede ser nula");
 		}
 		if (fecha.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
 		}
+		
+		Optional<PlantillaFormulario> optional = repositorioFormulariosPlantilla.findById(plantilla);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(plantilla);
+		}
+		PlantillaFormulario formulario = optional.get();
 		
 		Seguimiento seguimiento = new Seguimiento(fecha, plazo, new Formulario(fecha, formulario));
 		
@@ -54,7 +64,7 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 
 	@Override
 	public void modificarSeguimiento(String id, LocalDateTime fecha, LocalDateTime plazo,
-			PlantillaFormulario formulario) throws EntidadNoEncontrada {
+			String plantilla) throws EntidadNoEncontrada {
 		if (fecha == null) {
 			throw new IllegalArgumentException("La fecha no puede ser nula");
 		}
@@ -63,6 +73,12 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 		}
 		
 		Seguimiento seguimiento = obtenerSeguimiento(id);
+		
+		Optional<PlantillaFormulario> optional = repositorioFormulariosPlantilla.findById(plantilla);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(plantilla);
+		}
+		PlantillaFormulario formulario = optional.get();
 		
 		seguimiento.setFecha(fecha);
 		seguimiento.setPlazo(plazo);
@@ -93,6 +109,14 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 		repositorioSeguimientos.findAll().forEach(seguimiento -> seguimientos.add(SeguimientoDto.from(seguimiento)));
 		return seguimientos;
 	}
+	
+	@Override
+	public Collection<SeguimientoDto> obtenerSeguimientos(Collection<String> ids) {
+		Collection<SeguimientoDto> seguimientos = new LinkedList<SeguimientoDto>();
+		repositorioSeguimientos.findAllById(ids).forEach(
+				seguimiento -> seguimientos.add(SeguimientoDto.from(seguimiento)));
+		return seguimientos;
+	}
 
 	@Override
 	public Page<SeguimientoDto> obtenerSeguimientosPaginado(Pageable pageable) {
@@ -119,5 +143,4 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 		}
 		repositorioSeguimientos.save(seguimiento);
 	}
-
 }

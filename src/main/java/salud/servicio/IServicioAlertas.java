@@ -21,6 +21,8 @@ public interface IServicioAlertas {
 	
 	public Collection<AlertaDto> obtenerAlertas();
 	
+	public Collection<AlertaDto> obtenerAlertas(Collection<String> ids);
+	
 	public Page<AlertaDto> obtenerAlertasPaginado(Pageable pageable);
 	
 	public void eliminarAlerta(String id) throws EntidadNoEncontrada;

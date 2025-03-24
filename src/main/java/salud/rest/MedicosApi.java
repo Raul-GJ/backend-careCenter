@@ -33,9 +33,10 @@ public interface MedicosApi {
 	public ResponseEntity<MedicoDto> obtenerMedico(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener médicos", description = "Obtiene los datos de todos los médicos de familia")
+	@Operation(summary = "Obtener médicos", description = "Obtiene los datos de todos los médicos de familia indicados")
 	@GetMapping
-	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos() throws Exception;
+	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos(
+			@Valid @RequestBody Collection<String> ids) throws Exception;
 	
 	@Operation(summary = "Eliminar médico", description = "Elimina un médico de familia de la base de datos")
 	@DeleteMapping("/{id}")

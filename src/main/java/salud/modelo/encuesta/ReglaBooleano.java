@@ -7,13 +7,11 @@ public class ReglaBooleano implements ReglaDatoEncuesta {
 	// Atributos
 	
 	private TipoDatoEncuesta tipoDato;
-	private String nombre;
 	
 	// Constructores
 	
 	public ReglaBooleano() {
 		this.tipoDato = TipoDatoEncuesta.BOOLEANO;
-		this.nombre = "reglaBooleano";
 	}
 	
 	// Métodos
@@ -25,14 +23,6 @@ public class ReglaBooleano implements ReglaDatoEncuesta {
 	public void setTipoDato(TipoDatoEncuesta tipoDato) {
 		this.tipoDato = tipoDato;
 	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 	
 	@Override
 	public boolean test(String value) {
@@ -41,7 +31,7 @@ public class ReglaBooleano implements ReglaDatoEncuesta {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(nombre, tipoDato);
+		return Objects.hash(tipoDato);
 	}
 
 	@Override
@@ -53,6 +43,6 @@ public class ReglaBooleano implements ReglaDatoEncuesta {
 		if (getClass() != obj.getClass())
 			return false;
 		ReglaBooleano other = (ReglaBooleano) obj;
-		return Objects.equals(nombre, other.nombre) && tipoDato == other.tipoDato;
+		return tipoDato == other.tipoDato;
 	}
 }

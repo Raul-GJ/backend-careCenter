@@ -67,8 +67,13 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	}
 
 	@Override
-	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas() throws Exception {
-		Collection<EspecialistaDto> especialistas = servicioEspecialistas.obtenerEspecialistas();
+	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas(
+			Collection<String> ids) throws Exception {
+		if (ids == null || ids.isEmpty()) {
+			Collection<EspecialistaDto> especialistas = servicioEspecialistas.obtenerEspecialistas();
+			return ResponseEntity.ok(especialistas);
+		}
+		Collection<EspecialistaDto> especialistas = servicioEspecialistas.obtenerEspecialistas(ids);
 		return ResponseEntity.ok(especialistas);
 	}
 

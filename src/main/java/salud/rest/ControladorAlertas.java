@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,8 +61,12 @@ public class ControladorAlertas implements AlertasApi {
 	}
 	
 	@Override
-	public ResponseEntity<Collection<AlertaDto>> obtenerAlertas() throws Exception {
-		Collection<AlertaDto> alertas = servicioAlertas.obtenerAlertas();
+	public ResponseEntity<Collection<AlertaDto>> obtenerAlertas(@Valid Collection<String> ids) throws Exception {
+		if (ids == null || ids.isEmpty()) {
+			Collection<AlertaDto> alertas = servicioAlertas.obtenerAlertas();
+			return ResponseEntity.ok(alertas);
+		}
+		Collection<AlertaDto> alertas = servicioAlertas.obtenerAlertas(ids);
 		return ResponseEntity.ok(alertas);
 	}
 

@@ -68,6 +68,13 @@ public class ServicioConsultas implements IServicioConsultas {
 	}
 	
 	@Override
+	public Collection<ConsultaDto> obtenerConsultas(Collection<String> ids) {
+		Collection<ConsultaDto> consultas = new LinkedList<ConsultaDto>();
+		repositorioConsultas.findAllById(ids).forEach(consulta -> consultas.add(ConsultaDto.from(consulta)));
+		return consultas;
+	}
+	
+	@Override
 	public Page<ConsultaDto> obtenerConsultasPaginado(Pageable pageable) {
 		
 		return repositorioConsultas.findAll(pageable).map(consulta -> {

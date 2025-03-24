@@ -12,8 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.rest.dto.usuario.CrearPacienteDto;
 import salud.rest.dto.usuario.PacienteDto;
-import salud.servicio.IServicioEspecialistas;
-import salud.servicio.IServicioMedicos;
 import salud.servicio.IServicioPacientes;
 
 @RestController
@@ -23,17 +21,12 @@ public class ControladorPacientes implements PacientesApi {
 	// Atributos
 	
 	private IServicioPacientes servicioPacientes;
-	private IServicioMedicos servicioMedicos;
-	private IServicioEspecialistas servicioEspecialistas;
 	
 	// Constructores
 	
-	public ControladorPacientes(IServicioPacientes servicioPacientes,
-			IServicioMedicos servicioMedicos, IServicioEspecialistas servicioEspecialistas) {
+	public ControladorPacientes(IServicioPacientes servicioPacientes) {
 		super();
 		this.servicioPacientes = servicioPacientes;
-		this.servicioMedicos = servicioMedicos;
-		this.servicioEspecialistas = servicioEspecialistas;
 	}
 	
 	// Métodos
@@ -47,7 +40,7 @@ public class ControladorPacientes implements PacientesApi {
 				pacienteDto.getApellido2(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(), 
-				servicioMedicos.obtenerMedico(pacienteDto.getMedicoCabecera()));
+				pacienteDto.getMedicoCabecera());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -62,7 +55,7 @@ public class ControladorPacientes implements PacientesApi {
 				pacienteDto.getApellido2(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(), 
-				servicioMedicos.obtenerMedico(pacienteDto.getMedicoCabecera()));
+				pacienteDto.getMedicoCabecera());
 		
 		return ResponseEntity.noContent().build();
 	}
@@ -74,14 +67,66 @@ public class ControladorPacientes implements PacientesApi {
 	}
 
 	@Override
-	public ResponseEntity<Collection<PacienteDto>> obtenerPacientes() throws Exception {
-		Collection<PacienteDto> pacientes = servicioPacientes.obtenerPacientes();
+	public ResponseEntity<Collection<PacienteDto>> obtenerPacientes(
+			Collection<String> ids) throws Exception {
+		if (ids == null || ids.isEmpty()) {
+			Collection<PacienteDto> pacientes = servicioPacientes.obtenerPacientes();
+			return ResponseEntity.ok(pacientes);
+		}
+		Collection<PacienteDto> pacientes = servicioPacientes.obtenerPacientes(ids);
 		return ResponseEntity.ok(pacientes);
 	}
 
 	@Override
 	public ResponseEntity<Void> eliminarPaciente(@Valid String id) throws Exception {
 		servicioPacientes.eliminarPaciente(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
+		servicioPacientes.agregarAlertas(id, alertas);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarConsultas(@Valid Collection<String> consultas, @Valid String id)
+			throws Exception {
+		servicioPacientes.agregarConsultas(id, consultas);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarEspecialistas(@Valid Collection<String> especialistas, @Valid String id)
+			throws Exception {
+		servicioPacientes.agregarEspecialistas(id, especialistas);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
+			throws Exception {
+		servicioPacientes.agregarSeguimientos(id, seguimientos);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
+		servicioPacientes.eliminarAlertas(id, alertas);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarEspecialistas(@Valid Collection<String> especialistas, @Valid String id)
+			throws Exception {
+		servicioPacientes.eliminarEspecialistas(id, especialistas);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
+			throws Exception {
+		servicioPacientes.eliminarSeguimientos(id, seguimientos);
 		return ResponseEntity.noContent().build();
 	}
 	

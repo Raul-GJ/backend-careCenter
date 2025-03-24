@@ -46,8 +46,13 @@ public class ControladorConsultas implements ConsultasApi {
 	}
 	
 	@Override
-	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas() throws Exception {
-		Collection<ConsultaDto> consultas = servicioConsultas.obtenerConsultas();
+	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas(
+			Collection<String> ids) throws Exception {
+		if (ids == null || ids.isEmpty()) {
+			Collection<ConsultaDto> consultas = servicioConsultas.obtenerConsultas();
+			return ResponseEntity.ok(consultas);
+		}
+		Collection<ConsultaDto> consultas = servicioConsultas.obtenerConsultas(ids);
 		return ResponseEntity.ok(consultas);
 	}
 	

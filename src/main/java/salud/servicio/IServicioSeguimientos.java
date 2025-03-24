@@ -7,21 +7,23 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import salud.modelo.PlantillaFormulario;
 import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.rest.dto.seguimiento.SeguimientoDto;
 
 public interface IServicioSeguimientos {
 
-	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  PlantillaFormulario formulario);
+	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  String plantilla)
+		throws EntidadNoEncontrada;
 	
 	public void modificarSeguimiento(String id, LocalDateTime fecha, LocalDateTime plazo,
-			PlantillaFormulario formulario) throws EntidadNoEncontrada;
+			String plantilla) throws EntidadNoEncontrada;
 	
 	public Seguimiento obtenerSeguimiento(String id) throws EntidadNoEncontrada;
 	
 	public Collection<SeguimientoDto> obtenerSeguimientos();
+	
+	public Collection<SeguimientoDto> obtenerSeguimientos(Collection<String> ids);
 	
 	public Page<SeguimientoDto> obtenerSeguimientosPaginado(Pageable pageable);
 	

@@ -18,7 +18,9 @@ public interface IServicioMedicos {
 	
 	public MedicoFamilia obtenerMedico(String id) throws EntidadNoEncontrada;
 	
-	public Collection<MedicoDto> obtenerMedicos() throws EntidadNoEncontrada;
+	public Collection<MedicoDto> obtenerMedicos();
+	
+	public Collection<MedicoDto> obtenerMedicos(Collection<String> ids);
 	
 	public void eliminarMedico(String id) throws EntidadNoEncontrada;
 	

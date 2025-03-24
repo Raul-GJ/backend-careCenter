@@ -67,7 +67,8 @@ public class Consulta {
 	}
 
 	public void setRespuesta(Respuesta respuesta) {
-		this.respuesta = respuesta;
+		if (this.respuesta == null)
+			this.respuesta = respuesta;
 	}
 	
 	@Override

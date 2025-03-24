@@ -66,7 +66,7 @@ public class Formulario {
 				return false;
 			}
 		}
-		respuestas = res;
+		this.respuestas = res;
 		return true;
 	}
 	

@@ -82,9 +82,10 @@ public interface EstudiosApi {
 	public ResponseEntity<EstudioDto> obtenerEstudio(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener estudios", description = "Obtiene los datos de todos los estudios")
+	@Operation(summary = "Obtener estudios", description = "Obtiene los datos de todos los estudios indicados")
 	@GetMapping
-	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios() throws Exception;
+	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios(
+			@Valid @RequestBody Collection<String> ids) throws Exception;
 	
 	@Operation(summary = "Eliminar estudio", description = "Elimina un estudio de la base de datos")
 	@DeleteMapping("/{id}")

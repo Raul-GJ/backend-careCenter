@@ -1,5 +1,8 @@
 package salud.modelo;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class Sanitario extends Usuario {
@@ -7,6 +10,7 @@ public abstract class Sanitario extends Usuario {
 	// Atributos
 	
 	private String nCol;
+	private List<Paciente> pacientes;
 	
 	// Constructores
 	
@@ -14,6 +18,7 @@ public abstract class Sanitario extends Usuario {
 			String nCol) {
 		super(nombre, apellido1, apellido2, email, telefono);
 		this.nCol = nCol;
+		this.pacientes = new LinkedList<Paciente>();
 	}
 	
 	// Métodos
@@ -24,6 +29,22 @@ public abstract class Sanitario extends Usuario {
 
 	public void setNCol(String nCol) {
 		this.nCol = nCol;
+	}
+
+	public List<Paciente> getPacientes() {
+		return pacientes;
+	}
+
+	public void setPacientes(List<Paciente> pacientes) {
+		this.pacientes = pacientes;
+	}
+	
+	public void agregarPacientes(Collection<Paciente> pacientes) {
+		this.pacientes.addAll(pacientes);
+	}
+	
+	public void eliminarPacientes(Collection<Paciente> pacientes) {
+		this.pacientes.removeAll(pacientes);
 	}
 
 	@Override

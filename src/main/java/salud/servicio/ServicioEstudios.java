@@ -254,6 +254,13 @@ public class ServicioEstudios implements IServicioEstudios {
 		repositorioEstudios.findAll().forEach(estudio -> estudios.add(EstudioDto.from(estudio)));
 		return estudios;
 	}
+	
+	@Override
+	public Collection<EstudioDto> obtenerEstudios(Collection<String> ids) {
+		Collection<EstudioDto> estudios = new LinkedList<EstudioDto>();
+		repositorioEstudios.findAllById(ids).forEach(estudio -> estudios.add(EstudioDto.from(estudio)));
+		return estudios;
+	}
 
 	@Override
 	public Page<EstudioDto> obtenerEstudiosPaginado(Pageable pageable) {

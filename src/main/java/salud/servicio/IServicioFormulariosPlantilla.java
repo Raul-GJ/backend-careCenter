@@ -22,5 +22,7 @@ public interface IServicioFormulariosPlantilla {
 	
 	public Collection<PlantillaFormularioDto> obtenerFormularios();
 	
+	public Collection<PlantillaFormularioDto> obtenerFormularios(Collection<String> ids);
+	
 	public void eliminarFormulario(String id) throws EntidadNoEncontrada;
 }

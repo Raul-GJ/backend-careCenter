@@ -40,6 +40,8 @@ public interface IServicioEstudios {
 	
 	public Collection<EstudioDto> obtenerEstudios();
 	
+	public Collection<EstudioDto> obtenerEstudios(Collection<String> ids);
+	
 	public Page<EstudioDto> obtenerEstudiosPaginado(Pageable pageable);
 	
 	public void eliminarEstudio(String id) throws EntidadNoEncontrada;

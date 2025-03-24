@@ -108,6 +108,13 @@ public class ServicioAlertas implements IServicioAlertas {
 		repositorioAlertas.findAll().forEach(alerta -> alertas.add(AlertaDto.from(alerta)));
 		return alertas;
 	}
+	
+	@Override
+	public Collection<AlertaDto> obtenerAlertas(Collection<String> ids) {
+		Collection<AlertaDto> alertas = new LinkedList<AlertaDto>();
+		repositorioAlertas.findAllById(ids).forEach(alerta -> alertas.add(AlertaDto.from(alerta)));
+		return alertas;
+	}
 
 	@Override
 	public Page<AlertaDto> obtenerAlertasPaginado(Pageable pageable) {
@@ -125,5 +132,4 @@ public class ServicioAlertas implements IServicioAlertas {
 		
 		repositorioAlertas.deleteById(id);
 	}
-
 }

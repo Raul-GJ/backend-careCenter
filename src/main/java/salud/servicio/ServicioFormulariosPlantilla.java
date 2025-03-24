@@ -130,6 +130,14 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 		repositorioFormularios.findAll().forEach(f -> formularios.add(PlantillaFormularioDto.from(f)));
 		return formularios;
 	}
+	
+	@Override
+	public Collection<PlantillaFormularioDto> obtenerFormularios(Collection<String> ids) {
+		Collection<PlantillaFormularioDto> formularios = new LinkedList<PlantillaFormularioDto>();
+		repositorioFormularios.findAllById(ids).forEach(
+				f -> formularios.add(PlantillaFormularioDto.from(f)));
+		return formularios;
+	}
 
 	@Override
 	public void eliminarFormulario(String id) throws EntidadNoEncontrada {
@@ -138,5 +146,4 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 		}
 		repositorioFormularios.deleteById(id);
 	}
-
 }

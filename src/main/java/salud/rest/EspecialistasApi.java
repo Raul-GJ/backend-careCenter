@@ -33,9 +33,10 @@ public interface EspecialistasApi {
 	public ResponseEntity<EspecialistaDto> obtenerEspecialista(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener especialistas", description = "Obtiene los datos de todos los especialistas")
+	@Operation(summary = "Obtener especialistas", description = "Obtiene los datos de todos los especialistas indicados")
 	@GetMapping
-	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas() throws Exception;
+	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas(
+			@Valid @RequestBody Collection<String> ids) throws Exception;
 	
 	@Operation(summary = "Eliminar especialista", description = "Elimina un especialista de la base de datos")
 	@DeleteMapping("/{id}")

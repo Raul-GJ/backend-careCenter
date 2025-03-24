@@ -106,9 +106,13 @@ public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi 
 	}
 	
 	@Override
-	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla() 
-			throws Exception {
-		Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios();
+	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla(
+			Collection<String> ids) throws Exception {
+		if (ids == null || ids.isEmpty()) {
+			Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios();
+			return ResponseEntity.ok(formularios);
+		}
+		Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios(ids);
 		return ResponseEntity.ok(formularios);
 	}
 

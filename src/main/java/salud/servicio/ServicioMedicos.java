@@ -106,9 +106,16 @@ public class ServicioMedicos implements IServicioMedicos {
 	}
 
 	@Override
-	public Collection<MedicoDto> obtenerMedicos() throws EntidadNoEncontrada {
+	public Collection<MedicoDto> obtenerMedicos() {
 		Collection<MedicoDto> medicos = new LinkedList<MedicoDto>();
 		repositorioMedicos.findAll().forEach(m -> medicos.add(MedicoDto.from(m)));
+		return medicos;
+	}
+	
+	@Override
+	public Collection<MedicoDto> obtenerMedicos(Collection<String> ids) {
+		Collection<MedicoDto> medicos = new LinkedList<MedicoDto>();
+		repositorioMedicos.findAllById(ids).forEach(m -> medicos.add(MedicoDto.from(m)));
 		return medicos;
 	}
 
@@ -119,5 +126,4 @@ public class ServicioMedicos implements IServicioMedicos {
 		}
 		repositorioMedicos.deleteById(id);
 	}
-
 }

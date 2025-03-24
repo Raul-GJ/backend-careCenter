@@ -27,9 +27,10 @@ public interface ConsultasApi {
 	public ResponseEntity<ConsultaDto> obtenerConsulta(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener consultas", description = "Obtiene los datos de todas las consultas")
+	@Operation(summary = "Obtener consultas", description = "Obtiene los datos de todas las consultas indicadas")
 	@GetMapping
-	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas() throws Exception;
+	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas(
+			@Valid @RequestBody Collection<String> ids) throws Exception;
 	
 	@Operation(summary = "Responder consulta", description = "Crea una respuesta para una consulta")
 	@PatchMapping("/{id}")

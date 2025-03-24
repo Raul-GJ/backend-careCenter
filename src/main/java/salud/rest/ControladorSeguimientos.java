@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import salud.rest.dto.formulario.RellenarFormularioDto;
 import salud.rest.dto.seguimiento.CrearSeguimientoDto;
 import salud.rest.dto.seguimiento.SeguimientoDto;
-import salud.servicio.IServicioFormulariosPlantilla;
 import salud.servicio.IServicioSeguimientos;
 
 @RestController
@@ -25,15 +24,12 @@ public class ControladorSeguimientos implements SeguimientosApi {
 	// Atributos
 	
 	private IServicioSeguimientos servicioSeguimientos;
-	private IServicioFormulariosPlantilla servicioFormulariosPlantilla;
 	
 	// Constructores
 	
-	public ControladorSeguimientos(IServicioSeguimientos servicioSeguimientos,
-			IServicioFormulariosPlantilla servicioFormulariosPlantilla) {
+	public ControladorSeguimientos(IServicioSeguimientos servicioSeguimientos) {
 		super();
 		this.servicioSeguimientos = servicioSeguimientos;
-		this.servicioFormulariosPlantilla = servicioFormulariosPlantilla;
 	}
 	
 	// Métodos
@@ -46,8 +42,7 @@ public class ControladorSeguimientos implements SeguimientosApi {
 		String id = servicioSeguimientos.altaSeguimiento(
 				LocalDateTime.parse(seguimientoDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME),
 				LocalDateTime.parse(seguimientoDto.getPlazo(), DateTimeFormatter.ISO_DATE_TIME),
-				servicioFormulariosPlantilla.obtenerFormulario(
-						seguimientoDto.getPlantilla()));
+				seguimientoDto.getPlantilla());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -60,8 +55,7 @@ public class ControladorSeguimientos implements SeguimientosApi {
 		servicioSeguimientos.modificarSeguimiento(id,
 				LocalDateTime.parse(seguimientoDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME),
 				LocalDateTime.parse(seguimientoDto.getPlazo(), DateTimeFormatter.ISO_DATE_TIME),
-				servicioFormulariosPlantilla.obtenerFormulario(
-						seguimientoDto.getPlantilla()));
+				seguimientoDto.getPlantilla());
 		
 		return ResponseEntity.noContent().build();
 	}
@@ -73,8 +67,13 @@ public class ControladorSeguimientos implements SeguimientosApi {
 	}
 	
 	@Override
-	public ResponseEntity<Collection<SeguimientoDto>> obtenerSeguimientos() throws Exception {
-		Collection<SeguimientoDto> seguimientos = servicioSeguimientos.obtenerSeguimientos();
+	public ResponseEntity<Collection<SeguimientoDto>> obtenerSeguimientos(
+			Collection<String> ids) throws Exception {
+		if (ids == null || ids.isEmpty()) {
+			Collection<SeguimientoDto> seguimientos = servicioSeguimientos.obtenerSeguimientos();
+			return ResponseEntity.ok(seguimientos);
+		}
+		Collection<SeguimientoDto> seguimientos = servicioSeguimientos.obtenerSeguimientos(ids);
 		return ResponseEntity.ok(seguimientos);
 	}
 	

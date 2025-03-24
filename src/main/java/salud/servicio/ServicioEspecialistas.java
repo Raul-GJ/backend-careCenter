@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Especialista;
+import salud.modelo.Paciente;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioEspecialistas;
+import salud.repositorio.RepositorioPacientes;
 import salud.rest.dto.usuario.EspecialistaDto;
 
 @Service
@@ -19,12 +21,15 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	// Atributos
 	
 	private RepositorioEspecialistas repositorioEspecialistas;
+	private RepositorioPacientes repositorioPacientes;
 	
 	// Constructores
 	
-	public ServicioEspecialistas(RepositorioEspecialistas repositorioEspecialistas) {
+	public ServicioEspecialistas(RepositorioEspecialistas repositorioEspecialistas,
+			RepositorioPacientes repositorioPacientes) {
 		super();
 		this.repositorioEspecialistas = repositorioEspecialistas;
+		this.repositorioPacientes = repositorioPacientes;
 	}
 	
 	// Métodos
@@ -80,11 +85,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 			throw new IllegalArgumentException("La especialidad no puede ser nula o vacía");
 		}
 		
-		Optional<Especialista> optional = repositorioEspecialistas.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Especialista especialista = optional.get();
+		Especialista especialista = obtenerEspecialista(id);
 		
 		especialista.setNombre(nombre);
 		especialista.setApellido1(apellido1);
@@ -95,6 +96,22 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		especialista.setEspecialidad(especialidad);
 		
 		repositorioEspecialistas.save(especialista);
+	}
+	
+	@Override
+	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		Collection<Paciente> lista = new LinkedList<Paciente>();
+		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
+		especialista.agregarPacientes(lista);
+	}
+
+	@Override
+	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		Collection<Paciente> lista = new LinkedList<Paciente>();
+		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
+		especialista.eliminarPacientes(lista);
 	}
 
 	@Override
@@ -112,9 +129,16 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	}
 
 	@Override
-	public Collection<EspecialistaDto> obtenerEspecialistas() throws EntidadNoEncontrada {
+	public Collection<EspecialistaDto> obtenerEspecialistas() {
 		Collection<EspecialistaDto> especialistas = new LinkedList<EspecialistaDto>();
 		repositorioEspecialistas.findAll().forEach(e -> especialistas.add(EspecialistaDto.from(e)));
+		return especialistas;
+	}
+	
+	@Override
+	public Collection<EspecialistaDto> obtenerEspecialistas(Collection<String> ids) {
+		Collection<EspecialistaDto> especialistas = new LinkedList<EspecialistaDto>();
+		repositorioEspecialistas.findAllById(ids).forEach(e -> especialistas.add(EspecialistaDto.from(e)));
 		return especialistas;
 	}
 

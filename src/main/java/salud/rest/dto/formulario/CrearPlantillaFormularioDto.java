@@ -1,7 +1,5 @@
 package salud.rest.dto.formulario;
 
-import salud.modelo.PlantillaFormulario;
-
 public class CrearPlantillaFormularioDto {
 	
 	// Atributos
@@ -31,13 +29,5 @@ public class CrearPlantillaFormularioDto {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
-	}
-	
-	public static CrearPlantillaFormularioDto from(PlantillaFormulario formulario) {
-		CrearPlantillaFormularioDto formularioDto = new CrearPlantillaFormularioDto();	
-		formularioDto.setNombre(formulario.getNombre());
-		formularioDto.setDescripcion(formulario.getDescripcion());
-		
-		return formularioDto;
 	}
 }

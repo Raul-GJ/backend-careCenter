@@ -64,8 +64,13 @@ public class ControladorEstudios implements EstudiosApi {
 	}
 	
 	@Override
-	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios() throws Exception {
-		Collection<EstudioDto> estudios = servicioEstudios.obtenerEstudios();
+	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios(
+			Collection<String> ids) throws Exception {
+		if (ids == null || ids.isEmpty()) {
+			Collection<EstudioDto> estudios = servicioEstudios.obtenerEstudios();
+			return ResponseEntity.ok(estudios);
+		}
+		Collection<EstudioDto> estudios = servicioEstudios.obtenerEstudios(ids);
 		return ResponseEntity.ok(estudios);
 	}
 	

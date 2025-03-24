@@ -17,6 +17,8 @@ public interface IServicioConsultas {
 	
 	public Collection<ConsultaDto> obtenerConsultas();
 	
+	public Collection<ConsultaDto> obtenerConsultas(Collection<String> ids);
+	
 	public Page<ConsultaDto> obtenerConsultasPaginado(Pageable pageable);
 	
 	public void eliminarConsulta(String id) throws EntidadNoEncontrada;

@@ -1,5 +1,8 @@
 package salud.rest.dto.usuario;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import salud.modelo.MedicoFamilia;
 
 public class MedicoDto extends SanitarioDto {
@@ -33,6 +36,10 @@ public class MedicoDto extends SanitarioDto {
 		dto.setTelefono(medico.getTelefono());
 		dto.setnCol(medico.getNCol());
 		dto.setAtributoTemporal(medico.getAtributoTemporal());
+		
+		List<String> pacientes = new LinkedList<String>();
+		medico.getPacientes().forEach(p -> pacientes.add(p.getId()));
+		dto.setPacientes(pacientes);
 		
 		return dto;
 	}
