@@ -41,7 +41,8 @@ public class Paciente extends Usuario {
 	}
 	
 	public void addAlerta(Alerta alerta) {
-		this.alertas.add(alerta);
+		if (!this.alertas.contains(alerta))
+			this.alertas.add(alerta);
 	}
 	
 	public void removeAlerta(Alerta alerta) {
@@ -57,7 +58,8 @@ public class Paciente extends Usuario {
 	}
 	
 	public void addConsulta(Consulta consulta) {
-		this.consultas.add(consulta);
+		if (!this.consultas.contains(consulta))
+			this.consultas.add(consulta);
 	}
 	
 	public void addRespuesta(Consulta consulta, Respuesta respuesta) {
@@ -82,7 +84,8 @@ public class Paciente extends Usuario {
 	}
 	
 	public void addEspecialista(Especialista especialista) {
-		this.especialistas.add(especialista);
+		if (!this.especialistas.contains(especialista))
+			this.especialistas.add(especialista);
 	}
 	
 	public void removeEspecialista(Especialista especialista) {
@@ -110,7 +113,8 @@ public class Paciente extends Usuario {
 	}
 	
 	public void addSeguimiento(Seguimiento seguimiento) {
-		this.seguimientos.add(seguimiento);
+		if (!this.seguimientos.contains(seguimiento))
+			this.seguimientos.add(seguimiento);
 	}
 	
 	public void removeSeguimiento(Seguimiento seguimiento) {

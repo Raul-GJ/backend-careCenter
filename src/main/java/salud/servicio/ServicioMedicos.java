@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.MedicoFamilia;
+import salud.modelo.Paciente;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioMedicos;
+import salud.repositorio.RepositorioPacientes;
 import salud.rest.dto.usuario.MedicoDto;
 
 @Service
@@ -19,12 +21,15 @@ public class ServicioMedicos implements IServicioMedicos {
 	// Atributos
 	
 	private RepositorioMedicos repositorioMedicos;
+	private RepositorioPacientes repositorioPacientes;
 	
 	// Constructores
 	
-	public ServicioMedicos(RepositorioMedicos repositorioMedicos) {
+	public ServicioMedicos(RepositorioMedicos repositorioMedicos,
+			RepositorioPacientes repositorioPacientes) {
 		super();
 		this.repositorioMedicos = repositorioMedicos;
+		this.repositorioPacientes = repositorioPacientes;
 	}
 	
 	// Métodos
@@ -55,9 +60,6 @@ public class ServicioMedicos implements IServicioMedicos {
 	@Override
 	public void modificarMedico(String id, String nombre, String apellido1, String apellido2, String email, 
 			String telefono, String nCol, String atributoTemporal) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
@@ -74,11 +76,7 @@ public class ServicioMedicos implements IServicioMedicos {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
 		
-		Optional<MedicoFamilia> optional = repositorioMedicos.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		MedicoFamilia medico = optional.get();
+		MedicoFamilia medico = obtenerMedico(id);
 		
 		medico.setNombre(nombre);
 		medico.setApellido1(apellido1);
@@ -125,5 +123,23 @@ public class ServicioMedicos implements IServicioMedicos {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
 		repositorioMedicos.deleteById(id);
+	}
+
+	@Override
+	public void agregarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada {
+		MedicoFamilia medico = obtenerMedico(id);
+		Collection<Paciente> pacientes = new LinkedList<Paciente>();
+		repositorioPacientes.findAllById(ids).forEach(p -> pacientes.add(p));
+		medico.agregarPacientes(pacientes);
+		repositorioMedicos.save(medico);
+	}
+
+	@Override
+	public void eliminarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada {
+		MedicoFamilia medico = obtenerMedico(id);
+		Collection<Paciente> pacientes = new LinkedList<Paciente>();
+		repositorioPacientes.findAllById(ids).forEach(p -> pacientes.add(p));
+		medico.eliminarPacientes(pacientes);
+		repositorioMedicos.save(medico);
 	}
 }

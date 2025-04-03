@@ -6,11 +6,7 @@ import java.util.LinkedList;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import salud.modelo.PlantillaFormulario;
-import salud.modelo.encuesta.ReglaEnum;
-import salud.modelo.encuesta.ReglaRango;
-import salud.modelo.encuesta.PreguntaEncuesta;
-import salud.servicio.IServicioFormulariosPlantilla;
+import salud.servicio.IServicioEspecialistas;
 
 public class TestApp {
 
@@ -20,25 +16,12 @@ public class TestApp {
 		
 		System.out.println("Comenzando aplicación");
 		
-		System.out.println("Prueba de formularios");
+		IServicioEspecialistas servicioEspecialistas = contexto.getBean(IServicioEspecialistas.class);
 		
-		IServicioFormulariosPlantilla servicioFormulariosPlantilla = contexto.getBean(IServicioFormulariosPlantilla.class);
+		Collection<String> plantillas = new LinkedList<String>();
+		plantillas.add("67daba953b81f8437e910d41");
 		
-		String idForm = servicioFormulariosPlantilla.altaFormulario("Formulario 1", "Descripción formulario 1");
-		
-		PreguntaEncuesta pregunta1 = new PreguntaEncuesta(idForm, new ReglaRango(100, 200));
-		
-		Collection<String> enumPregunta2 = new LinkedList<String>();
-		enumPregunta2.add("opción 1");
-		enumPregunta2.add("opción 2");
-		
-		PreguntaEncuesta pregunta2 = new PreguntaEncuesta(idForm, new ReglaEnum(enumPregunta2));
-		
-		servicioFormulariosPlantilla.agregarPregunta(idForm, pregunta1);
-		servicioFormulariosPlantilla.agregarPregunta(idForm, pregunta2);
-		
-		PlantillaFormulario form = servicioFormulariosPlantilla.obtenerFormulario(idForm);
-		System.out.println(form);
+		servicioEspecialistas.agregarPlantillas("67e3e13e39eebc4e6bdaf121", plantillas);
 		
 		System.out.println("Adiós!");
 		

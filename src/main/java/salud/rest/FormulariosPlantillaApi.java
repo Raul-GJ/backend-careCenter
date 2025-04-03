@@ -75,10 +75,9 @@ public interface FormulariosPlantillaApi {
 	public ResponseEntity<PlantillaFormularioDto> obtenerPlantillaFormulario(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener formularios plantilla", description = "Obtiene los datos de todos los formularios plantilla indicados")
+	@Operation(summary = "Obtener formularios plantilla", description = "Obtiene los datos de todos los formularios plantilla")
 	@GetMapping
-	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla(
-			@Valid @RequestBody Collection<String> ids) throws Exception;
+	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla() throws Exception;
 	
 	@Operation(summary = "Eliminar formulario plantilla", description = "Elimina un formulario plantilla de la base de datos")
 	@DeleteMapping("/{id}")

@@ -20,6 +20,20 @@ public interface IServicioEspecialistas {
 	
 	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;
 	
+	public void agregarEstudiosCreador(String id, Collection<String> estudios) throws EntidadNoEncontrada;
+	
+	public void agregarEstudiosEditor(String id, Collection<String> estudios) throws EntidadNoEncontrada;
+	
+	public void agregarEstudiosObservador(String id, Collection<String> estudios) throws EntidadNoEncontrada;
+	
+	public void eliminarEstudios(String id, Collection<String> estudios) throws EntidadNoEncontrada;
+
+	public void agregarPlantillas(String id, Collection<String> plantillas) throws EntidadNoEncontrada;
+	
+	public void eliminarPlantillas(String id, Collection<String> plantillas) throws EntidadNoEncontrada;
+	
+	public void agregarConsultas(String id, Collection<String> consultas) throws EntidadNoEncontrada;
+	
 	public Especialista obtenerEspecialista(String id) throws EntidadNoEncontrada;
 	
 	public Collection<EspecialistaDto> obtenerEspecialistas();

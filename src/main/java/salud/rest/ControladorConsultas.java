@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.rest.dto.consulta.ConsultaDto;
+import salud.rest.dto.consulta.CrearConsultaDto;
 import salud.rest.dto.consulta.CrearRespuestaDto;
 import salud.servicio.IServicioConsultas;
 
@@ -29,10 +30,12 @@ public class ControladorConsultas implements ConsultasApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<ConsultaDto> crearConsulta(ConsultaDto consultaDto) {
+	public ResponseEntity<ConsultaDto> crearConsulta(CrearConsultaDto consultaDto) throws Exception {
 		String id = servicioConsultas.altaConsulta(
 				consultaDto.getAsunto(),
-				consultaDto.getMensaje());
+				consultaDto.getMensaje(),
+				consultaDto.getEmisor(),
+				consultaDto.getReceptor());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -46,13 +49,8 @@ public class ControladorConsultas implements ConsultasApi {
 	}
 	
 	@Override
-	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas(
-			Collection<String> ids) throws Exception {
-		if (ids == null || ids.isEmpty()) {
-			Collection<ConsultaDto> consultas = servicioConsultas.obtenerConsultas();
-			return ResponseEntity.ok(consultas);
-		}
-		Collection<ConsultaDto> consultas = servicioConsultas.obtenerConsultas(ids);
+	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas() throws Exception {
+		Collection<ConsultaDto> consultas = servicioConsultas.obtenerConsultas();
 		return ResponseEntity.ok(consultas);
 	}
 	

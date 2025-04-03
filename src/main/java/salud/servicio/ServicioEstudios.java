@@ -11,13 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Alerta;
-import salud.modelo.Especialista;
 import salud.modelo.Estudio;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioAlertas;
-import salud.repositorio.RepositorioEspecialistas;
 import salud.repositorio.RepositorioEstudios;
 import salud.repositorio.RepositorioPacientes;
 import salud.repositorio.RepositorioSeguimientos;
@@ -31,19 +29,17 @@ public class ServicioEstudios implements IServicioEstudios {
 	
 	private RepositorioEstudios repositorioEstudios;
 	private RepositorioPacientes repositorioPacientes;
-	private RepositorioEspecialistas repositorioEspecialistas;
 	private RepositorioSeguimientos repositorioSeguimientos;
 	private RepositorioAlertas repositorioAlertas;
 	
 	// Constructores
 	
-	public ServicioEstudios(RepositorioEstudios repositorioEstudios, RepositorioPacientes repositorioPacientes,
-			RepositorioEspecialistas repositorioEspecialistas, RepositorioSeguimientos repositorioSeguimientos,
+	public ServicioEstudios(RepositorioEstudios repositorioEstudios, 
+			RepositorioPacientes repositorioPacientes, RepositorioSeguimientos repositorioSeguimientos,
 			RepositorioAlertas repositorioAlertas) {
 		super();
 		this.repositorioEstudios = repositorioEstudios;
 		this.repositorioPacientes = repositorioPacientes;
-		this.repositorioEspecialistas = repositorioEspecialistas;
 		this.repositorioSeguimientos = repositorioSeguimientos;
 		this.repositorioAlertas = repositorioAlertas;
 	}
@@ -57,13 +53,7 @@ public class ServicioEstudios implements IServicioEstudios {
 			throw new IllegalArgumentException("El creador no puede ser nulo o vacío");
 		}
 		
-		Optional<Especialista> optional = repositorioEspecialistas.findById(creador);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(creador);
-		}
-		Especialista especialista = optional.get();
-		
-		Estudio estudio = new Estudio(nombre, descripcion, fechaAlta, fechaFin, especialista);
+		Estudio estudio = new Estudio(nombre, descripcion, fechaAlta, fechaFin);
 		return repositorioEstudios.save(estudio).getId();
 	}
 
@@ -81,23 +71,6 @@ public class ServicioEstudios implements IServicioEstudios {
 		Collection<Paciente> lista = new LinkedList<Paciente>();
 		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
 		estudio.setPacientes(lista);
-		repositorioEstudios.save(estudio);
-	}
-
-	@Override
-	public void asignarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
-		Optional<Estudio> optional = repositorioEstudios.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Estudio estudio = optional.get();
-		Collection<Especialista> lista = new LinkedList<Especialista>();
-		repositorioEspecialistas.findAllById(especialistas).forEach(e -> lista.add(e));
-		estudio.setEspecialistas(lista);
 		repositorioEstudios.save(estudio);
 	}
 
@@ -149,23 +122,6 @@ public class ServicioEstudios implements IServicioEstudios {
 		Collection<Paciente> lista = new LinkedList<Paciente>();
 		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
 		estudio.removePacientes(lista);
-		repositorioEstudios.save(estudio);
-	}
-
-	@Override
-	public void eliminarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
-		Optional<Estudio> optional = repositorioEstudios.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Estudio estudio = optional.get();
-		Collection<Especialista> lista = new LinkedList<Especialista>();
-		repositorioEspecialistas.findAllById(especialistas).forEach(e -> lista.add(e));
-		estudio.removeEspecialistas(lista);
 		repositorioEstudios.save(estudio);
 	}
 

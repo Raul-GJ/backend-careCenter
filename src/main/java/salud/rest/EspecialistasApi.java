@@ -28,15 +28,68 @@ public interface EspecialistasApi {
 			@Valid @RequestBody EspecialistaDto especialistaDto,
 			@Valid @PathVariable String id) throws Exception;
 	
+	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un especialista")
+	@PatchMapping("/{id}/pacientes/agregar")
+	public ResponseEntity<Void> agregarPacientes(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Eliminar pacientes", description = "Elimina pacientes de un especialista")
+	@PatchMapping("/{id}/pacientes/eliminar")
+	public ResponseEntity<Void> eliminarPacientes(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Agregar estudios", description = "Agrega estudios a un especialista con el rol creador")
+	@PatchMapping("/{id}/estudios/agregar/creador")
+	public ResponseEntity<Void> agregarEstudiosCreador(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Agregar estudios", description = "Agrega estudios a un especialista con el rol editor")
+	@PatchMapping("/{id}/estudios/agregar/editor")
+	public ResponseEntity<Void> agregarEstudiosEditor(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Agregar estudios", description = "Agrega estudios a un especialista con el rol observador")
+	@PatchMapping("/{id}/estudios/agregar/observador")
+	public ResponseEntity<Void> agregarEstudiosObservador(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Eliminar estudios", description = "Elimina estudios de un especialista")
+	@PatchMapping("/{id}/estudios/eliminar")
+	public ResponseEntity<Void> eliminarEstudios(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Agregar plantillas", description = "Agrega plantillas a un especialista")
+	@PatchMapping("/{id}/plantillas/agregar")
+	public ResponseEntity<Void> agregarPlantillas(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Eliminar plantillas", description = "Elimina plantillas de un especialista")
+	@PatchMapping("/{id}/plantillas/eliminar")
+	public ResponseEntity<Void> eliminarPlantillas(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Agregar consultas", description = "Agrega consultas a un especialista")
+	@PatchMapping("/{id}/consultas/agregar")
+	public ResponseEntity<Void> agregarConsultas(
+			@Valid @RequestBody Collection<String> ids,
+			@Valid @PathVariable String id) throws Exception;
+	
 	@Operation(summary = "Obtener especialista", description = "Obtiene los datos de un especialista")
 	@GetMapping("/{id}")
 	public ResponseEntity<EspecialistaDto> obtenerEspecialista(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener especialistas", description = "Obtiene los datos de todos los especialistas indicados")
+	@Operation(summary = "Obtener especialistas", description = "Obtiene los datos de todos los especialistas")
 	@GetMapping
-	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas(
-			@Valid @RequestBody Collection<String> ids) throws Exception;
+	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas() throws Exception;
 	
 	@Operation(summary = "Eliminar especialista", description = "Elimina un especialista de la base de datos")
 	@DeleteMapping("/{id}")

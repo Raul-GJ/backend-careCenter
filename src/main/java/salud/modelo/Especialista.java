@@ -1,5 +1,9 @@
 package salud.modelo;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,22 +14,88 @@ public class Especialista extends Sanitario {
 	// Atributos
 
 	private String especialidad;
+	private Map<RolEstudio, Collection<Estudio>> estudios;
+	private Collection<PlantillaFormulario> plantillas;
+	private Collection<Consulta> consultas;
 	
 	// Constructores
 	
-	public Especialista(String nombre, String apellido1, String apellido2, String email, String telefono, String nCol, String especialidad) {
+	public Especialista(String nombre, String apellido1, String apellido2, String email, String telefono,
+			String nCol, String especialidad) {
 		super(nombre, apellido1, apellido2, email, telefono, nCol);
 		this.especialidad = especialidad;
+		this.estudios = new HashMap<RolEstudio, Collection<Estudio>>();
+		this.plantillas = new LinkedList<PlantillaFormulario>();
+		this.consultas = new LinkedList<Consulta>();
 	}
 	
 	// Métodos
-	
+
 	public String getEspecialidad() {
 		return especialidad;
 	}
 
 	public void setEspecialidad(String especialidad) {
 		this.especialidad = especialidad;
+	}
+	
+	public Map<RolEstudio, Collection<Estudio>> getEstudios() {
+		return estudios;
+	}
+
+	public void setEstudios(Map<RolEstudio, Collection<Estudio>> estudios) {
+		this.estudios = estudios;
+	}
+	
+	public void agregarEstudios(Map<RolEstudio, Collection<Estudio>> estudios) {
+		this.estudios.putAll(estudios);
+	}
+	
+	public void eliminarEstudios(Collection<Estudio> estudios) {
+		for (Estudio estudio : estudios) {
+			for (RolEstudio rol : RolEstudio.values()) {
+				this.estudios.remove(rol, estudio);
+			}
+		}
+	}
+	
+	public Collection<PlantillaFormulario> getPlantillas() {
+		return plantillas;
+	}
+
+	public void setPlantillas(Collection<PlantillaFormulario> plantillas) {
+		this.plantillas = plantillas;
+	}
+	
+	public void agregarPlantillas(Collection<PlantillaFormulario> plantillas) {
+		for (PlantillaFormulario plantillaFormulario : plantillas) {
+			if (!this.plantillas.contains(plantillaFormulario))
+				this.plantillas.add(plantillaFormulario);
+		}
+	}
+	
+	public void eliminarPlantillas(Collection<PlantillaFormulario> plantillas) {
+		this.plantillas.removeAll(plantillas);
+	}
+
+	public Collection<Consulta> getConsultas() {
+		return consultas;
+	}
+
+	public void setConsultas(Collection<Consulta> consultas) {
+		this.consultas = consultas;
+	}
+	
+	public void agregarConsultas(Collection<Consulta> consultas) {
+		for (Consulta consulta : consultas) {
+			if (!this.consultas.contains(consulta))
+				this.consultas.add(consulta);
+		}
+	}
+	
+	public void responderConsulta(Consulta consulta, Respuesta respuesta) {
+		if (this.consultas.contains(consulta))
+			consulta.setRespuesta(respuesta);
 	}
 
 	@Override

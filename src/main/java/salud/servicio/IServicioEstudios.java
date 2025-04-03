@@ -17,17 +17,11 @@ public interface IServicioEstudios {
 	
 	public void asignarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;
 	
-	public void asignarEspecialistas(String id, Collection<String> especialistas) 
-			throws EntidadNoEncontrada;
-	
 	public void asignarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada;
 	
 	public void asignarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada;
 	
 	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;
-	
-	public void eliminarEspecialistas(String id, Collection<String> especialistas) 
-			throws EntidadNoEncontrada;
 	
 	public void eliminarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada;
 	

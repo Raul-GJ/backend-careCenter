@@ -67,13 +67,8 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	}
 
 	@Override
-	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas(
-			Collection<String> ids) throws Exception {
-		if (ids == null || ids.isEmpty()) {
-			Collection<EspecialistaDto> especialistas = servicioEspecialistas.obtenerEspecialistas();
-			return ResponseEntity.ok(especialistas);
-		}
-		Collection<EspecialistaDto> especialistas = servicioEspecialistas.obtenerEspecialistas(ids);
+	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas() throws Exception {
+		Collection<EspecialistaDto> especialistas = servicioEspecialistas.obtenerEspecialistas();
 		return ResponseEntity.ok(especialistas);
 	}
 
@@ -83,4 +78,59 @@ public class ControladorEspecialistas implements EspecialistasApi {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
+	public ResponseEntity<Void> agregarPacientes(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.agregarPacientes(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarPacientes(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.eliminarPacientes(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@Override
+	public ResponseEntity<Void> agregarEstudiosCreador(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.agregarEstudiosCreador(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@Override
+	public ResponseEntity<Void> agregarEstudiosEditor(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.agregarEstudiosEditor(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@Override
+	public ResponseEntity<Void> agregarEstudiosObservador(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.agregarEstudiosObservador(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarEstudios(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.eliminarEstudios(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarPlantillas(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		System.out.println("Hola");
+		System.out.println(ids);
+		servicioEspecialistas.agregarPlantillas(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarPlantillas(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.eliminarPlantillas(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarConsultas(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioEspecialistas.agregarConsultas(id, ids);
+		return ResponseEntity.noContent().build();
+	}
 }

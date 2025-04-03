@@ -19,24 +19,19 @@ public class Estudio {
 	private String descripcion;
 	private LocalDateTime fechaAlta;
 	private LocalDateTime fechaFin;
-	private Especialista creador;
 	private Collection<Paciente> pacientes;
-	private Collection<Especialista> especialistas;
 	private Collection<Seguimiento> seguimientos;
 	private Collection<Alerta> alertas;
 	
 	// Constructores
 	
-	public Estudio(String nombre, String descripcion, LocalDateTime fechaAlta, LocalDateTime fechaFin,
-			Especialista creador) {
+	public Estudio(String nombre, String descripcion, LocalDateTime fechaAlta, LocalDateTime fechaFin) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.fechaAlta = fechaAlta;
 		this.fechaFin = fechaFin;
-		this.creador = creador;
 		this.pacientes = new LinkedList<Paciente>();
-		this.especialistas = new LinkedList<Especialista>();
 		this.seguimientos = new LinkedList<Seguimiento>();
 		this.alertas = new LinkedList<Alerta>();
 	}
@@ -82,14 +77,6 @@ public class Estudio {
 	public void setFechaFin(LocalDateTime fechaFin) {
 		this.fechaFin = fechaFin;
 	}
-	
-	public Especialista getCreador() {
-		return creador;
-	}
-
-	public void setCreador(Especialista creador) {
-		this.creador = creador;
-	}
 
 	public Collection<Paciente> getPacientes() {
 		return pacientes;
@@ -101,18 +88,6 @@ public class Estudio {
 	
 	public void removePacientes(Collection<Paciente> pacientes) {
 		this.pacientes.removeAll(pacientes);
-	}
-
-	public Collection<Especialista> getEspecialistas() {
-		return especialistas;
-	}
-
-	public void setEspecialistas(Collection<Especialista> especialistas) {
-		this.especialistas = especialistas;
-	}
-	
-	public void removeEspecialistas(Collection<Especialista> especialistas) {
-		this.especialistas.removeAll(especialistas);
 	}
 	
 	public Collection<Seguimiento> getSeguimientos() {
@@ -145,7 +120,7 @@ public class Estudio {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alertas, creador, descripcion, especialistas, fechaAlta, fechaFin, id, nombre, pacientes,
+		return Objects.hash(alertas, descripcion, fechaAlta, fechaFin, id, nombre, pacientes,
 				seguimientos);
 	}
 
@@ -158,8 +133,8 @@ public class Estudio {
 		if (getClass() != obj.getClass())
 			return false;
 		Estudio other = (Estudio) obj;
-		return Objects.equals(alertas, other.alertas) && Objects.equals(creador, other.creador)
-				&& Objects.equals(descripcion, other.descripcion) && Objects.equals(especialistas, other.especialistas)
+		return Objects.equals(alertas, other.alertas)
+				&& Objects.equals(descripcion, other.descripcion)
 				&& Objects.equals(fechaAlta, other.fechaAlta) && Objects.equals(fechaFin, other.fechaFin)
 				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
 				&& Objects.equals(pacientes, other.pacientes) && Objects.equals(seguimientos, other.seguimientos);

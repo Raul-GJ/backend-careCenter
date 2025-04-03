@@ -67,13 +67,8 @@ public class ControladorSeguimientos implements SeguimientosApi {
 	}
 	
 	@Override
-	public ResponseEntity<Collection<SeguimientoDto>> obtenerSeguimientos(
-			Collection<String> ids) throws Exception {
-		if (ids == null || ids.isEmpty()) {
-			Collection<SeguimientoDto> seguimientos = servicioSeguimientos.obtenerSeguimientos();
-			return ResponseEntity.ok(seguimientos);
-		}
-		Collection<SeguimientoDto> seguimientos = servicioSeguimientos.obtenerSeguimientos(ids);
+	public ResponseEntity<Collection<SeguimientoDto>> obtenerSeguimientos() throws Exception {
+		Collection<SeguimientoDto> seguimientos = servicioSeguimientos.obtenerSeguimientos();
 		return ResponseEntity.ok(seguimientos);
 	}
 	

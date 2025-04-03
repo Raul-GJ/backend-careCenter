@@ -64,13 +64,8 @@ public class ControladorEstudios implements EstudiosApi {
 	}
 	
 	@Override
-	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios(
-			Collection<String> ids) throws Exception {
-		if (ids == null || ids.isEmpty()) {
-			Collection<EstudioDto> estudios = servicioEstudios.obtenerEstudios();
-			return ResponseEntity.ok(estudios);
-		}
-		Collection<EstudioDto> estudios = servicioEstudios.obtenerEstudios(ids);
+	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios() throws Exception {
+		Collection<EstudioDto> estudios = servicioEstudios.obtenerEstudios();
 		return ResponseEntity.ok(estudios);
 	}
 	
@@ -84,13 +79,6 @@ public class ControladorEstudios implements EstudiosApi {
 	public ResponseEntity<Void> asignarPacientes(@Valid Collection<String> pacientes, @Valid String id)
 			throws Exception {
 		servicioEstudios.asignarPacientes(id, pacientes);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> asignarEspecialistas(@Valid Collection<String> especialistas, @Valid String id)
-			throws Exception {
-		servicioEstudios.asignarEspecialistas(id, especialistas);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -111,13 +99,6 @@ public class ControladorEstudios implements EstudiosApi {
 	public ResponseEntity<Void> eliminarPacientes(@Valid Collection<String> pacientes, @Valid String id)
 			throws Exception {
 		servicioEstudios.eliminarPacientes(id, pacientes);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> eliminarEspecialistas(@Valid Collection<String> especialistas, @Valid String id)
-			throws Exception {
-		servicioEstudios.eliminarEspecialistas(id, especialistas);
 		return ResponseEntity.noContent().build();
 	}
 

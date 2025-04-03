@@ -37,10 +37,9 @@ public interface SeguimientosApi {
 	public ResponseEntity<SeguimientoDto> obtenerSeguimiento(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener seguimientos", description = "Obtiene los datos de todos los seguimientos indicados")
+	@Operation(summary = "Obtener seguimientos", description = "Obtiene los datos de todos los seguimientos")
 	@GetMapping
-	public ResponseEntity<Collection<SeguimientoDto>> obtenerSeguimientos(
-			@Valid @RequestBody Collection<String> ids) throws Exception;
+	public ResponseEntity<Collection<SeguimientoDto>> obtenerSeguimientos() throws Exception;
 	
 	@Operation(summary = "Eliminar seguimiento", description = "Elimina un seguimiento de la base de datos")
 	@DeleteMapping("/{id}")

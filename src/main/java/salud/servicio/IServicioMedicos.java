@@ -16,6 +16,10 @@ public interface IServicioMedicos {
 	public void modificarMedico(String id, String nombre, String apellido1, String apellido2, String email, 
 			String telefono, String nCol, String atributoTemporal) throws EntidadNoEncontrada;
 	
+	public void agregarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada;
+	
+	public void eliminarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada;
+	
 	public MedicoFamilia obtenerMedico(String id) throws EntidadNoEncontrada;
 	
 	public Collection<MedicoDto> obtenerMedicos();

@@ -76,10 +76,9 @@ public interface PacientesApi {
 	public ResponseEntity<PacienteDto> obtenerPaciente(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener pacientes", description = "Obtiene los datos de todos los pacientes indicados")
+	@Operation(summary = "Obtener pacientes", description = "Obtiene los datos de todos los pacientes")
 	@GetMapping
-	public ResponseEntity<Collection<PacienteDto>> obtenerPacientes(
-			@RequestBody Collection<String> ids) throws Exception;
+	public ResponseEntity<Collection<PacienteDto>> obtenerPacientes() throws Exception;
 	
 	@Operation(summary = "Eliminar paciente", description = "Elimina un paciente de la base de datos")
 	@DeleteMapping("/{id}")

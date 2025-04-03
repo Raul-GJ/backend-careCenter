@@ -33,10 +33,9 @@ public interface AlertasApi {
 	public ResponseEntity<AlertaDto> obtenerAlerta(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener alertas", description = "Obtiene los datos de todas las alertas indicadas")
+	@Operation(summary = "Obtener alertas", description = "Obtiene los datos de todas las alertas")
 	@GetMapping
-	public ResponseEntity<Collection<AlertaDto>> obtenerAlertas(
-			@Valid @RequestBody Collection<String> ids) throws Exception;
+	public ResponseEntity<Collection<AlertaDto>> obtenerAlertas() throws Exception;
 	
 	@Operation(summary = "Eliminar alerta", description = "Elimina una alerta de la base de datos")
 	@DeleteMapping("/{id}")

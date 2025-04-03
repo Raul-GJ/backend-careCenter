@@ -35,12 +35,6 @@ public interface EstudiosApi {
 			@Valid @RequestBody Collection<String> pacientes,
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Asignar especialistas", description = "Asigna especialistas a un estudio")
-	@PatchMapping("/{id}/especialistas/agregar")
-	public ResponseEntity<Void> asignarEspecialistas(
-			@Valid @RequestBody Collection<String> especialistas,
-			@Valid @PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Asignar seguimientos", description = "Asigna seguimientos a un estudio")
 	@PatchMapping("/{id}/seguimientos/agregar")
 	public ResponseEntity<Void> asignarSeguimientos(
@@ -57,12 +51,6 @@ public interface EstudiosApi {
 	@PatchMapping("/{id}/pacientes/eliminar")
 	public ResponseEntity<Void> eliminarPacientes(
 			@Valid @RequestBody Collection<String> pacientes,
-			@Valid @PathVariable String id) throws Exception;
-	
-	@Operation(summary = "Eliminar especialistas", description = "Elimina especialistas de un estudio")
-	@PatchMapping("/{id}/especialistas/eliminar")
-	public ResponseEntity<Void> eliminarEspecialistas(
-			@Valid @RequestBody Collection<String> especialistas,
 			@Valid @PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar seguimientos", description = "Elimina seguimientos de un estudio")
@@ -82,10 +70,9 @@ public interface EstudiosApi {
 	public ResponseEntity<EstudioDto> obtenerEstudio(
 			@Valid @PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener estudios", description = "Obtiene los datos de todos los estudios indicados")
+	@Operation(summary = "Obtener estudios", description = "Obtiene los datos de todos los estudios")
 	@GetMapping
-	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios(
-			@Valid @RequestBody Collection<String> ids) throws Exception;
+	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios() throws Exception;
 	
 	@Operation(summary = "Eliminar estudio", description = "Elimina un estudio de la base de datos")
 	@DeleteMapping("/{id}")

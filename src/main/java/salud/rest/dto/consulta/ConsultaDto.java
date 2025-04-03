@@ -6,6 +6,8 @@ public class ConsultaDto {
 
 	// Atributos
 	
+	private String emisor;
+	private String receptor;
 	private String asunto;
 	private String mensaje;
 	private String fecha;
@@ -18,6 +20,22 @@ public class ConsultaDto {
 	}
 	
 	// Métodos
+
+	public String getEmisor() {
+		return emisor;
+	}
+
+	public void setEmisor(String emisor) {
+		this.emisor = emisor;
+	}
+
+	public String getReceptor() {
+		return receptor;
+	}
+
+	public void setReceptor(String receptor) {
+		this.receptor = receptor;
+	}
 
 	public String getAsunto() {
 		return asunto;
@@ -53,6 +71,8 @@ public class ConsultaDto {
 	
 	public static ConsultaDto from(Consulta consulta) {
 		ConsultaDto consultaDto = new ConsultaDto();
+		consultaDto.setEmisor(consulta.getEmisor().getId());
+		consultaDto.setReceptor(consulta.getReceptor().getId());
 		consultaDto.setAsunto(consulta.getAsunto());
 		consultaDto.setFecha(consulta.getFecha().toString());
 		consultaDto.setMensaje(consulta.getMensaje());

@@ -11,7 +11,8 @@ import salud.rest.dto.consulta.ConsultaDto;
 
 public interface IServicioConsultas {
 
-	public String altaConsulta(String asunto, String mensaje);
+	public String altaConsulta(String asunto, String mensaje, String emisor, String receptor)
+			throws EntidadNoEncontrada;
 	
 	public Consulta obtenerConsulta(String id) throws EntidadNoEncontrada;
 	

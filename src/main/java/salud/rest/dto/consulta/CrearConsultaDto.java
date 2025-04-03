@@ -4,6 +4,8 @@ public class CrearConsultaDto {
 
 	// Atributos
 	
+	private String emisor;
+	private String receptor;
 	private String asunto;
 	private String mensaje;
 	
@@ -14,6 +16,22 @@ public class CrearConsultaDto {
 	}
 	
 	// Métodos
+	
+	public String getEmisor() {
+		return emisor;
+	}
+
+	public void setEmisor(String emisor) {
+		this.emisor = emisor;
+	}
+
+	public String getReceptor() {
+		return receptor;
+	}
+
+	public void setReceptor(String receptor) {
+		this.receptor = receptor;
+	}
 
 	public String getAsunto() {
 		return asunto;

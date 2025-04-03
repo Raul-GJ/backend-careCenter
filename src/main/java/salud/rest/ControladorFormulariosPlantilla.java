@@ -18,7 +18,7 @@ import salud.rest.dto.formulario.tipos.TipoDatoRangoDto;
 import salud.servicio.IServicioFormulariosPlantilla;
 
 @RestController
-@RequestMapping("/salud/api/formularios/plantillas")
+@RequestMapping("/salud/api/plantillas")
 public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi {
 	
 	// Atributos
@@ -106,13 +106,9 @@ public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi 
 	}
 	
 	@Override
-	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla(
-			Collection<String> ids) throws Exception {
-		if (ids == null || ids.isEmpty()) {
-			Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios();
-			return ResponseEntity.ok(formularios);
-		}
-		Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios(ids);
+	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla() 
+			throws Exception {
+		Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios();
 		return ResponseEntity.ok(formularios);
 	}
 

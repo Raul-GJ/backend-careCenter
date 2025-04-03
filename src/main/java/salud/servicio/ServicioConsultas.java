@@ -11,9 +11,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Consulta;
+import salud.modelo.Especialista;
+import salud.modelo.Paciente;
 import salud.modelo.Respuesta;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioConsultas;
+import salud.repositorio.RepositorioEspecialistas;
+import salud.repositorio.RepositorioPacientes;
 import salud.rest.dto.consulta.ConsultaDto;
 
 @Service
@@ -23,18 +27,24 @@ public class ServicioConsultas implements IServicioConsultas {
 	// Atributos
 	
 	private RepositorioConsultas repositorioConsultas;
+	private RepositorioPacientes repositorioPacientes;
+	private RepositorioEspecialistas repositorioEspecialistas;
 	
 	// Constructores
 	
-	public ServicioConsultas(RepositorioConsultas reposiotiConsultas) {
+	public ServicioConsultas(RepositorioConsultas repositorioConsultas, RepositorioPacientes repositorioPacientes,
+			RepositorioEspecialistas repositorioEspecialistas) {
 		super();
-		this.repositorioConsultas = reposiotiConsultas;
+		this.repositorioConsultas = repositorioConsultas;
+		this.repositorioPacientes = repositorioPacientes;
+		this.repositorioEspecialistas = repositorioEspecialistas;
 	}
 	
 	// Métodos
 	
 	@Override
-	public String altaConsulta(String asunto, String mensaje) {
+	public String altaConsulta(String asunto, String mensaje, String emisor, String receptor) 
+			throws EntidadNoEncontrada {
 		if (asunto == null || asunto.isEmpty()) {
 			throw new IllegalArgumentException("El asunto no puede ser nulo o vacío");
 		}
@@ -42,7 +52,19 @@ public class ServicioConsultas implements IServicioConsultas {
 			throw new IllegalArgumentException("El mensaje no puede ser nulo o vacío");
 		}
 		
-		Consulta consulta = new Consulta(asunto, mensaje);
+		Optional<Paciente> optionalPaciente = repositorioPacientes.findById(emisor);
+		if (optionalPaciente.isEmpty()) {
+			throw new EntidadNoEncontrada(emisor);
+		}
+		Paciente paciente = optionalPaciente.get();
+		
+		Optional<Especialista> optionalEspecialista = repositorioEspecialistas.findById(receptor);
+		if (optionalEspecialista.isEmpty()) {
+			throw new EntidadNoEncontrada(receptor);
+		}
+		Especialista especialista = optionalEspecialista.get();
+		
+		Consulta consulta = new Consulta(asunto, mensaje, paciente, especialista);
 		return repositorioConsultas.save(consulta).getId();
 	}
 

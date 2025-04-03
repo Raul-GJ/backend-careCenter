@@ -13,9 +13,7 @@ public class EstudioDto {
 	private String descripcion;
 	private String fechaAlta;
 	private String fechaFin;
-	private String creador;
 	private Collection<String> pacientes;
-	private Collection<String> especialistas;
 	private Collection<String> seguimientos;
 	private Collection<String> alertas;
 	
@@ -58,14 +56,6 @@ public class EstudioDto {
 	public void setFechaFin(String fechaFin) {
 		this.fechaFin = fechaFin;
 	}
-	
-	public String getCreador() {
-		return creador;
-	}
-
-	public void setCreador(String creador) {
-		this.creador = creador;
-	}
 
 	public Collection<String> getPacientes() {
 		return pacientes;
@@ -73,14 +63,6 @@ public class EstudioDto {
 
 	public void setPacientes(Collection<String> pacientes) {
 		this.pacientes = pacientes;
-	}
-
-	public Collection<String> getEspecialistas() {
-		return especialistas;
-	}
-
-	public void setEspecialistas(Collection<String> especialistas) {
-		this.especialistas = especialistas;
 	}
 	
 	public Collection<String> getSeguimientos() {
@@ -103,12 +85,10 @@ public class EstudioDto {
 		EstudioDto estudioDto = new EstudioDto();
 		
 		Collection<String> pacientes = new LinkedList<String>();
-		Collection<String> especialistas = new LinkedList<String>();
 		Collection<String> alertas = new LinkedList<String>();
 		Collection<String> seguimientos = new LinkedList<String>();
 		
 		estudio.getPacientes().forEach(p -> pacientes.add(p.getId()));
-		estudio.getEspecialistas().forEach(e -> especialistas.add(e.getId()));
 		estudio.getAlertas().forEach(a -> alertas.add(a.getId()));
 		estudio.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
 		
@@ -116,10 +96,8 @@ public class EstudioDto {
 		estudioDto.setDescripcion(estudio.getDescripcion());
 		estudioDto.setFechaAlta(estudio.getFechaAlta().toString());
 		estudioDto.setFechaFin(estudio.getFechaFin().toString());
-		estudioDto.setCreador(estudio.getCreador().getId());
 		
 		estudioDto.setPacientes(pacientes);
-		estudioDto.setEspecialistas(especialistas);
 		estudioDto.setAlertas(alertas);
 		estudioDto.setSeguimientos(seguimientos);
 		return estudioDto;

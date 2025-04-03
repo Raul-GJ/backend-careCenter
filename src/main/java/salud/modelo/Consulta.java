@@ -13,6 +13,8 @@ public class Consulta {
 
 	@Id
 	private String id;
+	private Paciente emisor;
+	private Sanitario receptor;
 	private String asunto;
 	private String mensaje;
 	private LocalDateTime fecha;
@@ -20,8 +22,26 @@ public class Consulta {
 	
 	// Constructores
 	
-	public Consulta(String asunto, String mensaje) {
+	public Paciente getEmisor() {
+		return emisor;
+	}
+
+	public void setEmisor(Paciente emisor) {
+		this.emisor = emisor;
+	}
+
+	public Sanitario getReceptor() {
+		return receptor;
+	}
+
+	public void setReceptor(Sanitario receptor) {
+		this.receptor = receptor;
+	}
+
+	public Consulta(String asunto, String mensaje, Paciente emisor, Sanitario receptor) {
 		super();
+		this.emisor = emisor;
+		this.receptor = receptor;
 		this.asunto = asunto;
 		this.mensaje = mensaje;
 		this.fecha = LocalDateTime.now();

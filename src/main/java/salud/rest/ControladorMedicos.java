@@ -64,19 +64,26 @@ public class ControladorMedicos implements MedicosApi {
 	}
 
 	@Override
-	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos(
-			Collection<String> ids) throws Exception {
-		if (ids == null || ids.isEmpty()) {
-			Collection<MedicoDto> medicos = servicioMedicos.obtenerMedicos();
-			return ResponseEntity.ok(medicos);
-		}
-		Collection<MedicoDto> medicos = servicioMedicos.obtenerMedicos(ids);
+	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos() throws Exception {
+		Collection<MedicoDto> medicos = servicioMedicos.obtenerMedicos();
 		return ResponseEntity.ok(medicos);
 	}
 
 	@Override
 	public ResponseEntity<Void> eliminarMedico(@Valid String id) throws Exception {
 		servicioMedicos.eliminarMedico(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarPacientes(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioMedicos.agregarPacientes(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarPacientes(@Valid Collection<String> ids, @Valid String id) throws Exception {
+		servicioMedicos.eliminarPacientes(id, ids);
 		return ResponseEntity.noContent().build();
 	}
 
