@@ -6,15 +6,12 @@ import java.util.LinkedList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Alerta;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioAlertas;
-import salud.rest.dto.alerta.AlertaDto;
 
 @Service
 @Transactional
@@ -103,25 +100,17 @@ public class ServicioAlertas implements IServicioAlertas {
 	}
 
 	@Override
-	public Collection<AlertaDto> obtenerAlertas() {
-		Collection<AlertaDto> alertas = new LinkedList<AlertaDto>();
-		repositorioAlertas.findAll().forEach(alerta -> alertas.add(AlertaDto.from(alerta)));
+	public Collection<Alerta> obtenerAlertas() {
+		Collection<Alerta> alertas = new LinkedList<Alerta>();
+		repositorioAlertas.findAll().forEach(alerta -> alertas.add(alerta));
 		return alertas;
 	}
 	
 	@Override
-	public Collection<AlertaDto> obtenerAlertas(Collection<String> ids) {
-		Collection<AlertaDto> alertas = new LinkedList<AlertaDto>();
-		repositorioAlertas.findAllById(ids).forEach(alerta -> alertas.add(AlertaDto.from(alerta)));
+	public Collection<Alerta> obtenerAlertas(Collection<String> ids) {
+		Collection<Alerta> alertas = new LinkedList<Alerta>();
+		repositorioAlertas.findAllById(ids).forEach(alerta -> alertas.add(alerta));
 		return alertas;
-	}
-
-	@Override
-	public Page<AlertaDto> obtenerAlertasPaginado(Pageable pageable) {
-		return repositorioAlertas.findAll(pageable).map(alerta -> {
-			AlertaDto dto = AlertaDto.from(alerta);
-			return dto;
-		});
 	}
 
 	@Override

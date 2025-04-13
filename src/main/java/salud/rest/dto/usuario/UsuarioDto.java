@@ -1,15 +1,24 @@
 package salud.rest.dto.usuario;
 
+import javax.validation.constraints.NotEmpty;
+
 import salud.modelo.Usuario;
 
 public class UsuarioDto {
 
 	// Atributos
 	
+	@NotEmpty(message = "El campo 'nombre' no debe estar vacío")
 	private String nombre;
+	
+	@NotEmpty(message = "El campo 'apellido1' no debe estar vacío")
 	private String apellido1;
+	
 	private String apellido2;
+	
+	@NotEmpty(message = "El campo 'email' no debe estar vacío")
 	private String email;
+	
 	private String telefono;
 	
 	// Constructores

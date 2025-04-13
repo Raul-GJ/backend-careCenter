@@ -2,6 +2,8 @@ package salud.rest.dto.formulario.tipos;
 
 import java.util.Collection;
 
+import javax.validation.constraints.NotEmpty;
+
 import salud.modelo.encuesta.ReglaEnum;
 import salud.modelo.encuesta.PreguntaEncuesta;
 
@@ -9,7 +11,10 @@ public class TipoDatoEnumDto {
 	
 	// Atributos
 	
+	@NotEmpty(message = "El campo 'pregunta' no debe estar vacío")
 	private String pregunta;
+	
+	@NotEmpty(message = "El campo 'values' no debe estar vacío")
 	private Collection<String> values;
 	
 	// Constructores

@@ -2,6 +2,7 @@ package salud.rest;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.validation.Valid;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.modelo.Especialista;
 import salud.rest.dto.usuario.EspecialistaDto;
 import salud.servicio.IServicioEspecialistas;
 
@@ -68,8 +70,10 @@ public class ControladorEspecialistas implements EspecialistasApi {
 
 	@Override
 	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas() throws Exception {
-		Collection<EspecialistaDto> especialistas = servicioEspecialistas.obtenerEspecialistas();
-		return ResponseEntity.ok(especialistas);
+		Collection<Especialista> especialistas = servicioEspecialistas.obtenerEspecialistas();
+		Collection<EspecialistaDto> dtos = new LinkedList<EspecialistaDto>();
+		especialistas.forEach(a -> dtos.add(EspecialistaDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 
 	@Override
@@ -116,8 +120,6 @@ public class ControladorEspecialistas implements EspecialistasApi {
 
 	@Override
 	public ResponseEntity<Void> agregarPlantillas(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		System.out.println("Hola");
-		System.out.println(ids);
 		servicioEspecialistas.agregarPlantillas(id, ids);
 		return ResponseEntity.noContent().build();
 	}

@@ -3,12 +3,8 @@ package salud.servicio;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import salud.modelo.Alerta;
 import salud.repositorio.EntidadNoEncontrada;
-import salud.rest.dto.alerta.AlertaDto;
 
 public interface IServicioAlertas {
 
@@ -19,11 +15,9 @@ public interface IServicioAlertas {
 	
 	public Alerta obtenerAlerta(String id) throws EntidadNoEncontrada;
 	
-	public Collection<AlertaDto> obtenerAlertas();
+	public Collection<Alerta> obtenerAlertas();
 	
-	public Collection<AlertaDto> obtenerAlertas(Collection<String> ids);
-	
-	public Page<AlertaDto> obtenerAlertasPaginado(Pageable pageable);
+	public Collection<Alerta> obtenerAlertas(Collection<String> ids);
 	
 	public void eliminarAlerta(String id) throws EntidadNoEncontrada;
 }

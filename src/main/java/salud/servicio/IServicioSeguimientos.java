@@ -4,12 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
-import salud.rest.dto.seguimiento.SeguimientoDto;
 
 public interface IServicioSeguimientos {
 
@@ -21,11 +17,9 @@ public interface IServicioSeguimientos {
 	
 	public Seguimiento obtenerSeguimiento(String id) throws EntidadNoEncontrada;
 	
-	public Collection<SeguimientoDto> obtenerSeguimientos();
+	public Collection<Seguimiento> obtenerSeguimientos();
 	
-	public Collection<SeguimientoDto> obtenerSeguimientos(Collection<String> ids);
-	
-	public Page<SeguimientoDto> obtenerSeguimientosPaginado(Pageable pageable);
+	public Collection<Seguimiento> obtenerSeguimientos(Collection<String> ids);
 	
 	public void eliminarSeguimiento(String id) throws EntidadNoEncontrada;
 	

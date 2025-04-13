@@ -26,12 +26,12 @@ public interface AlertasApi {
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> modificarAlerta(
 			@Valid @RequestBody AlertaDto alertaDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener alerta", description = "Obtiene los datos de una alerta")
 	@GetMapping("/{id}")
 	public ResponseEntity<AlertaDto> obtenerAlerta(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener alertas", description = "Obtiene los datos de todas las alertas")
 	@GetMapping
@@ -40,5 +40,5 @@ public interface AlertasApi {
 	@Operation(summary = "Eliminar alerta", description = "Elimina una alerta de la base de datos")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminarAlerta(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 }

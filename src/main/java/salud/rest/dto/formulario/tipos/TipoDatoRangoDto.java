@@ -1,14 +1,23 @@
 package salud.rest.dto.formulario.tipos;
 
 import salud.modelo.encuesta.ReglaRango;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import salud.modelo.encuesta.PreguntaEncuesta;
 
 public class TipoDatoRangoDto {
 	
 	// Atributos
 	
+	@NotEmpty(message = "El campo 'pregunta' no debe estar vacío")
 	private String pregunta;
+	
+	@NotNull(message = "El campo 'minValue' es obligatorio")
 	private int minValue;
+	
+	@NotNull(message = "El campo 'maxValue' es obligatorio")
 	private int maxValue;
 	
 	// Constructores

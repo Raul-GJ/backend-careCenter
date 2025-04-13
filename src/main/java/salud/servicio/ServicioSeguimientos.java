@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +16,6 @@ import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioFormulariosPlantilla;
 import salud.repositorio.RepositorioSeguimientos;
-import salud.rest.dto.seguimiento.SeguimientoDto;
 
 @Service
 @Transactional
@@ -104,28 +101,19 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 	}
 
 	@Override
-	public Collection<SeguimientoDto> obtenerSeguimientos() {
-		Collection<SeguimientoDto> seguimientos = new LinkedList<SeguimientoDto>();
-		repositorioSeguimientos.findAll().forEach(seguimiento -> seguimientos.add(SeguimientoDto.from(seguimiento)));
+	public Collection<Seguimiento> obtenerSeguimientos() {
+		Collection<Seguimiento> seguimientos = new LinkedList<Seguimiento>();
+		repositorioSeguimientos.findAll().forEach(seguimiento -> seguimientos.add(seguimiento));
 		return seguimientos;
 	}
 	
 	@Override
-	public Collection<SeguimientoDto> obtenerSeguimientos(Collection<String> ids) {
-		Collection<SeguimientoDto> seguimientos = new LinkedList<SeguimientoDto>();
-		repositorioSeguimientos.findAllById(ids).forEach(
-				seguimiento -> seguimientos.add(SeguimientoDto.from(seguimiento)));
+	public Collection<Seguimiento> obtenerSeguimientos(Collection<String> ids) {
+		Collection<Seguimiento> seguimientos = new LinkedList<Seguimiento>();
+		repositorioSeguimientos.findAllById(ids).forEach(seguimiento -> seguimientos.add(seguimiento));
 		return seguimientos;
 	}
-
-	@Override
-	public Page<SeguimientoDto> obtenerSeguimientosPaginado(Pageable pageable) {
-		return repositorioSeguimientos.findAll(pageable).map(seguimiento -> {
-			SeguimientoDto dto = SeguimientoDto.from(seguimiento);
-			return dto;
-		});
-	}
-
+	
 	@Override
 	public void eliminarSeguimiento(String id) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {

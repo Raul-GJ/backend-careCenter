@@ -1,7 +1,9 @@
 package salud.rest.dto.estudio;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import salud.modelo.Estudio;
 
@@ -16,6 +18,7 @@ public class EstudioDto {
 	private Collection<String> pacientes;
 	private Collection<String> seguimientos;
 	private Collection<String> alertas;
+	private Map<String, String> especialistas;
 	
 	// Constructores
 	
@@ -24,7 +27,7 @@ public class EstudioDto {
 	}
 	
 	// Métodos
-	
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -81,16 +84,26 @@ public class EstudioDto {
 		this.alertas = alertas;
 	}
 	
+	public Map<String, String> getEspecialistas() {
+		return especialistas;
+	}
+
+	public void setEspecialistas(Map<String, String> especialistas) {
+		this.especialistas = especialistas;
+	}
+	
 	public static EstudioDto from(Estudio estudio) {
 		EstudioDto estudioDto = new EstudioDto();
 		
 		Collection<String> pacientes = new LinkedList<String>();
 		Collection<String> alertas = new LinkedList<String>();
 		Collection<String> seguimientos = new LinkedList<String>();
+		Map<String, String> especialistas = new HashMap<String, String>();
 		
 		estudio.getPacientes().forEach(p -> pacientes.add(p.getId()));
 		estudio.getAlertas().forEach(a -> alertas.add(a.getId()));
 		estudio.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
+		estudio.getEspecialistas().forEach((e, r) -> especialistas.put(e.getId(), r.toString()));
 		
 		estudioDto.setNombre(estudio.getNombre());
 		estudioDto.setDescripcion(estudio.getDescripcion());
@@ -100,6 +113,8 @@ public class EstudioDto {
 		estudioDto.setPacientes(pacientes);
 		estudioDto.setAlertas(alertas);
 		estudioDto.setSeguimientos(seguimientos);
+		estudioDto.setEspecialistas(especialistas);
+		
 		return estudioDto;
 	}
 }

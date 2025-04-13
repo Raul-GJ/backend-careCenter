@@ -5,7 +5,6 @@ import java.util.Collection;
 import salud.modelo.PlantillaFormulario;
 import salud.modelo.encuesta.PreguntaEncuesta;
 import salud.repositorio.EntidadNoEncontrada;
-import salud.rest.dto.formulario.PlantillaFormularioDto;
 
 public interface IServicioFormulariosPlantilla {
 
@@ -20,9 +19,9 @@ public interface IServicioFormulariosPlantilla {
 	
 	public PlantillaFormulario obtenerFormulario(String id) throws EntidadNoEncontrada;
 	
-	public Collection<PlantillaFormularioDto> obtenerFormularios();
+	public Collection<PlantillaFormulario> obtenerFormularios();
 	
-	public Collection<PlantillaFormularioDto> obtenerFormularios(Collection<String> ids);
+	public Collection<PlantillaFormulario> obtenerFormularios(Collection<String> ids);
 	
 	public void eliminarFormulario(String id) throws EntidadNoEncontrada;
 }

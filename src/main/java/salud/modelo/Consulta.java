@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "consultas")
@@ -13,7 +14,9 @@ public class Consulta {
 
 	@Id
 	private String id;
+	@DBRef
 	private Paciente emisor;
+	@DBRef
 	private Sanitario receptor;
 	private String asunto;
 	private String mensaje;

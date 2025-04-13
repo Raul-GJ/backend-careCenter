@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "seguimientos")
@@ -15,6 +16,7 @@ public class Seguimiento {
 	private String id;
 	private LocalDateTime fecha;
 	private LocalDateTime plazo;
+	@DBRef
 	private Formulario formulario;
 	
 	// Constructores

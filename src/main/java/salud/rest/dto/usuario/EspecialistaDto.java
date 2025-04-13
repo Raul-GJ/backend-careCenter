@@ -1,19 +1,18 @@
 package salud.rest.dto.usuario;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import salud.modelo.Especialista;
+import salud.rest.dto.estudio.InfoEstudioDto;
 
 public class EspecialistaDto extends SanitarioDto {
 	
 	// Atributos
 	
 	private String especialidad;
-	private Map<String, Collection<String>> estudios;
+	private Collection<InfoEstudioDto> infoEstudios;
 	private Collection<String> plantillas;
 	private Collection<String> consultas;
 	
@@ -33,12 +32,12 @@ public class EspecialistaDto extends SanitarioDto {
 		this.especialidad = especialidad;
 	}
 	
-	public Map<String, Collection<String>> getEstudios() {
-		return estudios;
+	public Collection<InfoEstudioDto> getInfoEstudios() {
+		return infoEstudios;
 	}
 
-	public void setEstudios(Map<String, Collection<String>> estudios) {
-		this.estudios = estudios;
+	public void setInfoEstudios(Collection<InfoEstudioDto> estudios) {
+		this.infoEstudios = estudios;
 	}
 
 	public Collection<String> getPlantillas() {
@@ -71,10 +70,9 @@ public class EspecialistaDto extends SanitarioDto {
 		especialista.getPacientes().forEach(p -> pacientes.add(p.getId()));
 		dto.setPacientes(pacientes);
 		
-		Map<String, Collection<String>> estudios = new HashMap<String, Collection<String>>();
-		especialista.getEstudios().forEach((r, e) -> estudios.put(r.toString(), 
-				e.stream().map(es -> es.getId()).toList()));
-		dto.setEstudios(estudios);
+		Collection<InfoEstudioDto> infoEstudios = new LinkedList<InfoEstudioDto>();
+		especialista.getEstudios().forEach(e -> infoEstudios.add(InfoEstudioDto.from(e)));
+		dto.setInfoEstudios(infoEstudios);
 		
 		List<String> plantillas = new LinkedList<String>();
 		especialista.getPlantillas().forEach(p -> plantillas.add(p.getId()));

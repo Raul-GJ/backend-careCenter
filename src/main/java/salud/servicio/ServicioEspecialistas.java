@@ -1,27 +1,23 @@
 package salud.servicio;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import salud.modelo.Alerta;
 import salud.modelo.Consulta;
 import salud.modelo.Especialista;
 import salud.modelo.Estudio;
+import salud.modelo.InfoEstudio;
 import salud.modelo.Paciente;
 import salud.modelo.PlantillaFormulario;
 import salud.modelo.RolEstudio;
 import salud.repositorio.EntidadNoEncontrada;
-import salud.repositorio.RepositorioConsultas;
 import salud.repositorio.RepositorioEspecialistas;
-import salud.repositorio.RepositorioEstudios;
-import salud.repositorio.RepositorioFormulariosPlantilla;
-import salud.repositorio.RepositorioPacientes;
-import salud.rest.dto.usuario.EspecialistaDto;
 
 @Service
 @Transactional
@@ -30,22 +26,25 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	// Atributos
 	
 	private RepositorioEspecialistas repositorioEspecialistas;
-	private RepositorioPacientes repositorioPacientes;
-	private RepositorioEstudios repositorioEstudios;
-	private RepositorioFormulariosPlantilla repositorioPlantillas;
-	private RepositorioConsultas repositorioConsultas;
+	private IServicioPacientes servicioPacientes;
+	private IServicioEstudios servicioEstudios;
+	private IServicioFormulariosPlantilla servicioPlantillas;
+	private IServicioConsultas servicioConsultas;
+	private IServicioAlertas servicioAlertas;
 	
 	// Constructores
 	
 	public ServicioEspecialistas(RepositorioEspecialistas repositorioEspecialistas,
-			RepositorioPacientes repositorioPacientes, RepositorioEstudios repositorioEstudios,
-			RepositorioFormulariosPlantilla repositorioPlantillas, RepositorioConsultas repositorioConsultas) {
+			IServicioPacientes servicioPacientes, IServicioEstudios servicioEstudios,
+			IServicioFormulariosPlantilla servicioPlantillas, IServicioConsultas servicioConsultas,
+			IServicioAlertas servicioAlertas) {
 		super();
 		this.repositorioEspecialistas = repositorioEspecialistas;
-		this.repositorioPacientes = repositorioPacientes;
-		this.repositorioEstudios = repositorioEstudios;
-		this.repositorioPlantillas = repositorioPlantillas;
-		this.repositorioConsultas = repositorioConsultas;
+		this.servicioPacientes = servicioPacientes;
+		this.servicioEstudios = servicioEstudios;
+		this.servicioPlantillas = servicioPlantillas;
+		this.servicioConsultas = servicioConsultas;
+		this.servicioAlertas = servicioAlertas;
 	}
 	
 	// Métodos
@@ -57,9 +56,6 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
 		if (apellido1 == null || apellido1.isEmpty()) {
-			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
-		}
-		if (apellido2 == null || apellido2.isEmpty()) {
 			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
 		}
 		if (email == null || email.isEmpty()) {
@@ -117,18 +113,22 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	@Override
 	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
-		Collection<Paciente> lista = new LinkedList<Paciente>();
-		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
+		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
 		especialista.agregarPacientes(lista);
+		for (Paciente paciente : lista) {
+			servicioPacientes.agregarEspecialista(paciente.getId(), especialista);
+		}
 		repositorioEspecialistas.save(especialista);
 	}
 
 	@Override
 	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
-		Collection<Paciente> lista = new LinkedList<Paciente>();
-		repositorioPacientes.findAllById(pacientes).forEach(p -> lista.add(p));
+		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
 		especialista.eliminarPacientes(lista);
+		for (Paciente paciente : lista) {
+			servicioPacientes.eliminarEspecialista(paciente.getId(), especialista);
+		}
 		repositorioEspecialistas.save(especialista);
 	}
 
@@ -147,34 +147,53 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	}
 
 	@Override
-	public Collection<EspecialistaDto> obtenerEspecialistas() {
-		Collection<EspecialistaDto> especialistas = new LinkedList<EspecialistaDto>();
-		repositorioEspecialistas.findAll().forEach(e -> especialistas.add(EspecialistaDto.from(e)));
+	public Collection<Especialista> obtenerEspecialistas() {
+		Collection<Especialista> especialistas = new LinkedList<Especialista>();
+		repositorioEspecialistas.findAll().forEach(e -> especialistas.add(e));
 		return especialistas;
 	}
 	
 	@Override
-	public Collection<EspecialistaDto> obtenerEspecialistas(Collection<String> ids) {
-		Collection<EspecialistaDto> especialistas = new LinkedList<EspecialistaDto>();
-		repositorioEspecialistas.findAllById(ids).forEach(e -> especialistas.add(EspecialistaDto.from(e)));
+	public Collection<Especialista> obtenerEspecialistas(Collection<String> ids) {
+		Collection<Especialista> especialistas = new LinkedList<Especialista>();
+		repositorioEspecialistas.findAllById(ids).forEach(e -> especialistas.add(e));
 		return especialistas;
 	}
 
 	@Override
 	public void eliminarEspecialista(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		Especialista especialista = obtenerEspecialista(id);
+		
+		Collection<Consulta> consultas = especialista.getConsultas();
+		for (Consulta consulta : consultas) {
+			servicioConsultas.eliminarConsulta(consulta.getId());
 		}
+		
+		Collection<InfoEstudio> estudios = especialista.getEstudios();
+		for (InfoEstudio infoEstudio : estudios) {
+			if (infoEstudio.getRol().equals(RolEstudio.CREADOR))
+				servicioEstudios.eliminarEstudio(infoEstudio.getEstudio().getId());
+		}
+		
+		List<Paciente> pacientes = especialista.getPacientes();
+		for (Paciente paciente : pacientes) {
+			servicioPacientes.eliminarEspecialista(paciente.getId(), especialista);
+		}
+		
+		Collection<PlantillaFormulario> plantillas = especialista.getPlantillas();
+		for (PlantillaFormulario p : plantillas) {
+			servicioPlantillas.eliminarFormulario(p.getId());
+		}
+	
 		repositorioEspecialistas.deleteById(id);
 	}
 	
 	public void agregarEstudios(String id, Collection<String> estudios, RolEstudio rol) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
-		Collection<Estudio> lista = new LinkedList<Estudio>();
-		repositorioEstudios.findAllById(estudios).forEach(e -> lista.add(e));
-		Map<RolEstudio, Collection<Estudio>> mapa = new HashMap<RolEstudio, Collection<Estudio>>();
-		mapa.put(rol, lista);
-		especialista.agregarEstudios(mapa);
+		Collection<Estudio> listaTmp = servicioEstudios.obtenerEstudios(estudios);
+		Collection<InfoEstudio> lista = new LinkedList<InfoEstudio>();
+		listaTmp.forEach(e -> lista.add(new InfoEstudio(rol, e)));
+		especialista.agregarEstudios(lista);
 		repositorioEspecialistas.save(especialista);
 	}
 
@@ -196,17 +215,18 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	@Override
 	public void eliminarEstudios(String id, Collection<String> estudios) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
-		Collection<Estudio> lista = new LinkedList<Estudio>();
-		repositorioEstudios.findAllById(estudios).forEach(e -> lista.add(e));
+		Collection<Estudio> lista = servicioEstudios.obtenerEstudios(estudios);
 		especialista.eliminarEstudios(lista);
+		for (Estudio estudio : lista) {
+			servicioEstudios.eliminarEspecialista(estudio.getId(), especialista);
+		}
 		repositorioEspecialistas.save(especialista);
 	}
 
 	@Override
 	public void agregarPlantillas(String id, Collection<String> plantillas) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
-		Collection<PlantillaFormulario> lista = new LinkedList<PlantillaFormulario>();
-		repositorioPlantillas.findAllById(plantillas).forEach(p -> lista.add(p));
+		Collection<PlantillaFormulario> lista = servicioPlantillas.obtenerFormularios(plantillas);
 		especialista.agregarPlantillas(lista);
 		repositorioEspecialistas.save(especialista);
 	}
@@ -214,18 +234,101 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	@Override
 	public void eliminarPlantillas(String id, Collection<String> plantillas) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
-		Collection<PlantillaFormulario> lista = new LinkedList<PlantillaFormulario>();
-		repositorioPlantillas.findAllById(plantillas).forEach(p -> lista.add(p));
+		Collection<PlantillaFormulario> lista = servicioPlantillas.obtenerFormularios(plantillas);
 		especialista.eliminarPlantillas(lista);
+		for (PlantillaFormulario plantillaFormulario : lista) {
+			if (!plantillaFormulario.isPublico())
+				servicioPlantillas.eliminarFormulario(id);
+		}
 		repositorioEspecialistas.save(especialista);
 	}
 
 	@Override
 	public void agregarConsultas(String id, Collection<String> consultas) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
-		Collection<Consulta> lista = new LinkedList<Consulta>();
-		repositorioConsultas.findAllById(consultas).forEach(c -> lista.add(c));
+		Collection<Consulta> lista = servicioConsultas.obtenerConsultas(consultas);
 		especialista.agregarConsultas(lista);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.agregarPaciente(paciente);
+		servicioPacientes.agregarEspecialista(paciente.getId(), especialista);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void agregarEstudio(String id, Estudio estudio, RolEstudio rol) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.agregarEstudio(new InfoEstudio(rol, estudio));
+		//servicioEstudios.agregarEspecialista(estudio.getId(), especialista, rol);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void agregarPlantilla(String id, PlantillaFormulario plantilla) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.agregarPlantilla(plantilla);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void agregarConsulta(String id, Consulta consulta) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.agregarConsulta(consulta);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
+		especialista.agregarAlertas(lista);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.agregarAlerta(alerta);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void eliminarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
+		especialista.eliminarAlertas(lista);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.eliminarPaciente(paciente);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void eliminarEstudio(String id, Estudio estudio) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.eliminarEstudio(estudio);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void eliminarPlantilla(String id, PlantillaFormulario plantilla) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.eliminarPlantilla(plantilla);
+		repositorioEspecialistas.save(especialista);
+	}
+
+	@Override
+	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
+		Especialista especialista = obtenerEspecialista(id);
+		especialista.eliminarAlerta(alerta);
 		repositorioEspecialistas.save(especialista);
 	}
 }

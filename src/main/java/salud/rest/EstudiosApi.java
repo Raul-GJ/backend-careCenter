@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
+import salud.rest.dto.estudio.AgregarEspecialistaDto;
 import salud.rest.dto.estudio.CrearEstudioDto;
 import salud.rest.dto.estudio.EstudioDto;
 
@@ -27,48 +28,60 @@ public interface EstudiosApi {
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> modificarEstudio(
 			@Valid @RequestBody CrearEstudioDto estudioDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Asignar pacientes", description = "Asigna pacientes a un estudio")
+	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un estudio")
 	@PatchMapping("/{id}/pacientes/agregar")
-	public ResponseEntity<Void> asignarPacientes(
+	public ResponseEntity<Void> agregarPacientes(
 			@Valid @RequestBody Collection<String> pacientes,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Asignar seguimientos", description = "Asigna seguimientos a un estudio")
+	@Operation(summary = "Agregar seguimientos", description = "Agrega seguimientos a un estudio")
 	@PatchMapping("/{id}/seguimientos/agregar")
-	public ResponseEntity<Void> asignarSeguimientos(
+	public ResponseEntity<Void> agregarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Asignar alertas", description = "Asignar alertas a un estudio")
+	@Operation(summary = "Agregar alertas", description = "Agrega alertas a un estudio")
 	@PatchMapping("/{id}/alertas/agregar")
-	public ResponseEntity<Void> asignarAlertas(
+	public ResponseEntity<Void> agregarAlertas(
 			@Valid @RequestBody Collection<String> alertas,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Agregar especialista", description = "Agrega un especialista a un estudio")
+	@PatchMapping("/{id}/especialistas/agregar")
+	public ResponseEntity<Void> agregarEspecialista(
+			@Valid @RequestBody AgregarEspecialistaDto especialista,
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar pacientes", description = "Elimina pacientes de un estudio")
 	@PatchMapping("/{id}/pacientes/eliminar")
 	public ResponseEntity<Void> eliminarPacientes(
 			@Valid @RequestBody Collection<String> pacientes,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar seguimientos", description = "Elimina seguimientos de un estudio")
 	@PatchMapping("/{id}/seguimientos/eliminar")
 	public ResponseEntity<Void> eliminarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar alertas", description = "Elimina alertas de un estudio")
 	@PatchMapping("/{id}/alertas/eliminar")
 	public ResponseEntity<Void> eliminarAlertas(
 			@Valid @RequestBody Collection<String> alertas,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Eliminar especialistas", description = "Elimina especialistas de un estudio")
+	@PatchMapping("/{id}/especialistas/eliminar")
+	public ResponseEntity<Void> eliminarEspecialistas(
+			@Valid @RequestBody Collection<String> especialistas,
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener estudio", description = "Obtiene los datos de un estudio")
 	@GetMapping("/{id}")
 	public ResponseEntity<EstudioDto> obtenerEstudio(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener estudios", description = "Obtiene los datos de todos los estudios")
 	@GetMapping
@@ -77,5 +90,5 @@ public interface EstudiosApi {
 	@Operation(summary = "Eliminar estudio", description = "Elimina un estudio de la base de datos")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminarEstudio(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 }

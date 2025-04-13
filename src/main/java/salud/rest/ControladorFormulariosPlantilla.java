@@ -2,12 +2,14 @@ package salud.rest;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.modelo.PlantillaFormulario;
 import salud.modelo.encuesta.PreguntaEncuesta;
 import salud.rest.dto.formulario.PlantillaFormularioDto;
 import salud.rest.dto.formulario.tipos.TipoDatoBooleanoDto;
@@ -108,8 +110,10 @@ public class ControladorFormulariosPlantilla implements FormulariosPlantillaApi 
 	@Override
 	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla() 
 			throws Exception {
-		Collection<PlantillaFormularioDto> formularios = servicioFormulariosPlantilla.obtenerFormularios();
-		return ResponseEntity.ok(formularios);
+		Collection<PlantillaFormulario> plantillas = servicioFormulariosPlantilla.obtenerFormularios();
+		Collection<PlantillaFormularioDto> dtos = new LinkedList<PlantillaFormularioDto>();
+		plantillas.forEach(a -> dtos.add(PlantillaFormularioDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 
 	@Override

@@ -1,10 +1,15 @@
 package salud.rest.dto.formulario;
 
+import javax.validation.constraints.NotEmpty;
+
 public class CrearPlantillaFormularioDto {
 	
 	// Atributos
 	
+	@NotEmpty(message = "El campo 'nombre' no debe estar vacío")
 	private String nombre;
+
+	@NotEmpty(message = "El campo 'descripcion' no debe estar vacío")
 	private String descripcion;
 	
 	// Constructores

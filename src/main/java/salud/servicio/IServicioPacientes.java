@@ -2,9 +2,12 @@ package salud.servicio;
 
 import java.util.Collection;
 
+import salud.modelo.Alerta;
+import salud.modelo.Consulta;
+import salud.modelo.Especialista;
 import salud.modelo.Paciente;
+import salud.modelo.Seguimiento;
 import salud.repositorio.EntidadNoEncontrada;
-import salud.rest.dto.usuario.PacienteDto;
 
 public interface IServicioPacientes {
 	
@@ -22,17 +25,31 @@ public interface IServicioPacientes {
 	
 	public void agregarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada;
 	
+	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
+
+	public void agregarConsulta(String id, Consulta consulta) throws EntidadNoEncontrada;
+	
+	public void agregarEspecialista(String id, Especialista especialista) throws EntidadNoEncontrada;
+	
+	public void agregarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada;
+	
 	public void eliminarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada;
 
 	public void eliminarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada;
 	
 	public void eliminarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada;
 	
+	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
+
+	public void eliminarEspecialista(String id, Especialista especialista) throws EntidadNoEncontrada;
+	
+	public void eliminarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada;
+	
 	public Paciente obtenerPaciente(String id) throws EntidadNoEncontrada;
 	
-	public Collection<PacienteDto> obtenerPacientes(Collection<String> ids);
+	public Collection<Paciente> obtenerPacientes(Collection<String> ids);
 	
-	public Collection<PacienteDto> obtenerPacientes();
+	public Collection<Paciente> obtenerPacientes();
 	
 	public void eliminarPaciente(String id) throws EntidadNoEncontrada;
 }

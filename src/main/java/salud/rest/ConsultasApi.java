@@ -26,7 +26,7 @@ public interface ConsultasApi {
 	@Operation(summary = "Obtener consulta", description = "Obtiene los datos de una consulta")
 	@GetMapping("/{id}")
 	public ResponseEntity<ConsultaDto> obtenerConsulta(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener consultas", description = "Obtiene los datos de todas las consultas")
 	@GetMapping
@@ -36,5 +36,5 @@ public interface ConsultasApi {
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> responderConsulta(
 			@Valid @RequestBody CrearRespuestaDto respuestaDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 }

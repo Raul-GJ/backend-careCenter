@@ -5,12 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 public abstract class Sanitario extends Usuario {
 	
 	// Atributos
 	
 	private String nCol;
+	@DBRef
 	private List<Paciente> pacientes;
+	@DBRef
+	private Collection<Consulta> consultas;
 	
 	// Constructores
 	
@@ -19,6 +24,7 @@ public abstract class Sanitario extends Usuario {
 		super(nombre, apellido1, apellido2, email, telefono);
 		this.nCol = nCol;
 		this.pacientes = new LinkedList<Paciente>();
+		this.consultas = new LinkedList<Consulta>();
 	}
 	
 	// Métodos
@@ -45,6 +51,38 @@ public abstract class Sanitario extends Usuario {
 	
 	public void eliminarPacientes(Collection<Paciente> pacientes) {
 		this.pacientes.removeAll(pacientes);
+	}
+	
+	public void agregarPaciente(Paciente paciente) {
+		this.pacientes.add(paciente);
+	}
+	
+	public void eliminarPaciente(Paciente paciente) {
+		this.pacientes.remove(paciente);
+	}
+	
+	public Collection<Consulta> getConsultas() {
+		return consultas;
+	}
+
+	public void setConsultas(Collection<Consulta> consultas) {
+		this.consultas = consultas;
+	}
+	
+	public void agregarConsulta(Consulta consulta) {
+	if (!this.consultas.contains(consulta))
+		this.consultas.add(consulta);
+	}
+	
+	public void agregarConsultas(Collection<Consulta> consultas) {
+		for (Consulta consulta : consultas) {
+			agregarConsulta(consulta);
+		}
+	}
+	
+	public void responderConsulta(Consulta consulta, Respuesta respuesta) {
+		if (this.consultas.contains(consulta))
+			consulta.setRespuesta(respuesta);
 	}
 
 	@Override

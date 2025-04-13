@@ -1,8 +1,12 @@
 package salud.modelo;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 public abstract class Usuario {
 	
@@ -15,6 +19,8 @@ public abstract class Usuario {
 	private String apellido2;
 	private String email;
 	private String telefono;
+	@DBRef
+	private List<Alerta> alertas;
 	
 	// Constructores
 	
@@ -25,6 +31,7 @@ public abstract class Usuario {
 		this.apellido2 = apellido2;
 		this.email = email;
 		this.telefono = telefono;
+		this.alertas = new LinkedList<Alerta>();
 	}
 	
 	// Métodos
@@ -76,10 +83,37 @@ public abstract class Usuario {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
+	
+	public List<Alerta> getAlertas() {
+		return alertas;
+	}
+
+	public void setAlertas(List<Alerta> alertas) {
+		this.alertas = alertas;
+	}
+	
+	public void agregarAlertas(Collection<Alerta> alertas) {
+		for (Alerta alerta : alertas) {
+			agregarAlerta(alerta);
+		}
+	}
+	
+	public void agregarAlerta(Alerta alerta) {
+		if (!this.alertas.contains(alerta))
+			this.alertas.add(alerta);
+	}
+	
+	public void eliminarAlertas(Collection<Alerta> alertas) {
+		this.alertas.removeAll(alertas);
+	}
+	
+	public void eliminarAlerta(Alerta alerta) {
+		this.alertas.remove(alerta);
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellido1, apellido2, email, id, nombre, telefono);
+		return Objects.hash(alertas, apellido1, apellido2, email, id, nombre, telefono);
 	}
 
 	@Override
@@ -91,8 +125,11 @@ public abstract class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(apellido1, other.apellido1) && Objects.equals(apellido2, other.apellido2)
-				&& Objects.equals(email, other.email) && Objects.equals(id, other.id)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(telefono, other.telefono);
+		return Objects.equals(alertas, other.alertas) && Objects.equals(apellido1, other.apellido1)
+				&& Objects.equals(apellido2, other.apellido2) && Objects.equals(email, other.email)
+				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(telefono, other.telefono);
 	}
+
+	
 }

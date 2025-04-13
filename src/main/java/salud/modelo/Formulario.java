@@ -5,12 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
+
 public class Formulario {
 	
 	// Atributos
 	
 	private LocalDateTime fecha;
 	private boolean rellenado;
+	@DBRef
 	private PlantillaFormulario plantilla;
 	private List<String> respuestas;
 	

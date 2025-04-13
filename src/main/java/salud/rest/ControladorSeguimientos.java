@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.modelo.Seguimiento;
 import salud.rest.dto.formulario.RellenarFormularioDto;
 import salud.rest.dto.seguimiento.CrearSeguimientoDto;
 import salud.rest.dto.seguimiento.SeguimientoDto;
@@ -68,8 +70,10 @@ public class ControladorSeguimientos implements SeguimientosApi {
 	
 	@Override
 	public ResponseEntity<Collection<SeguimientoDto>> obtenerSeguimientos() throws Exception {
-		Collection<SeguimientoDto> seguimientos = servicioSeguimientos.obtenerSeguimientos();
-		return ResponseEntity.ok(seguimientos);
+		Collection<Seguimiento> seguimientos = servicioSeguimientos.obtenerSeguimientos();
+		Collection<SeguimientoDto> dtos = new LinkedList<SeguimientoDto>();
+		seguimientos.forEach(a -> dtos.add(SeguimientoDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 	
 	@Override

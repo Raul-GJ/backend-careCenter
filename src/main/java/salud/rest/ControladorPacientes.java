@@ -2,6 +2,7 @@ package salud.rest;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.validation.Valid;
 
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.modelo.Paciente;
 import salud.rest.dto.usuario.CrearPacienteDto;
 import salud.rest.dto.usuario.PacienteDto;
 import salud.servicio.IServicioPacientes;
@@ -68,8 +70,10 @@ public class ControladorPacientes implements PacientesApi {
 
 	@Override
 	public ResponseEntity<Collection<PacienteDto>> obtenerPacientes() throws Exception {
-		Collection<PacienteDto> pacientes = servicioPacientes.obtenerPacientes();
-		return ResponseEntity.ok(pacientes);
+		Collection<Paciente> pacientes = servicioPacientes.obtenerPacientes();
+		Collection<PacienteDto> dtos = new LinkedList<PacienteDto>();
+		pacientes.forEach(a -> dtos.add(PacienteDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 
 	@Override

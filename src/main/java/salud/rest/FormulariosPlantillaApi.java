@@ -32,48 +32,48 @@ public interface FormulariosPlantillaApi {
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> modificarPlantillaFormulario(
 			@Valid @RequestBody PlantillaFormularioDto formularioDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pregunta cadena", description = "Agrega una pregunta de tipo cadena a un formulario plantilla")
 	@PostMapping("/{id}/datos/cadena")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
 			@Valid @RequestBody TipoDatoCadenaDto preguntaDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pregunta numeral", description = "Agrega una pregunta de tipo numeral a un formulario plantilla")
 	@PostMapping("/{id}/datos/numeral")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
 			@Valid @RequestBody TipoDatoNumeralDto preguntaDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pregunta booleana", description = "Agrega una pregunta de tipo booleano a un formulario plantilla")
-	@PostMapping("/{id}/datos/bool")
+	@PostMapping("/{id}/datos/booleano")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
 			@Valid @RequestBody TipoDatoBooleanoDto preguntaDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar pregunta enum", description = "Agrega una pregunta de tipo enumerado a un formulario plantilla")
-	@PostMapping("/{id}/datos/enum")
+	@Operation(summary = "Agregar pregunta enumerada", description = "Agrega una pregunta de tipo enumerado a un formulario plantilla")
+	@PostMapping("/{id}/datos/enumerado")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
 			@Valid @RequestBody TipoDatoEnumDto preguntaDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar pregunta", description = "Agrega una pregunta de tipo rango a un formulario plantilla")
+	@Operation(summary = "Agregar pregunta rango", description = "Agrega una pregunta de tipo rango a un formulario plantilla")
 	@PostMapping("/{id}/datos/rango")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
 			@Valid @RequestBody TipoDatoRangoDto preguntaDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar pregunta", description = "Elimina una pregunta de un formulario plantilla")
 	@DeleteMapping("/{id}/datos/{pos}")
 	public ResponseEntity<Void> eliminarPreguntaFormulario(
 			@Valid @PathVariable int pos,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener formulario plantilla", description = "Obtiene los datos de un formulario plantilla")
 	@GetMapping("/{id}")
 	public ResponseEntity<PlantillaFormularioDto> obtenerPlantillaFormulario(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener formularios plantilla", description = "Obtiene los datos de todos los formularios plantilla")
 	@GetMapping
@@ -82,5 +82,5 @@ public interface FormulariosPlantillaApi {
 	@Operation(summary = "Eliminar formulario plantilla", description = "Elimina un formulario plantilla de la base de datos")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminarPlantillaFormulario(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 }

@@ -30,12 +30,12 @@ public interface SeguimientosApi {
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> modificarSeguimiento(
 			@Valid @RequestBody CrearSeguimientoDto seguimientoDto,
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener seguimiento", description = "Obtiene los datos de un seguimiento")
 	@GetMapping("/{id}")
 	public ResponseEntity<SeguimientoDto> obtenerSeguimiento(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener seguimientos", description = "Obtiene los datos de todos los seguimientos")
 	@GetMapping
@@ -44,13 +44,13 @@ public interface SeguimientosApi {
 	@Operation(summary = "Eliminar seguimiento", description = "Elimina un seguimiento de la base de datos")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminarSeguimiento(
-			@Valid @PathVariable String id) throws Exception;
+			@PathVariable String id) throws Exception;
 	
 	// Formularios
 	
 	@Operation(summary = "Rellenar formulario", description = "Rellena un formulario")
 	@PatchMapping("/{id}/formulario")
 	public ResponseEntity<Void> rellenarFormulario(
-			@Valid @PathVariable String id,
+			@PathVariable String id,
 			@Valid @RequestBody RellenarFormularioDto formularioDto) throws Exception;
 }

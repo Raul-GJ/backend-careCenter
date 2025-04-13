@@ -1,11 +1,11 @@
 package salud.modelo;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "especialistas")
@@ -14,9 +14,10 @@ public class Especialista extends Sanitario {
 	// Atributos
 
 	private String especialidad;
-	private Map<RolEstudio, Collection<Estudio>> estudios;
+	@DBRef
+	private Collection<InfoEstudio> estudios;
+	@DBRef
 	private Collection<PlantillaFormulario> plantillas;
-	private Collection<Consulta> consultas;
 	
 	// Constructores
 	
@@ -24,9 +25,8 @@ public class Especialista extends Sanitario {
 			String nCol, String especialidad) {
 		super(nombre, apellido1, apellido2, email, telefono, nCol);
 		this.especialidad = especialidad;
-		this.estudios = new HashMap<RolEstudio, Collection<Estudio>>();
+		this.estudios = new LinkedList<InfoEstudio>();
 		this.plantillas = new LinkedList<PlantillaFormulario>();
-		this.consultas = new LinkedList<Consulta>();
 	}
 	
 	// Métodos
@@ -39,23 +39,36 @@ public class Especialista extends Sanitario {
 		this.especialidad = especialidad;
 	}
 	
-	public Map<RolEstudio, Collection<Estudio>> getEstudios() {
+	public Collection<InfoEstudio> getEstudios() {
 		return estudios;
 	}
 
-	public void setEstudios(Map<RolEstudio, Collection<Estudio>> estudios) {
+	public void setEstudios(Collection<InfoEstudio> estudios) {
 		this.estudios = estudios;
 	}
 	
-	public void agregarEstudios(Map<RolEstudio, Collection<Estudio>> estudios) {
-		this.estudios.putAll(estudios);
+	public void agregarEstudios(Collection<InfoEstudio> estudios) {
+		this.estudios.addAll(estudios);
 	}
 	
 	public void eliminarEstudios(Collection<Estudio> estudios) {
-		for (Estudio estudio : estudios) {
-			for (RolEstudio rol : RolEstudio.values()) {
-				this.estudios.remove(rol, estudio);
-			}
+		this.estudios = this.estudios.stream().filter(ie -> 
+			!estudios.contains(ie.getEstudio())).collect(Collectors.toList());
+	}
+	
+	public void agregarEstudio(InfoEstudio estudio) {
+		this.estudios.add(estudio);
+	}
+	
+	public void eliminarEstudio(Estudio estudio) {
+		this.estudios = this.estudios.stream().filter(ie -> 
+			!ie.getEstudio().getId().equals(estudio.getId())).collect(Collectors.toList());
+	}
+	
+	public void setRol(Estudio estudio, RolEstudio nuevoRol) {
+		for (InfoEstudio infoEstudio : this.estudios) {
+			if (infoEstudio.getEstudio().equals(estudio))
+				infoEstudio.setRol(nuevoRol);
 		}
 	}
 	
@@ -67,35 +80,23 @@ public class Especialista extends Sanitario {
 		this.plantillas = plantillas;
 	}
 	
+	public void agregarPlantilla(PlantillaFormulario plantilla) {
+		if (!this.plantillas.contains(plantilla))
+			this.plantillas.add(plantilla);
+	}
+	
 	public void agregarPlantillas(Collection<PlantillaFormulario> plantillas) {
 		for (PlantillaFormulario plantillaFormulario : plantillas) {
-			if (!this.plantillas.contains(plantillaFormulario))
-				this.plantillas.add(plantillaFormulario);
+			agregarPlantilla(plantillaFormulario);
 		}
 	}
 	
 	public void eliminarPlantillas(Collection<PlantillaFormulario> plantillas) {
 		this.plantillas.removeAll(plantillas);
 	}
-
-	public Collection<Consulta> getConsultas() {
-		return consultas;
-	}
-
-	public void setConsultas(Collection<Consulta> consultas) {
-		this.consultas = consultas;
-	}
 	
-	public void agregarConsultas(Collection<Consulta> consultas) {
-		for (Consulta consulta : consultas) {
-			if (!this.consultas.contains(consulta))
-				this.consultas.add(consulta);
-		}
-	}
-	
-	public void responderConsulta(Consulta consulta, Respuesta respuesta) {
-		if (this.consultas.contains(consulta))
-			consulta.setRespuesta(respuesta);
+	public void eliminarPlantilla(PlantillaFormulario plantilla) {
+		this.plantillas.remove(plantilla);
 	}
 
 	@Override

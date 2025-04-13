@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.modelo.Estudio;
+import salud.rest.dto.estudio.AgregarEspecialistaDto;
 import salud.rest.dto.estudio.CrearEstudioDto;
 import salud.rest.dto.estudio.EstudioDto;
 import salud.servicio.IServicioEstudios;
@@ -65,8 +68,10 @@ public class ControladorEstudios implements EstudiosApi {
 	
 	@Override
 	public ResponseEntity<Collection<EstudioDto>> obtenerEstudios() throws Exception {
-		Collection<EstudioDto> estudios = servicioEstudios.obtenerEstudios();
-		return ResponseEntity.ok(estudios);
+		Collection<Estudio> estudios = servicioEstudios.obtenerEstudios();
+		Collection<EstudioDto> dtos = new LinkedList<EstudioDto>();
+		estudios.forEach(a -> dtos.add(EstudioDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 	
 	@Override
@@ -76,22 +81,29 @@ public class ControladorEstudios implements EstudiosApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> asignarPacientes(@Valid Collection<String> pacientes, @Valid String id)
+	public ResponseEntity<Void> agregarPacientes(@Valid Collection<String> pacientes, @Valid String id)
 			throws Exception {
-		servicioEstudios.asignarPacientes(id, pacientes);
+		servicioEstudios.agregarPacientes(id, pacientes);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	public ResponseEntity<Void> asignarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
+	public ResponseEntity<Void> agregarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
 			throws Exception {
-		servicioEstudios.asignarSeguimientos(id, seguimientos);
+		servicioEstudios.agregarSeguimientos(id, seguimientos);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	public ResponseEntity<Void> asignarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
-		servicioEstudios.asignarAlertas(id, alertas);
+	public ResponseEntity<Void> agregarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
+		servicioEstudios.agregarAlertas(id, alertas);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@Override
+	public ResponseEntity<Void> agregarEspecialista(@Valid AgregarEspecialistaDto especialista,
+			String id) throws Exception {
+		servicioEstudios.agregarEspecialista(id, especialista.getEspecialista(), especialista.getRol());
 		return ResponseEntity.noContent().build();
 	}
 
@@ -112,6 +124,13 @@ public class ControladorEstudios implements EstudiosApi {
 	@Override
 	public ResponseEntity<Void> eliminarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
 		servicioEstudios.eliminarAlertas(id, alertas);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarEspecialistas(@Valid Collection<String> especialistas, String id)
+			throws Exception {
+		servicioEstudios.eliminarEspecialistas(id, especialistas);
 		return ResponseEntity.noContent().build();
 	}
 }

@@ -4,12 +4,14 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.modelo.Alerta;
 import salud.rest.dto.alerta.AlertaDto;
 import salud.servicio.IServicioAlertas;
 
@@ -60,8 +62,10 @@ public class ControladorAlertas implements AlertasApi {
 	
 	@Override
 	public ResponseEntity<Collection<AlertaDto>> obtenerAlertas() throws Exception {
-		Collection<AlertaDto> alertas = servicioAlertas.obtenerAlertas();
-		return ResponseEntity.ok(alertas);
+		Collection<Alerta> alertas = servicioAlertas.obtenerAlertas();
+		Collection<AlertaDto> dtos = new LinkedList<AlertaDto>();
+		alertas.forEach(a -> dtos.add(AlertaDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 
 	@Override

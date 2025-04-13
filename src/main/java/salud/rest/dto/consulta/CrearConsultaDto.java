@@ -1,12 +1,21 @@
 package salud.rest.dto.consulta;
 
+import javax.validation.constraints.NotEmpty;
+
 public class CrearConsultaDto {
 
 	// Atributos
 	
+	@NotEmpty(message = "El campo 'emisor' no debe estar vacío")
 	private String emisor;
+	
+	@NotEmpty(message = "El campo 'receptor' no debe estar vacío")
 	private String receptor;
+	
+	@NotEmpty(message = "El campo 'asunto' no debe estar vacío")
 	private String asunto;
+	
+	@NotEmpty(message = "El campo 'mensaje' no debe estar vacío")
 	private String mensaje;
 	
 	// Constructores

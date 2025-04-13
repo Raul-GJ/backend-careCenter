@@ -1,11 +1,18 @@
 package salud.rest.dto.seguimiento;
 
+import javax.validation.constraints.NotEmpty;
+
 public class CrearSeguimientoDto {
 
 	// Atributos
 
+	@NotEmpty(message = "El campo 'fecha' no debe estar vacío")
 	private String fecha;
+	
+	@NotEmpty(message = "El campo 'plazo' no debe estar vacío")
 	private String plazo;
+	
+	@NotEmpty(message = "El campo 'plantilla' no debe estar vacío")
 	private String plantilla;
 	
 	// Constructores

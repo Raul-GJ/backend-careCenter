@@ -2,12 +2,8 @@ package salud.servicio;
 
 import java.util.Collection;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import salud.modelo.Consulta;
 import salud.repositorio.EntidadNoEncontrada;
-import salud.rest.dto.consulta.ConsultaDto;
 
 public interface IServicioConsultas {
 
@@ -16,11 +12,9 @@ public interface IServicioConsultas {
 	
 	public Consulta obtenerConsulta(String id) throws EntidadNoEncontrada;
 	
-	public Collection<ConsultaDto> obtenerConsultas();
+	public Collection<Consulta> obtenerConsultas();
 	
-	public Collection<ConsultaDto> obtenerConsultas(Collection<String> ids);
-	
-	public Page<ConsultaDto> obtenerConsultasPaginado(Pageable pageable);
+	public Collection<Consulta> obtenerConsultas(Collection<String> ids);
 	
 	public void eliminarConsulta(String id) throws EntidadNoEncontrada;
 	

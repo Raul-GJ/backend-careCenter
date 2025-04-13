@@ -7,10 +7,15 @@ public class ConsultaDto {
 	// Atributos
 	
 	private String emisor;
+	
 	private String receptor;
+	
 	private String asunto;
+	
 	private String mensaje;
+	
 	private String fecha;
+	
 	private RespuestaDto respuesta;
 	
 	// Constructores

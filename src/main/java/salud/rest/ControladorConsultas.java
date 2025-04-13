@@ -2,12 +2,14 @@ package salud.rest;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.modelo.Consulta;
 import salud.rest.dto.consulta.ConsultaDto;
 import salud.rest.dto.consulta.CrearConsultaDto;
 import salud.rest.dto.consulta.CrearRespuestaDto;
@@ -50,8 +52,10 @@ public class ControladorConsultas implements ConsultasApi {
 	
 	@Override
 	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas() throws Exception {
-		Collection<ConsultaDto> consultas = servicioConsultas.obtenerConsultas();
-		return ResponseEntity.ok(consultas);
+		Collection<Consulta> consultas = servicioConsultas.obtenerConsultas();
+		Collection<ConsultaDto> dtos = new LinkedList<ConsultaDto>();
+		consultas.forEach(a -> dtos.add(ConsultaDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 	
 	@Override

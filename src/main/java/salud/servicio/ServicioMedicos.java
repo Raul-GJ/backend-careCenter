@@ -11,8 +11,6 @@ import salud.modelo.MedicoFamilia;
 import salud.modelo.Paciente;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioMedicos;
-import salud.repositorio.RepositorioPacientes;
-import salud.rest.dto.usuario.MedicoDto;
 
 @Service
 @Transactional
@@ -21,15 +19,15 @@ public class ServicioMedicos implements IServicioMedicos {
 	// Atributos
 	
 	private RepositorioMedicos repositorioMedicos;
-	private RepositorioPacientes repositorioPacientes;
+	private IServicioPacientes servicioPacientes;
 	
 	// Constructores
 	
 	public ServicioMedicos(RepositorioMedicos repositorioMedicos,
-			RepositorioPacientes repositorioPacientes) {
+			IServicioPacientes servicioPacientes) {
 		super();
 		this.repositorioMedicos = repositorioMedicos;
-		this.repositorioPacientes = repositorioPacientes;
+		this.servicioPacientes = servicioPacientes;
 	}
 	
 	// Métodos
@@ -41,9 +39,6 @@ public class ServicioMedicos implements IServicioMedicos {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
 		if (apellido1 == null || apellido1.isEmpty()) {
-			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
-		}
-		if (apellido2 == null || apellido2.isEmpty()) {
 			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
 		}
 		if (email == null || email.isEmpty()) {
@@ -104,16 +99,16 @@ public class ServicioMedicos implements IServicioMedicos {
 	}
 
 	@Override
-	public Collection<MedicoDto> obtenerMedicos() {
-		Collection<MedicoDto> medicos = new LinkedList<MedicoDto>();
-		repositorioMedicos.findAll().forEach(m -> medicos.add(MedicoDto.from(m)));
+	public Collection<MedicoFamilia> obtenerMedicos() {
+		Collection<MedicoFamilia> medicos = new LinkedList<MedicoFamilia>();
+		repositorioMedicos.findAll().forEach(m -> medicos.add(m));
 		return medicos;
 	}
 	
 	@Override
-	public Collection<MedicoDto> obtenerMedicos(Collection<String> ids) {
-		Collection<MedicoDto> medicos = new LinkedList<MedicoDto>();
-		repositorioMedicos.findAllById(ids).forEach(m -> medicos.add(MedicoDto.from(m)));
+	public Collection<MedicoFamilia> obtenerMedicos(Collection<String> ids) {
+		Collection<MedicoFamilia> medicos = new LinkedList<MedicoFamilia>();
+		repositorioMedicos.findAllById(ids).forEach(m -> medicos.add(m));
 		return medicos;
 	}
 
@@ -128,8 +123,7 @@ public class ServicioMedicos implements IServicioMedicos {
 	@Override
 	public void agregarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada {
 		MedicoFamilia medico = obtenerMedico(id);
-		Collection<Paciente> pacientes = new LinkedList<Paciente>();
-		repositorioPacientes.findAllById(ids).forEach(p -> pacientes.add(p));
+		Collection<Paciente> pacientes = servicioPacientes.obtenerPacientes(ids);
 		medico.agregarPacientes(pacientes);
 		repositorioMedicos.save(medico);
 	}
@@ -137,9 +131,22 @@ public class ServicioMedicos implements IServicioMedicos {
 	@Override
 	public void eliminarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada {
 		MedicoFamilia medico = obtenerMedico(id);
-		Collection<Paciente> pacientes = new LinkedList<Paciente>();
-		repositorioPacientes.findAllById(ids).forEach(p -> pacientes.add(p));
+		Collection<Paciente> pacientes = servicioPacientes.obtenerPacientes(ids);
 		medico.eliminarPacientes(pacientes);
+		repositorioMedicos.save(medico);
+	}
+
+	@Override
+	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
+		MedicoFamilia medico = obtenerMedico(id);
+		medico.agregarPaciente(paciente);
+		repositorioMedicos.save(medico);
+	}
+
+	@Override
+	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
+		MedicoFamilia medico = obtenerMedico(id);
+		medico.eliminarPaciente(paciente);
 		repositorioMedicos.save(medico);
 	}
 }

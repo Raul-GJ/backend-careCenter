@@ -11,7 +11,6 @@ import salud.modelo.PlantillaFormulario;
 import salud.modelo.encuesta.PreguntaEncuesta;
 import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioFormulariosPlantilla;
-import salud.rest.dto.formulario.PlantillaFormularioDto;
 
 @Service
 @Transactional
@@ -125,17 +124,16 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 	}
 
 	@Override
-	public Collection<PlantillaFormularioDto> obtenerFormularios() {
-		Collection<PlantillaFormularioDto> formularios = new LinkedList<PlantillaFormularioDto>();
-		repositorioFormularios.findAll().forEach(f -> formularios.add(PlantillaFormularioDto.from(f)));
+	public Collection<PlantillaFormulario> obtenerFormularios() {
+		Collection<PlantillaFormulario> formularios = new LinkedList<PlantillaFormulario>();
+		repositorioFormularios.findAll().forEach(f -> formularios.add(f));
 		return formularios;
 	}
 	
 	@Override
-	public Collection<PlantillaFormularioDto> obtenerFormularios(Collection<String> ids) {
-		Collection<PlantillaFormularioDto> formularios = new LinkedList<PlantillaFormularioDto>();
-		repositorioFormularios.findAllById(ids).forEach(
-				f -> formularios.add(PlantillaFormularioDto.from(f)));
+	public Collection<PlantillaFormulario> obtenerFormularios(Collection<String> ids) {
+		Collection<PlantillaFormulario> formularios = new LinkedList<PlantillaFormulario>();
+		repositorioFormularios.findAllById(ids).forEach(f -> formularios.add(f));
 		return formularios;
 	}
 
