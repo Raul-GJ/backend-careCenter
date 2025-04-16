@@ -2,8 +2,6 @@ package salud.servicio;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +12,9 @@ import salud.modelo.Especialista;
 import salud.modelo.Paciente;
 import salud.modelo.Respuesta;
 import salud.modelo.Usuario;
-import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioConsultas;
+import salud.rest.excepciones.EntidadNoEncontrada;
+import salud.servicio.obtencion.IServicioObtencionConsultas;
 
 @Service
 @Transactional
@@ -24,6 +23,7 @@ public class ServicioConsultas implements IServicioConsultas {
 	// Atributos
 	
 	private RepositorioConsultas repositorioConsultas;
+	private IServicioObtencionConsultas servicioConsultas;
 	private IServicioPacientes servicioPacientes;
 	private IServicioEspecialistas servicioEspecialistas;
 	private IServicioAlertas servicioAlertas;
@@ -31,12 +31,14 @@ public class ServicioConsultas implements IServicioConsultas {
 	// Constructores
 	
 	public ServicioConsultas(RepositorioConsultas repositorioConsultas, 
-			IServicioPacientes repositorioPacientes, IServicioEspecialistas repositorioEspecialistas, 
+			IServicioObtencionConsultas servicioConsultas,
+			IServicioPacientes servicioPacientes, IServicioEspecialistas servicioEspecialistas,
 			IServicioAlertas servicioAlertas) {
 		super();
 		this.repositorioConsultas = repositorioConsultas;
-		this.servicioPacientes = repositorioPacientes;
-		this.servicioEspecialistas = repositorioEspecialistas;
+		this.servicioConsultas = servicioConsultas;
+		this.servicioPacientes = servicioPacientes;
+		this.servicioEspecialistas = servicioEspecialistas;
 		this.servicioAlertas = servicioAlertas;
 	}
 	
@@ -59,41 +61,11 @@ public class ServicioConsultas implements IServicioConsultas {
 		String idConsulta = repositorioConsultas.save(consulta).getId();
 		
 		Alerta alerta = generarAlertaConsulta(consulta);
-		servicioAlertas.altaAlerta(alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
-		
-		servicioPacientes.agregarConsulta(paciente.getId(), consulta);
-		servicioEspecialistas.agregarConsulta(especialista.getId(), consulta);
-		servicioEspecialistas.agregarAlerta(especialista.getId(), alerta);
+		String idAlerta = servicioAlertas.altaAlerta(
+				alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
+		servicioEspecialistas.agregarAlerta(especialista.getId(), servicioAlertas.obtenerAlerta(idAlerta));
 		
 		return idConsulta;
-	}
-
-	@Override
-	public Consulta obtenerConsulta(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
-		Optional<Consulta> optional = repositorioConsultas.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Consulta consulta = optional.get();
-		return consulta;
-	}
-
-	@Override
-	public Collection<Consulta> obtenerConsultas() {
-		Collection<Consulta> consultas = new LinkedList<Consulta>();
-		repositorioConsultas.findAll().forEach(consulta -> consultas.add(consulta));
-		return consultas;
-	}
-	
-	@Override
-	public Collection<Consulta> obtenerConsultas(Collection<String> ids) {
-		Collection<Consulta> consultas = new LinkedList<Consulta>();
-		repositorioConsultas.findAllById(ids).forEach(consulta -> consultas.add(consulta));
-		return consultas;
 	}
 
 	@Override
@@ -143,6 +115,25 @@ public class ServicioConsultas implements IServicioConsultas {
 		consulta.setRespuesta(respuesta);
 		
 		repositorioConsultas.save(consulta);
-		servicioPacientes.agregarAlerta(consulta.getEmisor().getId(), generarAlertaRespuesta(consulta));
+		Alerta alerta = generarAlertaRespuesta(consulta);
+		String idAlerta = servicioAlertas.altaAlerta(
+				alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
+		servicioPacientes.agregarAlerta(consulta.getEmisor().getId(), 
+				servicioAlertas.obtenerAlerta(idAlerta));
+	}
+
+	@Override
+	public Consulta obtenerConsulta(String id) throws EntidadNoEncontrada {
+		return servicioConsultas.obtenerConsulta(id);
+	}
+
+	@Override
+	public Collection<Consulta> obtenerConsultas() {
+		return servicioConsultas.obtenerConsultas();
+	}
+
+	@Override
+	public Collection<Consulta> obtenerConsultas(Collection<String> ids) {
+		return servicioConsultas.obtenerConsultas(ids);
 	}
 }

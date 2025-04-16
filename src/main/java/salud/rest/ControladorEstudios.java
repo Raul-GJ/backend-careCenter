@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.modelo.Estudio;
-import salud.rest.dto.estudio.AgregarEspecialistaDto;
 import salud.rest.dto.estudio.CrearEstudioDto;
 import salud.rest.dto.estudio.EstudioDto;
 import salud.servicio.IServicioEstudios;
@@ -40,9 +39,8 @@ public class ControladorEstudios implements EstudiosApi {
 	public ResponseEntity<EstudioDto> crearEstudio(CrearEstudioDto estudioDto) throws Exception {
 		String id = servicioEstudios.altaEstudio(estudioDto.getNombre(), 
 				estudioDto.getDescripcion(),
-				LocalDateTime.parse(estudioDto.getFechaAlta(), DateTimeFormatter.ISO_DATE_TIME), 
-				LocalDateTime.parse(estudioDto.getFechaFin(), DateTimeFormatter.ISO_DATE_TIME),
-				estudioDto.getCreador());
+				LocalDateTime.parse(estudioDto.getFechaInicio(), DateTimeFormatter.ISO_DATE_TIME), 
+				LocalDateTime.parse(estudioDto.getFechaFin(), DateTimeFormatter.ISO_DATE_TIME));
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -99,13 +97,6 @@ public class ControladorEstudios implements EstudiosApi {
 		servicioEstudios.agregarAlertas(id, alertas);
 		return ResponseEntity.noContent().build();
 	}
-	
-	@Override
-	public ResponseEntity<Void> agregarEspecialista(@Valid AgregarEspecialistaDto especialista,
-			String id) throws Exception {
-		servicioEstudios.agregarEspecialista(id, especialista.getEspecialista(), especialista.getRol());
-		return ResponseEntity.noContent().build();
-	}
 
 	@Override
 	public ResponseEntity<Void> eliminarPacientes(@Valid Collection<String> pacientes, @Valid String id)
@@ -124,13 +115,6 @@ public class ControladorEstudios implements EstudiosApi {
 	@Override
 	public ResponseEntity<Void> eliminarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
 		servicioEstudios.eliminarAlertas(id, alertas);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> eliminarEspecialistas(@Valid Collection<String> especialistas, String id)
-			throws Exception {
-		servicioEstudios.eliminarEspecialistas(id, especialistas);
 		return ResponseEntity.noContent().build();
 	}
 }

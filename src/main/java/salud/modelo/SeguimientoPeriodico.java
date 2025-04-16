@@ -13,8 +13,8 @@ public class SeguimientoPeriodico extends Seguimiento {
 	// Constructores
 	
 	public SeguimientoPeriodico(LocalDateTime fecha, LocalDateTime plazo, Formulario formulario,
-			LocalDateTime fin, Tiempo frecuencia) {
-		super(fecha, plazo, formulario);
+			String motivo, LocalDateTime fin, Tiempo frecuencia) {
+		super(fecha, plazo, formulario, motivo);
 		this.fin = fin;
 		this.frecuencia = frecuencia;
 	}

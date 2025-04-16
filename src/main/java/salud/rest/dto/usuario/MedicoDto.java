@@ -3,7 +3,7 @@ package salud.rest.dto.usuario;
 import java.util.LinkedList;
 import java.util.List;
 
-import salud.modelo.MedicoFamilia;
+import salud.modelo.Medico;
 
 public class MedicoDto extends SanitarioDto {
 	
@@ -27,7 +27,7 @@ public class MedicoDto extends SanitarioDto {
 		this.atributoTemporal = atributoTemporal;
 	}
 	
-	public static MedicoDto from(MedicoFamilia medico) {
+	public static MedicoDto from(Medico medico) {
 		MedicoDto dto = new MedicoDto();
 		dto.setNombre(medico.getNombre());
 		dto.setApellido1(medico.getApellido1());

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 import salud.modelo.Alerta;
-import salud.repositorio.EntidadNoEncontrada;
+import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioAlertas {
 

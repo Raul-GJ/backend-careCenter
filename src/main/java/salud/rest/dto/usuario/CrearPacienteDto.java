@@ -12,7 +12,7 @@ public class CrearPacienteDto extends UsuarioDto {
 	// Constructores
 	
 	public CrearPacienteDto() {
-		
+		super();
 	}
 	
 	// Métodos

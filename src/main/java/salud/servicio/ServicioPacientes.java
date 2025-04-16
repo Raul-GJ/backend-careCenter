@@ -1,21 +1,22 @@
 package salud.servicio;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Alerta;
-import salud.modelo.Consulta;
 import salud.modelo.Especialista;
-import salud.modelo.MedicoFamilia;
+import salud.modelo.Medico;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
-import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioPacientes;
+import salud.rest.excepciones.EntidadNoEncontrada;
+import salud.servicio.obtencion.IServicioObtencionAlertas;
+import salud.servicio.obtencion.IServicioObtencionEspecialistas;
+import salud.servicio.obtencion.IServicioObtencionPacientes;
+import salud.servicio.obtencion.IServicioObtencionSeguimientos;
+import salud.utils.ValidadorEmail;
 
 @Service
 @Transactional
@@ -24,29 +25,28 @@ public class ServicioPacientes implements IServicioPacientes {
 	// Atributos
 	
 	private RepositorioPacientes repositorioPacientes;
+	private IServicioObtencionPacientes servicioPacientes;
 	private IServicioMedicos servicioMedicos;
-	private IServicioAlertas servicioAlertas;
-	private IServicioConsultas servicioConsultas;
-	private IServicioEspecialistas servicioEspecialistas;
-	private IServicioSeguimientos servicioSeguimientos;
+	private IServicioObtencionAlertas servicioAlertas;
+	private IServicioObtencionEspecialistas servicioEspecialistas;
+	private IServicioObtencionSeguimientos servicioSeguimientos;
 	
 	// Constructores
 	
-	public ServicioPacientes(RepositorioPacientes repositorioPacientes, IServicioMedicos servicioMedicos,
-			IServicioAlertas servicioAlertas, IServicioConsultas servicioConsultas,
-			IServicioEspecialistas servicioEspecialistas, IServicioSeguimientos servicioSeguimientos) {
+	public ServicioPacientes(RepositorioPacientes repositorioPacientes, IServicioObtencionPacientes servicioPacientes,
+			IServicioMedicos servicioMedicos, IServicioObtencionAlertas servicioAlertas,
+			IServicioObtencionEspecialistas servicioEspecialistas,
+			IServicioObtencionSeguimientos servicioSeguimientos) {
 		super();
 		this.repositorioPacientes = repositorioPacientes;
+		this.servicioPacientes = servicioPacientes;
 		this.servicioMedicos = servicioMedicos;
 		this.servicioAlertas = servicioAlertas;
-		this.servicioConsultas = servicioConsultas;
 		this.servicioEspecialistas = servicioEspecialistas;
 		this.servicioSeguimientos = servicioSeguimientos;
 	}
 	
 	// Métodos
-	
-	// Pacientes
 	
 	@Override
 	public String altaPaciente(String nombre, String apellido1, String apellido2, String email, 
@@ -60,11 +60,14 @@ public class ServicioPacientes implements IServicioPacientes {
 		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("El email no puede ser nulo o vacío");
 		}
+		if (!ValidadorEmail.esValido(email)) {
+			throw new IllegalArgumentException("El email debe ser válido");
+		}
 		if (medicoCabecera == null) {
 			throw new IllegalArgumentException("El médico de cabecera no puede ser nulo");
 		}
 		
-		MedicoFamilia medico = servicioMedicos.obtenerMedico(medicoCabecera);
+		Medico medico = servicioMedicos.obtenerMedico(medicoCabecera);
 		
 		Paciente paciente = new Paciente(nombre, apellido1, apellido2, email, telefono, medico);
 		
@@ -91,14 +94,17 @@ public class ServicioPacientes implements IServicioPacientes {
 		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("El email no puede ser nulo o vacío");
 		}
+		if (!ValidadorEmail.esValido(email)) {
+			throw new IllegalArgumentException("El email debe ser válido");
+		}
 		if (medicoCabecera == null) {
 			throw new IllegalArgumentException("El médico de cabecera no puede ser nulo");
 		}
 		
 		Paciente paciente = obtenerPaciente(id);
 		
-		MedicoFamilia medico = servicioMedicos.obtenerMedico(medicoCabecera);
-		MedicoFamilia anteriorMedico = paciente.getMedicoCabecera();
+		Medico medico = servicioMedicos.obtenerMedico(medicoCabecera);
+		Medico anteriorMedico = paciente.getMedicoCabecera();
 		if (!medico.getId().equals(anteriorMedico.getId())) {
 			servicioMedicos.eliminarPaciente(medico.getId(), paciente);
 			servicioMedicos.eliminarPaciente(anteriorMedico.getId(), paciente);
@@ -115,63 +121,11 @@ public class ServicioPacientes implements IServicioPacientes {
 	}
 
 	@Override
-	public Collection<Paciente> obtenerPacientes() {
-		Collection<Paciente> pacientes = new LinkedList<Paciente>();
-		repositorioPacientes.findAll().forEach(p -> pacientes.add(p));
-		return pacientes;
-	}
-	
-	@Override
-	public Collection<Paciente> obtenerPacientes(Collection<String> ids) {
-		Collection<Paciente> pacientes = new LinkedList<Paciente>();
-		repositorioPacientes.findAllById(ids).forEach(p -> pacientes.add(p));
-		return pacientes;
-	}
-
-	@Override
-	public Paciente obtenerPaciente(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
-		Optional<Paciente> optional = repositorioPacientes.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Paciente paciente = optional.get();
-		return paciente;
-	}
-
-	@Override
 	public void eliminarPaciente(String id) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
-		Paciente paciente = obtenerPaciente(id);
-		
-		MedicoFamilia medico = paciente.getMedicoCabecera();
-		servicioMedicos.eliminarPaciente(medico.getId(), paciente);
-		
-		List<Especialista> especialistas = paciente.getEspecialistas();
-		for (Especialista especialista : especialistas) {
-			servicioEspecialistas.eliminarPaciente(especialista.getId(), paciente);
-		}
-		
-		List<Consulta> consultas = paciente.getConsultas();
-		for (Consulta consulta : consultas) {
-			servicioConsultas.eliminarConsulta(consulta.getId());
-		}
-		
-		List<Alerta> alertas = paciente.getAlertas();
-		for (Alerta alerta : alertas) {
-			servicioAlertas.eliminarAlerta(alerta.getId());
-		}
-		
-		List<Seguimiento> seguimientos = paciente.getSeguimientos();
-		for (Seguimiento seguimiento : seguimientos) {
-			servicioSeguimientos.eliminarSeguimiento(seguimiento.getId());
-		}
-		
+		obtenerPaciente(id);
 		repositorioPacientes.deleteById(id);
 	}
 
@@ -180,14 +134,6 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		paciente.agregarAlertas(lista);
-		repositorioPacientes.save(paciente);
-	}
-
-	@Override
-	public void agregarConsultas(String id, Collection<String> consultas) throws EntidadNoEncontrada {
-		Paciente paciente = obtenerPaciente(id);
-		Collection<Consulta> lista = servicioConsultas.obtenerConsultas(consultas);
-		paciente.agregarConsultas(lista);
 		repositorioPacientes.save(paciente);
 	}
 
@@ -211,13 +157,6 @@ public class ServicioPacientes implements IServicioPacientes {
 	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.agregarAlerta(alerta);
-		repositorioPacientes.save(paciente);
-	}
-
-	@Override
-	public void agregarConsulta(String id, Consulta consulta) throws EntidadNoEncontrada {
-		Paciente paciente = obtenerPaciente(id);
-		paciente.agregarConsulta(consulta);
 		repositorioPacientes.save(paciente);
 	}
 
@@ -278,5 +217,20 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.eliminarSeguimiento(seguimiento);
 		repositorioPacientes.save(paciente);
+	}
+
+	@Override
+	public Paciente obtenerPaciente(String id) throws EntidadNoEncontrada {
+		return servicioPacientes.obtenerPaciente(id);
+	}
+
+	@Override
+	public Collection<Paciente> obtenerPacientes(Collection<String> ids) {
+		return servicioPacientes.obtenerPacientes(ids);
+	}
+
+	@Override
+	public Collection<Paciente> obtenerPacientes() {
+		return servicioPacientes.obtenerPacientes();
 	}
 }

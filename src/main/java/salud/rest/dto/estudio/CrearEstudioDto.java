@@ -12,14 +12,11 @@ public class CrearEstudioDto {
 	@NotEmpty(message = "El campo 'descripcion' no debe estar vacío")
 	private String descripcion;
 	
-	@NotEmpty(message = "El campo 'fechaAlta' no debe estar vacío")
-	private String fechaAlta;
+	@NotEmpty(message = "El campo 'fechaInicio' no debe estar vacío")
+	private String fechaInicio;
 	
 	@NotEmpty(message = "El campo 'fechaFin' no debe estar vacío")
 	private String fechaFin;
-	
-	@NotEmpty(message = "El campo 'creador' no debe estar vacío")
-	private String creador;
 	
 	// Constructores
 	
@@ -45,12 +42,12 @@ public class CrearEstudioDto {
 		this.descripcion = descripcion;
 	}
 
-	public String getFechaAlta() {
-		return fechaAlta;
+	public String getFechaInicio() {
+		return fechaInicio;
 	}
 
-	public void setFechaAlta(String fechaAlta) {
-		this.fechaAlta = fechaAlta;
+	public void setFechaInicio(String fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 
 	public String getFechaFin() {
@@ -59,13 +56,5 @@ public class CrearEstudioDto {
 
 	public void setFechaFin(String fechaFin) {
 		this.fechaFin = fechaFin;
-	}
-
-	public String getCreador() {
-		return creador;
-	}
-
-	public void setCreador(String creador) {
-		this.creador = creador;
 	}
 }

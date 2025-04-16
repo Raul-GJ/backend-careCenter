@@ -36,15 +36,14 @@ public class ControladorSeguimientos implements SeguimientosApi {
 	
 	// Métodos
 	
-	// Seguimientos
-	
 	@Override
 	public ResponseEntity<SeguimientoDto> crearSeguimiento(CrearSeguimientoDto seguimientoDto) 
 			throws Exception {
 		String id = servicioSeguimientos.altaSeguimiento(
 				LocalDateTime.parse(seguimientoDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME),
 				LocalDateTime.parse(seguimientoDto.getPlazo(), DateTimeFormatter.ISO_DATE_TIME),
-				seguimientoDto.getPlantilla());
+				seguimientoDto.getPlantilla(),
+				seguimientoDto.getMotivo());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -57,7 +56,8 @@ public class ControladorSeguimientos implements SeguimientosApi {
 		servicioSeguimientos.modificarSeguimiento(id,
 				LocalDateTime.parse(seguimientoDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME),
 				LocalDateTime.parse(seguimientoDto.getPlazo(), DateTimeFormatter.ISO_DATE_TIME),
-				seguimientoDto.getPlantilla());
+				seguimientoDto.getPlantilla(),
+				seguimientoDto.getMotivo());
 		
 		return ResponseEntity.noContent().build();
 	}

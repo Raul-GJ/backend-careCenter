@@ -3,7 +3,7 @@ package salud.servicio;
 import java.util.Collection;
 
 import salud.modelo.Consulta;
-import salud.repositorio.EntidadNoEncontrada;
+import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioConsultas {
 

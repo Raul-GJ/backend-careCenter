@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import salud.modelo.MedicoFamilia;
+import salud.modelo.Medico;
 import salud.rest.dto.usuario.MedicoDto;
 import salud.servicio.IServicioMedicos;
 
@@ -29,6 +29,8 @@ public class ControladorMedicos implements MedicosApi {
 		super();
 		this.servicioMedicos = servicioMedicos;
 	}
+	
+	// Métodos
 	
 	@Override
 	public ResponseEntity<MedicoDto> altaMedico(@Valid MedicoDto medicoDto) {
@@ -67,7 +69,7 @@ public class ControladorMedicos implements MedicosApi {
 
 	@Override
 	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos() throws Exception {
-		Collection<MedicoFamilia> medicos = servicioMedicos.obtenerMedicos();
+		Collection<Medico> medicos = servicioMedicos.obtenerMedicos();
 		Collection<MedicoDto> dtos = new LinkedList<MedicoDto>();
 		medicos.forEach(a -> dtos.add(MedicoDto.from(a)));
 		return ResponseEntity.ok(dtos);
@@ -78,17 +80,4 @@ public class ControladorMedicos implements MedicosApi {
 		servicioMedicos.eliminarMedico(id);
 		return ResponseEntity.noContent().build();
 	}
-
-	@Override
-	public ResponseEntity<Void> agregarPacientes(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioMedicos.agregarPacientes(id, ids);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> eliminarPacientes(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioMedicos.eliminarPacientes(id, ids);
-		return ResponseEntity.noContent().build();
-	}
-
 }

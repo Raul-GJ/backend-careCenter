@@ -33,8 +33,6 @@ public class ControladorPacientes implements PacientesApi {
 	
 	// Métodos
 	
-	// Pacientes
-	
 	@Override
 	public ResponseEntity<PacienteDto> altaPaciente(@Valid CrearPacienteDto pacienteDto) throws Exception {
 		String id = servicioPacientes.altaPaciente(pacienteDto.getNombre(), 
@@ -85,13 +83,6 @@ public class ControladorPacientes implements PacientesApi {
 	@Override
 	public ResponseEntity<Void> agregarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
 		servicioPacientes.agregarAlertas(id, alertas);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> agregarConsultas(@Valid Collection<String> consultas, @Valid String id)
-			throws Exception {
-		servicioPacientes.agregarConsultas(id, consultas);
 		return ResponseEntity.noContent().build();
 	}
 

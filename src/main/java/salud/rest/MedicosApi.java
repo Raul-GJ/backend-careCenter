@@ -28,18 +28,6 @@ public interface MedicosApi {
 			@Valid @RequestBody MedicoDto medicoDto,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un médico de familia")
-	@PatchMapping("/{id}/pacientes/agregar")
-	public ResponseEntity<Void> agregarPacientes(
-			@Valid @RequestBody Collection<String> ids,
-			@PathVariable String id) throws Exception;
-	
-	@Operation(summary = "Eliminar pacientes", description = "Elimina pacientes de un médico de familia")
-	@PatchMapping("/{id}/pacientes/eliminar")
-	public ResponseEntity<Void> eliminarPacientes(
-			@Valid @RequestBody Collection<String> ids,
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Obtener médico", description = "Obtiene los datos de un médico de familia")
 	@GetMapping("/{id}")
 	public ResponseEntity<MedicoDto> obtenerMedico(

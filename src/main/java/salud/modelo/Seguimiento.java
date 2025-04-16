@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "seguimientos")
@@ -16,16 +15,17 @@ public class Seguimiento {
 	private String id;
 	private LocalDateTime fecha;
 	private LocalDateTime plazo;
-	@DBRef
 	private Formulario formulario;
+	private String motivo;
 	
 	// Constructores
 	
-	public Seguimiento(LocalDateTime fecha, LocalDateTime plazo, Formulario formulario) {
+	public Seguimiento(LocalDateTime fecha, LocalDateTime plazo, Formulario formulario, String motivo) {
 		super();
 		this.fecha = fecha;
 		this.plazo = plazo;
 		this.formulario = formulario;
+		this.motivo = motivo;
 	}
 	
 	// Métodos
@@ -62,9 +62,17 @@ public class Seguimiento {
 		this.formulario = formulario;
 	}
 	
+	public String getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(fecha, formulario, id, plazo);
+		return Objects.hash(fecha, formulario, id, plazo, motivo);
 	}
 
 	@Override
@@ -77,12 +85,15 @@ public class Seguimiento {
 			return false;
 		Seguimiento other = (Seguimiento) obj;
 		return Objects.equals(fecha, other.fecha) && Objects.equals(formulario, other.formulario)
-				&& Objects.equals(id, other.id) && Objects.equals(plazo, other.plazo);
+				&& Objects.equals(id, other.id) && Objects.equals(plazo, other.plazo)
+				&& Objects.equals(motivo, other.motivo);
 	}
 
 	@Override
 	public String toString() {
-		return "Seguimiento [id=" + id + ", fecha=" + fecha + ", plazo=" + plazo + 
-				", formulario=" + formulario + "]";
+		return "Seguimiento [id=" + id + ", fecha=" + fecha + ", plazo=" + plazo + ", formulario=" + formulario
+				+ ", motivo=" + motivo + "]";
 	}
+
+	
 }

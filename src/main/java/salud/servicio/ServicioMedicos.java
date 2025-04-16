@@ -1,16 +1,16 @@
 package salud.servicio;
 
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import salud.modelo.MedicoFamilia;
+import salud.modelo.Medico;
 import salud.modelo.Paciente;
-import salud.repositorio.EntidadNoEncontrada;
 import salud.repositorio.RepositorioMedicos;
+import salud.rest.excepciones.EntidadNoEncontrada;
+import salud.servicio.obtencion.IServicioObtencionMedicos;
+import salud.utils.ValidadorEmail;
 
 @Service
 @Transactional
@@ -19,15 +19,15 @@ public class ServicioMedicos implements IServicioMedicos {
 	// Atributos
 	
 	private RepositorioMedicos repositorioMedicos;
-	private IServicioPacientes servicioPacientes;
+	private IServicioObtencionMedicos servicioMedicos;
 	
 	// Constructores
 	
-	public ServicioMedicos(RepositorioMedicos repositorioMedicos,
-			IServicioPacientes servicioPacientes) {
+	public ServicioMedicos(RepositorioMedicos repositorioMedicos, 
+			IServicioObtencionMedicos servicioMedicos) {
 		super();
 		this.repositorioMedicos = repositorioMedicos;
-		this.servicioPacientes = servicioPacientes;
+		this.servicioMedicos = servicioMedicos;
 	}
 	
 	// Métodos
@@ -44,11 +44,17 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("El email no puede ser nulo o vacío");
 		}
+		if (!ValidadorEmail.esValido(email)) {
+			throw new IllegalArgumentException("El email debe ser válido");
+		}
 		if (nCol == null || nCol.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
+		if (atributoTemporal == null || atributoTemporal.isEmpty()) {
+			throw new IllegalArgumentException("El atributo temporal no puede ser nulo o vacío");
+		}
 		
-		MedicoFamilia medico = new MedicoFamilia(nombre, apellido1, apellido2, email, telefono, nCol, atributoTemporal);
+		Medico medico = new Medico(nombre, apellido1, apellido2, email, telefono, nCol, atributoTemporal);
 		return repositorioMedicos.save(medico).getId();
 	}
 
@@ -67,11 +73,17 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("El email no puede ser nulo o vacío");
 		}
+		if (!ValidadorEmail.esValido(email)) {
+			throw new IllegalArgumentException("El email debe ser válido");
+		}
 		if (nCol == null || nCol.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
+		if (atributoTemporal == null || atributoTemporal.isEmpty()) {
+			throw new IllegalArgumentException("El atributo temporal no puede ser nulo o vacío");
+		}
 		
-		MedicoFamilia medico = obtenerMedico(id);
+		Medico medico = obtenerMedico(id);
 		
 		medico.setNombre(nombre);
 		medico.setApellido1(apellido1);
@@ -85,34 +97,6 @@ public class ServicioMedicos implements IServicioMedicos {
 	}
 
 	@Override
-	public MedicoFamilia obtenerMedico(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
-		Optional<MedicoFamilia> optional = repositorioMedicos.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		MedicoFamilia medico = optional.get();
-		return medico;
-	}
-
-	@Override
-	public Collection<MedicoFamilia> obtenerMedicos() {
-		Collection<MedicoFamilia> medicos = new LinkedList<MedicoFamilia>();
-		repositorioMedicos.findAll().forEach(m -> medicos.add(m));
-		return medicos;
-	}
-	
-	@Override
-	public Collection<MedicoFamilia> obtenerMedicos(Collection<String> ids) {
-		Collection<MedicoFamilia> medicos = new LinkedList<MedicoFamilia>();
-		repositorioMedicos.findAllById(ids).forEach(m -> medicos.add(m));
-		return medicos;
-	}
-
-	@Override
 	public void eliminarMedico(String id) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
@@ -121,32 +105,31 @@ public class ServicioMedicos implements IServicioMedicos {
 	}
 
 	@Override
-	public void agregarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada {
-		MedicoFamilia medico = obtenerMedico(id);
-		Collection<Paciente> pacientes = servicioPacientes.obtenerPacientes(ids);
-		medico.agregarPacientes(pacientes);
-		repositorioMedicos.save(medico);
-	}
-
-	@Override
-	public void eliminarPacientes(String id, Collection<String> ids) throws EntidadNoEncontrada {
-		MedicoFamilia medico = obtenerMedico(id);
-		Collection<Paciente> pacientes = servicioPacientes.obtenerPacientes(ids);
-		medico.eliminarPacientes(pacientes);
-		repositorioMedicos.save(medico);
-	}
-
-	@Override
 	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
-		MedicoFamilia medico = obtenerMedico(id);
+		Medico medico = obtenerMedico(id);
 		medico.agregarPaciente(paciente);
 		repositorioMedicos.save(medico);
 	}
 
 	@Override
 	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
-		MedicoFamilia medico = obtenerMedico(id);
+		Medico medico = obtenerMedico(id);
 		medico.eliminarPaciente(paciente);
 		repositorioMedicos.save(medico);
+	}
+
+	@Override
+	public Medico obtenerMedico(String id) throws EntidadNoEncontrada {
+		return servicioMedicos.obtenerMedico(id);
+	}
+
+	@Override
+	public Collection<Medico> obtenerMedicos() {
+		return servicioMedicos.obtenerMedicos();
+	}
+
+	@Override
+	public Collection<Medico> obtenerMedicos(Collection<String> ids) {
+		return servicioMedicos.obtenerMedicos(ids);
 	}
 }

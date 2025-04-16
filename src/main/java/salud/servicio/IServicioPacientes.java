@@ -3,11 +3,10 @@ package salud.servicio;
 import java.util.Collection;
 
 import salud.modelo.Alerta;
-import salud.modelo.Consulta;
 import salud.modelo.Especialista;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
-import salud.repositorio.EntidadNoEncontrada;
+import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioPacientes {
 	
@@ -18,16 +17,12 @@ public interface IServicioPacientes {
 			String email, String telefono, String medicoCabecera) throws EntidadNoEncontrada;
 	
 	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada;
-
-	public void agregarConsultas(String id, Collection<String> consultas) throws EntidadNoEncontrada;
 	
 	public void agregarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada;
 	
 	public void agregarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada;
 	
 	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
-
-	public void agregarConsulta(String id, Consulta consulta) throws EntidadNoEncontrada;
 	
 	public void agregarEspecialista(String id, Especialista especialista) throws EntidadNoEncontrada;
 	

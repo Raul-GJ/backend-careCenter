@@ -1,4 +1,4 @@
-package salud.repositorio;
+package salud.rest.excepciones;
 
 @SuppressWarnings("serial")
 public class EntidadNoEncontrada extends Exception {

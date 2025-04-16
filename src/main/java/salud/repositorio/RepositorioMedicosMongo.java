@@ -2,8 +2,8 @@ package salud.repositorio;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import salud.modelo.MedicoFamilia;
+import salud.modelo.Medico;
 
-public interface RepositorioMedicosMongo extends RepositorioMedicos, MongoRepository<MedicoFamilia, String> {
+public interface RepositorioMedicosMongo extends RepositorioMedicos, MongoRepository<Medico, String> {
 
 }

@@ -3,9 +3,9 @@ package salud.repositorio;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import salud.modelo.PlantillaFormulario;
+import salud.modelo.Plantilla;
 
 @NoRepositoryBean
-public interface RepositorioFormulariosPlantilla extends PagingAndSortingRepository<PlantillaFormulario, String> {
+public interface RepositorioPlantillas extends PagingAndSortingRepository<Plantilla, String> {
 
 }

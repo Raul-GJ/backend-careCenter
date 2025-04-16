@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import salud.modelo.encuesta.PreguntaEncuesta;
 
 @Document(collection = "formularios")
-public class PlantillaFormulario {
+public class Plantilla {
 	
 	// Atributos
 	
@@ -23,7 +23,7 @@ public class PlantillaFormulario {
 	
 	// Constructores
 
-	public PlantillaFormulario(String nombre, String descripcion) {
+	public Plantilla(String nombre, String descripcion) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
@@ -99,7 +99,7 @@ public class PlantillaFormulario {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		PlantillaFormulario other = (PlantillaFormulario) obj;
+		Plantilla other = (Plantilla) obj;
 		return Objects.equals(descripcion, other.descripcion) && Objects.equals(id, other.id)
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(preguntas, other.preguntas)
 				&& publico == other.publico;
@@ -107,7 +107,7 @@ public class PlantillaFormulario {
 
 	@Override
 	public String toString() {
-		return "PlantillaFormulario [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", publico="
+		return "Plantilla [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", publico="
 				+ publico + ", preguntas=" + preguntas + "]";
 	}
 }

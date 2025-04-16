@@ -5,7 +5,7 @@ import java.util.Objects;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "medicos")
-public class MedicoFamilia extends Sanitario {
+public class Medico extends Sanitario {
 
 	// Atributos
 	
@@ -13,7 +13,7 @@ public class MedicoFamilia extends Sanitario {
 	
 	// Constructores
 	
-	public MedicoFamilia(String nombre, String apellido1, String apellido2, String email, 
+	public Medico(String nombre, String apellido1, String apellido2, String email, 
 			String telefono, String nCol, String atributoTemporal) {
 		super(nombre, apellido1, apellido2, email, telefono, nCol);
 		this.atributoTemporal = atributoTemporal;
@@ -45,7 +45,7 @@ public class MedicoFamilia extends Sanitario {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MedicoFamilia other = (MedicoFamilia) obj;
+		Medico other = (Medico) obj;
 		return Objects.equals(atributoTemporal, other.atributoTemporal);
 	}
 }

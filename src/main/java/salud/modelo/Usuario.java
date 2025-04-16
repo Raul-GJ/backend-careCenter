@@ -21,6 +21,7 @@ public abstract class Usuario {
 	private String telefono;
 	@DBRef
 	private List<Alerta> alertas;
+	boolean eliminado;
 	
 	// Constructores
 	
@@ -32,6 +33,7 @@ public abstract class Usuario {
 		this.email = email;
 		this.telefono = telefono;
 		this.alertas = new LinkedList<Alerta>();
+		this.eliminado = false;
 	}
 	
 	// Métodos
@@ -111,6 +113,14 @@ public abstract class Usuario {
 		this.alertas.remove(alerta);
 	}
 
+	public boolean isEliminado() {
+		return eliminado;
+	}
+
+	public void setEliminado(boolean eliminado) {
+		this.eliminado = eliminado;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(alertas, apellido1, apellido2, email, id, nombre, telefono);
@@ -126,10 +136,8 @@ public abstract class Usuario {
 			return false;
 		Usuario other = (Usuario) obj;
 		return Objects.equals(alertas, other.alertas) && Objects.equals(apellido1, other.apellido1)
-				&& Objects.equals(apellido2, other.apellido2) && Objects.equals(email, other.email)
-				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(telefono, other.telefono);
+				&& Objects.equals(apellido2, other.apellido2)
+				&& Objects.equals(email, other.email) && Objects.equals(id, other.id)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(telefono, other.telefono);
 	}
-
-	
 }

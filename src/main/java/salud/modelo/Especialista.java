@@ -3,7 +3,6 @@ package salud.modelo;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,9 +14,7 @@ public class Especialista extends Sanitario {
 
 	private String especialidad;
 	@DBRef
-	private Collection<InfoEstudio> estudios;
-	@DBRef
-	private Collection<PlantillaFormulario> plantillas;
+	private Collection<Plantilla> plantillas;
 	
 	// Constructores
 	
@@ -25,8 +22,7 @@ public class Especialista extends Sanitario {
 			String nCol, String especialidad) {
 		super(nombre, apellido1, apellido2, email, telefono, nCol);
 		this.especialidad = especialidad;
-		this.estudios = new LinkedList<InfoEstudio>();
-		this.plantillas = new LinkedList<PlantillaFormulario>();
+		this.plantillas = new LinkedList<Plantilla>();
 	}
 	
 	// Métodos
@@ -39,63 +35,30 @@ public class Especialista extends Sanitario {
 		this.especialidad = especialidad;
 	}
 	
-	public Collection<InfoEstudio> getEstudios() {
-		return estudios;
-	}
-
-	public void setEstudios(Collection<InfoEstudio> estudios) {
-		this.estudios = estudios;
-	}
-	
-	public void agregarEstudios(Collection<InfoEstudio> estudios) {
-		this.estudios.addAll(estudios);
-	}
-	
-	public void eliminarEstudios(Collection<Estudio> estudios) {
-		this.estudios = this.estudios.stream().filter(ie -> 
-			!estudios.contains(ie.getEstudio())).collect(Collectors.toList());
-	}
-	
-	public void agregarEstudio(InfoEstudio estudio) {
-		this.estudios.add(estudio);
-	}
-	
-	public void eliminarEstudio(Estudio estudio) {
-		this.estudios = this.estudios.stream().filter(ie -> 
-			!ie.getEstudio().getId().equals(estudio.getId())).collect(Collectors.toList());
-	}
-	
-	public void setRol(Estudio estudio, RolEstudio nuevoRol) {
-		for (InfoEstudio infoEstudio : this.estudios) {
-			if (infoEstudio.getEstudio().equals(estudio))
-				infoEstudio.setRol(nuevoRol);
-		}
-	}
-	
-	public Collection<PlantillaFormulario> getPlantillas() {
+	public Collection<Plantilla> getPlantillas() {
 		return plantillas;
 	}
 
-	public void setPlantillas(Collection<PlantillaFormulario> plantillas) {
+	public void setPlantillas(Collection<Plantilla> plantillas) {
 		this.plantillas = plantillas;
 	}
 	
-	public void agregarPlantilla(PlantillaFormulario plantilla) {
+	public void agregarPlantilla(Plantilla plantilla) {
 		if (!this.plantillas.contains(plantilla))
 			this.plantillas.add(plantilla);
 	}
 	
-	public void agregarPlantillas(Collection<PlantillaFormulario> plantillas) {
-		for (PlantillaFormulario plantillaFormulario : plantillas) {
+	public void agregarPlantillas(Collection<Plantilla> plantillas) {
+		for (Plantilla plantillaFormulario : plantillas) {
 			agregarPlantilla(plantillaFormulario);
 		}
 	}
 	
-	public void eliminarPlantillas(Collection<PlantillaFormulario> plantillas) {
+	public void eliminarPlantillas(Collection<Plantilla> plantillas) {
 		this.plantillas.removeAll(plantillas);
 	}
 	
-	public void eliminarPlantilla(PlantillaFormulario plantilla) {
+	public void eliminarPlantilla(Plantilla plantilla) {
 		this.plantillas.remove(plantilla);
 	}
 

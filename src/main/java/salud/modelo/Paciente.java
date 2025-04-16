@@ -15,9 +15,7 @@ public class Paciente extends Usuario {
 	// Atributos
 	
 	@DBRef
-	private MedicoFamilia medicoCabecera;
-	@DBRef
-	private List<Consulta> consultas;
+	private Medico medicoCabecera;
 	@DBRef
 	private List<Especialista> especialistas;
 	@DBRef
@@ -26,43 +24,14 @@ public class Paciente extends Usuario {
 	// Constructores
 
 	public Paciente(String nombre, String apellido1, String apellido2, String email, 
-			String telefono, MedicoFamilia medicoCabecera) {
+			String telefono, Medico medicoCabecera) {
 		super(nombre, apellido1, apellido2, email, telefono);
 		this.setMedicoCabecera(medicoCabecera);
-		this.consultas = new LinkedList<Consulta>();
 		this.especialistas = new LinkedList<Especialista>();
 		this.seguimientos = new LinkedList<Seguimiento>();
 	}
 	
 	// Métodos
-
-	public List<Consulta> getConsultas() {
-		return consultas;
-	}
-
-	public void setConsultas(List<Consulta> consultas) {
-		this.consultas = consultas;
-	}
-	
-	public void agregarConsultas(Collection<Consulta> consultas) {
-		for (Consulta consulta : consultas) {
-			agregarConsulta(consulta);
-		}
-	}
-	
-	public void agregarConsulta(Consulta consulta) {
-		if (!this.consultas.contains(consulta))
-			this.consultas.add(consulta);
-	}
-	
-	public void agregarRespuesta(Consulta consulta, Respuesta respuesta) {
-		if (this.consultas.contains(consulta))
-			consulta.setRespuesta(respuesta);
-	}
-	
-	public Consulta getConsulta(int pos) {
-		return this.consultas.get(pos);
-	}
 
 	public List<Especialista> getEspecialistas() {
 		return especialistas;
@@ -95,11 +64,11 @@ public class Paciente extends Usuario {
 		this.especialistas.remove(especialista);
 	}
 
-	public MedicoFamilia getMedicoCabecera() {
+	public Medico getMedicoCabecera() {
 		return medicoCabecera;
 	}
 
-	public void setMedicoCabecera(MedicoFamilia medicoCabecera) {
+	public void setMedicoCabecera(Medico medicoCabecera) {
 		this.medicoCabecera = medicoCabecera;
 	}
 	
@@ -138,7 +107,7 @@ public class Paciente extends Usuario {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(consultas, especialistas, medicoCabecera, seguimientos);
+		result = prime * result + Objects.hash(seguimientos);
 		return result;
 	}
 
@@ -151,10 +120,7 @@ public class Paciente extends Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Paciente other = (Paciente) obj;
-		return Objects.equals(consultas, other.consultas)
-				&& Objects.equals(especialistas, other.especialistas)
-				&& Objects.equals(medicoCabecera, other.medicoCabecera)
-				&& Objects.equals(seguimientos, other.seguimientos);
+		return Objects.equals(seguimientos, other.seguimientos);
 	}
 	
 }

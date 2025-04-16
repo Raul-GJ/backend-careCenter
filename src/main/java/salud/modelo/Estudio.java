@@ -2,9 +2,7 @@ package salud.modelo;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
@@ -20,7 +18,7 @@ public class Estudio {
 	private String id;
 	private String nombre;
 	private String descripcion;
-	private LocalDateTime fechaAlta;
+	private LocalDateTime fechaInicio;
 	private LocalDateTime fechaFin;
 	@DBRef
 	private Collection<Paciente> pacientes;
@@ -28,23 +26,18 @@ public class Estudio {
 	private Collection<Seguimiento> seguimientos;
 	@DBRef
 	private Collection<Alerta> alertas;
-	@DBRef
-	private Map<Especialista, RolEstudio> especialistas;
 	
 	// Constructores
 	
-	public Estudio(String nombre, String descripcion, LocalDateTime fechaAlta, LocalDateTime fechaFin, 
-			Especialista creador) {
+	public Estudio(String nombre, String descripcion, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.fechaAlta = fechaAlta;
+		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
 		this.pacientes = new LinkedList<Paciente>();
 		this.seguimientos = new LinkedList<Seguimiento>();
 		this.alertas = new LinkedList<Alerta>();
-		this.especialistas = new HashMap<Especialista, RolEstudio>();
-		this.especialistas.put(creador, RolEstudio.CREADOR);
 	}
 	
 	// Métodos
@@ -73,12 +66,12 @@ public class Estudio {
 		this.descripcion = descripcion;
 	}
 
-	public LocalDateTime getFechaAlta() {
-		return fechaAlta;
+	public LocalDateTime getFechaInicio() {
+		return fechaInicio;
 	}
 
-	public void setFechaAlta(LocalDateTime fechaAlta) {
-		this.fechaAlta = fechaAlta;
+	public void setFechaInicio(LocalDateTime fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 
 	public LocalDateTime getFechaFin() {
@@ -160,34 +153,10 @@ public class Estudio {
 	public void eliminarAlerta(Alerta alerta) {
 		this.alertas.remove(alerta);
 	}
-	
-	public Map<Especialista, RolEstudio> getEspecialistas() {
-		return especialistas;
-	}
-
-	public void setEspecialistas(Map<Especialista, RolEstudio> especialistas) {
-		this.especialistas = especialistas;
-	}
-	
-	public void agregarEspecialistas(Map<Especialista, RolEstudio> especialistas) {
-		this.especialistas.putAll(especialistas);
-	}
-	
-	public void agregarEspecialista(Especialista especialista, RolEstudio rol) {
-		this.especialistas.put(especialista, rol);
-	}
-	
-	public void eliminarEspecialistas(Collection<Especialista> especialistas) {
-		especialistas.forEach(e -> this.especialistas.remove(e));
-	}
-	
-	public void eliminarEspecialista(Especialista especialista) {
-		this.especialistas.remove(especialista);
-	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alertas, descripcion, fechaAlta, fechaFin, id, nombre, pacientes,
+		return Objects.hash(alertas, descripcion, fechaInicio, fechaFin, id, nombre, pacientes,
 				seguimientos);
 	}
 
@@ -202,7 +171,7 @@ public class Estudio {
 		Estudio other = (Estudio) obj;
 		return Objects.equals(alertas, other.alertas)
 				&& Objects.equals(descripcion, other.descripcion)
-				&& Objects.equals(fechaAlta, other.fechaAlta) && Objects.equals(fechaFin, other.fechaFin)
+				&& Objects.equals(fechaInicio, other.fechaInicio) && Objects.equals(fechaFin, other.fechaFin)
 				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
 				&& Objects.equals(pacientes, other.pacientes) && Objects.equals(seguimientos, other.seguimientos);
 	}

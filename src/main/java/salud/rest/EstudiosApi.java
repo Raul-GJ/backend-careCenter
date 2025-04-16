@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
-import salud.rest.dto.estudio.AgregarEspecialistaDto;
 import salud.rest.dto.estudio.CrearEstudioDto;
 import salud.rest.dto.estudio.EstudioDto;
 
@@ -48,12 +47,6 @@ public interface EstudiosApi {
 			@Valid @RequestBody Collection<String> alertas,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar especialista", description = "Agrega un especialista a un estudio")
-	@PatchMapping("/{id}/especialistas/agregar")
-	public ResponseEntity<Void> agregarEspecialista(
-			@Valid @RequestBody AgregarEspecialistaDto especialista,
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Eliminar pacientes", description = "Elimina pacientes de un estudio")
 	@PatchMapping("/{id}/pacientes/eliminar")
 	public ResponseEntity<Void> eliminarPacientes(
@@ -70,12 +63,6 @@ public interface EstudiosApi {
 	@PatchMapping("/{id}/alertas/eliminar")
 	public ResponseEntity<Void> eliminarAlertas(
 			@Valid @RequestBody Collection<String> alertas,
-			@PathVariable String id) throws Exception;
-	
-	@Operation(summary = "Eliminar especialistas", description = "Elimina especialistas de un estudio")
-	@PatchMapping("/{id}/especialistas/eliminar")
-	public ResponseEntity<Void> eliminarEspecialistas(
-			@Valid @RequestBody Collection<String> especialistas,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener estudio", description = "Obtiene los datos de un estudio")

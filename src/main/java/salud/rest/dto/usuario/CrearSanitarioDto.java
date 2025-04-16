@@ -12,7 +12,7 @@ public class CrearSanitarioDto extends UsuarioDto {
 	// Constructores
 
 	public CrearSanitarioDto() {
-
+		super();
 	}
 	
 	// Métodos

@@ -5,15 +5,15 @@ import java.util.Collection;
 import java.util.List;
 
 import salud.modelo.Seguimiento;
-import salud.repositorio.EntidadNoEncontrada;
+import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioSeguimientos {
 
-	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  String plantilla)
+	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  String plantilla, String motivo)
 		throws EntidadNoEncontrada;
 	
 	public void modificarSeguimiento(String id, LocalDateTime fecha, LocalDateTime plazo,
-			String plantilla) throws EntidadNoEncontrada;
+			String plantilla, String motivo) throws EntidadNoEncontrada;
 	
 	public Seguimiento obtenerSeguimiento(String id) throws EntidadNoEncontrada;
 	

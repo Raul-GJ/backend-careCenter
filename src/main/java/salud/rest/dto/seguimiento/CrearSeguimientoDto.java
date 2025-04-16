@@ -15,8 +15,11 @@ public class CrearSeguimientoDto {
 	@NotEmpty(message = "El campo 'plantilla' no debe estar vacío")
 	private String plantilla;
 	
-	// Constructores
+	@NotEmpty(message = "El campo 'motivo' no debe estar vacío")
+	private String motivo;
 	
+	// Constructores
+
 	public CrearSeguimientoDto() {
 
 	}
@@ -45,5 +48,13 @@ public class CrearSeguimientoDto {
 
 	public void setPlantilla(String plantilla) {
 		this.plantilla = plantilla;
+	}
+	
+	public String getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
 	}
 }

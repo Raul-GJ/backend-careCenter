@@ -10,9 +10,10 @@ public class SeguimientoDto {
 	private String fecha;
 	private String plazo;
 	private FormularioDto formulario;
+	private String motivo;
 	
 	// Constructores
-	
+
 	public SeguimientoDto() {
 
 	}
@@ -43,11 +44,20 @@ public class SeguimientoDto {
 		this.formulario = formulario;
 	}
 	
+	public String getMotivo() {
+		return motivo;
+	}
+
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
+	}
+	
 	public static SeguimientoDto from(Seguimiento seguimiento) {
 		SeguimientoDto seguimientoDto = new SeguimientoDto();
 		seguimientoDto.setFecha(seguimiento.getFecha().toString());
 		seguimientoDto.setPlazo(seguimiento.getPlazo().toString());
 		seguimientoDto.setFormulario(FormularioDto.from(seguimiento.getFormulario()));
+		seguimientoDto.setMotivo(seguimiento.getMotivo());
 		return seguimientoDto;
 	}
 }

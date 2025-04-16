@@ -2,10 +2,10 @@ package salud.rest.dto.formulario;
 
 import java.util.Collection;
 
-import salud.modelo.PlantillaFormulario;
+import salud.modelo.Plantilla;
 import salud.modelo.encuesta.PreguntaEncuesta;
 
-public class PlantillaFormularioDto {
+public class PlantillaDto {
 	
 	// Atributos
 	
@@ -16,7 +16,7 @@ public class PlantillaFormularioDto {
 	
 	// Constructores
 	
-	public PlantillaFormularioDto() {
+	public PlantillaDto() {
 		
 	}
 	
@@ -54,8 +54,8 @@ public class PlantillaFormularioDto {
 		this.preguntas = preguntas;
 	}
 	
-	public static PlantillaFormularioDto from(PlantillaFormulario formulario) {
-		PlantillaFormularioDto formularioDto = new PlantillaFormularioDto();
+	public static PlantillaDto from(Plantilla formulario) {
+		PlantillaDto formularioDto = new PlantillaDto();
 		formularioDto.setPreguntas(formulario.getPreguntas());	
 		formularioDto.setNombre(formulario.getNombre());
 		formularioDto.setDescripcion(formulario.getDescripcion());

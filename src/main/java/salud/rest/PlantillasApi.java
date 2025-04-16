@@ -14,24 +14,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
 import salud.modelo.encuesta.PreguntaEncuesta;
-import salud.rest.dto.formulario.PlantillaFormularioDto;
+import salud.rest.dto.formulario.PlantillaDto;
 import salud.rest.dto.formulario.tipos.TipoDatoBooleanoDto;
 import salud.rest.dto.formulario.tipos.TipoDatoCadenaDto;
 import salud.rest.dto.formulario.tipos.TipoDatoEnumDto;
 import salud.rest.dto.formulario.tipos.TipoDatoNumeralDto;
 import salud.rest.dto.formulario.tipos.TipoDatoRangoDto;
 
-public interface FormulariosPlantillaApi {
+public interface PlantillasApi {
 
 	@Operation(summary = "Crear formulario plantilla", description = "Crea un nuevo formulario plantilla")
 	@PostMapping
-	public ResponseEntity<PlantillaFormularioDto> crearPlantillaFormulario(
-			@Valid @RequestBody PlantillaFormularioDto formularioDto);
+	public ResponseEntity<PlantillaDto> crearPlantilla(
+			@Valid @RequestBody PlantillaDto formularioDto);
 	
 	@Operation(summary = "Modificar formulario plantilla", description = "Modifica los datos de un formulario plantilla")
 	@PatchMapping("/{id}")
-	public ResponseEntity<Void> modificarPlantillaFormulario(
-			@Valid @RequestBody PlantillaFormularioDto formularioDto,
+	public ResponseEntity<Void> modificarPlantilla(
+			@Valid @RequestBody PlantillaDto formularioDto,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pregunta cadena", description = "Agrega una pregunta de tipo cadena a un formulario plantilla")
@@ -72,15 +72,15 @@ public interface FormulariosPlantillaApi {
 	
 	@Operation(summary = "Obtener formulario plantilla", description = "Obtiene los datos de un formulario plantilla")
 	@GetMapping("/{id}")
-	public ResponseEntity<PlantillaFormularioDto> obtenerPlantillaFormulario(
+	public ResponseEntity<PlantillaDto> obtenerPlantilla(
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener formularios plantilla", description = "Obtiene los datos de todos los formularios plantilla")
 	@GetMapping
-	public ResponseEntity<Collection<PlantillaFormularioDto>> obtenerFormulariosPlantilla() throws Exception;
+	public ResponseEntity<Collection<PlantillaDto>> obtenerPlantillas() throws Exception;
 	
 	@Operation(summary = "Eliminar formulario plantilla", description = "Elimina un formulario plantilla de la base de datos")
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> eliminarPlantillaFormulario(
+	public ResponseEntity<Void> eliminarPlantilla(
 			@PathVariable String id) throws Exception;
 }

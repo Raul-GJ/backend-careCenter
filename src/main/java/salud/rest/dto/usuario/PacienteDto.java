@@ -11,7 +11,6 @@ public class PacienteDto extends UsuarioDto {
 	
 	private String medicoCabecera;
 	private List<String> alertas;
-	private List<String> consultas;
 	private List<String> especialistas;
 	private List<String> seguimientos;
 	
@@ -42,17 +41,6 @@ public class PacienteDto extends UsuarioDto {
 		this.alertas = alertas;
 	}
 
-
-	public List<String> getConsultas() {
-		return consultas;
-	}
-
-
-	public void setConsultas(List<String> consultas) {
-		this.consultas = consultas;
-	}
-
-
 	public List<String> getEspecialistas() {
 		return especialistas;
 	}
@@ -80,17 +68,14 @@ public class PacienteDto extends UsuarioDto {
 		dto.setMedicoCabecera(paciente.getMedicoCabecera().getId());
 		
 		List<String> alertas = new LinkedList<String>();
-		List<String> consultas = new LinkedList<String>();
 		List<String> especialistas = new LinkedList<String>();
 		List<String> seguimientos = new LinkedList<String>();
 		
 		paciente.getAlertas().forEach(a -> alertas.add(a.getId()));
-		paciente.getConsultas().forEach(c -> consultas.add(c.getId()));
 		paciente.getEspecialistas().forEach(e -> especialistas.add(e.getId()));
 		paciente.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
 		
 		dto.setAlertas(alertas);
-		dto.setConsultas(consultas);
 		dto.setEspecialistas(especialistas);
 		dto.setSeguimientos(seguimientos);
 		

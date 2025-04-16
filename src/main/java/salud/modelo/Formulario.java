@@ -14,12 +14,12 @@ public class Formulario {
 	private LocalDateTime fecha;
 	private boolean rellenado;
 	@DBRef
-	private PlantillaFormulario plantilla;
+	private Plantilla plantilla;
 	private List<String> respuestas;
 	
 	// Constructores
 	
-	public Formulario(LocalDateTime fecha, PlantillaFormulario plantilla) {
+	public Formulario(LocalDateTime fecha, Plantilla plantilla) {
 		super();
 		this.fecha = fecha;
 		this.rellenado = false;
@@ -45,11 +45,11 @@ public class Formulario {
 		this.rellenado = rellenado;
 	}
 
-	public PlantillaFormulario getPlantilla() {
+	public Plantilla getPlantilla() {
 		return plantilla;
 	}
 
-	public void setPlantilla(PlantillaFormulario plantilla) {
+	public void setPlantilla(Plantilla plantilla) {
 		this.plantilla = plantilla;
 	}
 

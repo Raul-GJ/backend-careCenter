@@ -12,7 +12,7 @@ public class CrearEspecialistaDto extends CrearSanitarioDto {
 	// Constructores
 	
 	public CrearEspecialistaDto() {
-
+		super();
 	}
 	
 	// Métodos

@@ -1,10 +1,7 @@
 package salud.rest.dto.estudio;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
-
 import salud.modelo.Estudio;
 
 public class EstudioDto {
@@ -13,12 +10,11 @@ public class EstudioDto {
 	
 	private String nombre;
 	private String descripcion;
-	private String fechaAlta;
+	private String fechaInicio;
 	private String fechaFin;
 	private Collection<String> pacientes;
 	private Collection<String> seguimientos;
 	private Collection<String> alertas;
-	private Map<String, String> especialistas;
 	
 	// Constructores
 	
@@ -44,12 +40,12 @@ public class EstudioDto {
 		this.descripcion = descripcion;
 	}
 
-	public String getFechaAlta() {
-		return fechaAlta;
+	public String getFechaInicio() {
+		return fechaInicio;
 	}
 
-	public void setFechaAlta(String fechaAlta) {
-		this.fechaAlta = fechaAlta;
+	public void setFechaInicio(String fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 
 	public String getFechaFin() {
@@ -83,37 +79,26 @@ public class EstudioDto {
 	public void setAlertas(Collection<String> alertas) {
 		this.alertas = alertas;
 	}
-	
-	public Map<String, String> getEspecialistas() {
-		return especialistas;
-	}
 
-	public void setEspecialistas(Map<String, String> especialistas) {
-		this.especialistas = especialistas;
-	}
-	
 	public static EstudioDto from(Estudio estudio) {
 		EstudioDto estudioDto = new EstudioDto();
 		
 		Collection<String> pacientes = new LinkedList<String>();
 		Collection<String> alertas = new LinkedList<String>();
 		Collection<String> seguimientos = new LinkedList<String>();
-		Map<String, String> especialistas = new HashMap<String, String>();
 		
 		estudio.getPacientes().forEach(p -> pacientes.add(p.getId()));
 		estudio.getAlertas().forEach(a -> alertas.add(a.getId()));
 		estudio.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
-		estudio.getEspecialistas().forEach((e, r) -> especialistas.put(e.getId(), r.toString()));
 		
 		estudioDto.setNombre(estudio.getNombre());
 		estudioDto.setDescripcion(estudio.getDescripcion());
-		estudioDto.setFechaAlta(estudio.getFechaAlta().toString());
+		estudioDto.setFechaInicio(estudio.getFechaInicio().toString());
 		estudioDto.setFechaFin(estudio.getFechaFin().toString());
 		
 		estudioDto.setPacientes(pacientes);
 		estudioDto.setAlertas(alertas);
 		estudioDto.setSeguimientos(seguimientos);
-		estudioDto.setEspecialistas(especialistas);
 		
 		return estudioDto;
 	}

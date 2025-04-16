@@ -35,12 +35,6 @@ public interface PacientesApi {
 			@Valid @RequestBody Collection<String> alertas,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar consultas", description = "Agrega consultas a un paciente")
-	@PatchMapping("/{id}/consultas/agregar")
-	public ResponseEntity<Void> agregarConsultas(
-			@Valid @RequestBody Collection<String> consultas,
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Agregar especialistas", description = "Agrega especialistas a un paciente")
 	@PatchMapping("/{id}/especialistas/agregar")
 	public ResponseEntity<Void> agregarEspecialistas(

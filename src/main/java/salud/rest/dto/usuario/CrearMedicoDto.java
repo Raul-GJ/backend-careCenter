@@ -12,7 +12,7 @@ public class CrearMedicoDto {
 	// Constructores
 
 	public CrearMedicoDto() {
-
+		super();
 	}
 	
 	// Métodos

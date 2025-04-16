@@ -33,7 +33,8 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<EspecialistaDto> altaEspecialista(@Valid EspecialistaDto especialistaDto) {
+	public ResponseEntity<EspecialistaDto> altaEspecialista(@Valid EspecialistaDto especialistaDto)
+			throws Exception {
 		String id = servicioEspecialistas.altaEspecialista(especialistaDto.getNombre(), 
 				especialistaDto.getApellido1(), 
 				especialistaDto.getApellido2(), 
@@ -93,30 +94,6 @@ public class ControladorEspecialistas implements EspecialistasApi {
 		servicioEspecialistas.eliminarPacientes(id, ids);
 		return ResponseEntity.noContent().build();
 	}
-	
-	@Override
-	public ResponseEntity<Void> agregarEstudiosCreador(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioEspecialistas.agregarEstudiosCreador(id, ids);
-		return ResponseEntity.noContent().build();
-	}
-	
-	@Override
-	public ResponseEntity<Void> agregarEstudiosEditor(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioEspecialistas.agregarEstudiosEditor(id, ids);
-		return ResponseEntity.noContent().build();
-	}
-	
-	@Override
-	public ResponseEntity<Void> agregarEstudiosObservador(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioEspecialistas.agregarEstudiosObservador(id, ids);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> eliminarEstudios(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioEspecialistas.eliminarEstudios(id, ids);
-		return ResponseEntity.noContent().build();
-	}
 
 	@Override
 	public ResponseEntity<Void> agregarPlantillas(@Valid Collection<String> ids, @Valid String id) throws Exception {
@@ -127,12 +104,6 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	@Override
 	public ResponseEntity<Void> eliminarPlantillas(@Valid Collection<String> ids, @Valid String id) throws Exception {
 		servicioEspecialistas.eliminarPlantillas(id, ids);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> agregarConsultas(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioEspecialistas.agregarConsultas(id, ids);
 		return ResponseEntity.noContent().build();
 	}
 }

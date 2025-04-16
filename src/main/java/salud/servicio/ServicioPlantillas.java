@@ -1,36 +1,39 @@
 package salud.servicio;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import salud.modelo.PlantillaFormulario;
+import salud.modelo.Plantilla;
 import salud.modelo.encuesta.PreguntaEncuesta;
-import salud.repositorio.EntidadNoEncontrada;
-import salud.repositorio.RepositorioFormulariosPlantilla;
+import salud.repositorio.RepositorioPlantillas;
+import salud.rest.excepciones.EntidadNoEncontrada;
+import salud.servicio.obtencion.IServicioObtencionPlantillas;
 
 @Service
 @Transactional
-public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantilla {
+public class ServicioPlantillas implements IServicioPlantillas {
 
 	// Atributos
 	
-	private RepositorioFormulariosPlantilla repositorioFormularios;
+	private RepositorioPlantillas repositorioPlantillas;
+	private IServicioObtencionPlantillas servicioPlantillas;
 	
 	// Constructores
 	
-	public ServicioFormulariosPlantilla(RepositorioFormulariosPlantilla repositorioFormularios) {
+	public ServicioPlantillas(RepositorioPlantillas repositorioPlantillas,
+			IServicioObtencionPlantillas servicioPlantillas) {
 		super();
-		this.repositorioFormularios = repositorioFormularios;
+		this.repositorioPlantillas = repositorioPlantillas;
+		this.servicioPlantillas = servicioPlantillas;
 	}
 	
 	// Métodos
 	
 	@Override
-	public String altaFormulario(String nombre, String descripcion) {
+	public String altaPlantilla(String nombre, String descripcion) {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
@@ -38,13 +41,13 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 			throw new IllegalArgumentException("La descripción no puede ser nula o vacía");
 		}
 		
-		PlantillaFormulario formulario = new PlantillaFormulario(nombre, descripcion);
+		Plantilla formulario = new Plantilla(nombre, descripcion);
 		
-		return repositorioFormularios.save(formulario).getId();
+		return repositorioPlantillas.save(formulario).getId();
 	}
 
 	@Override
-	public void modificarFormulario(String id, String nombre, String descripcion) throws EntidadNoEncontrada {
+	public void modificarPlantilla(String id, String nombre, String descripcion) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
@@ -55,16 +58,16 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 			throw new IllegalArgumentException("La descripción no puede ser nula o vacía");
 		}
 		
-		Optional<PlantillaFormulario> optional = repositorioFormularios.findById(id);
+		Optional<Plantilla> optional = repositorioPlantillas.findById(id);
 		if (optional.isEmpty()) {
 			throw new EntidadNoEncontrada(id);
 		}
-		PlantillaFormulario formulario = optional.get();
+		Plantilla formulario = optional.get();
 		
 		formulario.setNombre(nombre);
 		formulario.setDescripcion(descripcion);
 		
-		repositorioFormularios.save(formulario);
+		repositorioPlantillas.save(formulario);
 	}
 
 	@Override
@@ -79,13 +82,13 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 			throw new IllegalArgumentException("La pregunta no puede ser nula o vacía");
 		}
 		
-		Optional<PlantillaFormulario> optional = repositorioFormularios.findById(id);
+		Optional<Plantilla> optional = repositorioPlantillas.findById(id);
 		if (optional.isEmpty()) {
 			throw new EntidadNoEncontrada(id);
 		}
-		PlantillaFormulario formulario = optional.get();
+		Plantilla formulario = optional.get();
 		int pos = formulario.addPregunta(pregunta);
-		repositorioFormularios.save(formulario);
+		repositorioPlantillas.save(formulario);
 		
 		return pos;
 	}
@@ -99,49 +102,35 @@ public class ServicioFormulariosPlantilla implements IServicioFormulariosPlantil
 			throw new IllegalArgumentException("La posición no puede ser negativa");
 		}
 		
-		Optional<PlantillaFormulario> optional = repositorioFormularios.findById(id);
+		Optional<Plantilla> optional = repositorioPlantillas.findById(id);
 		if (optional.isEmpty()) {
 			throw new EntidadNoEncontrada(id);
 		}
-		PlantillaFormulario formulario = optional.get();
+		Plantilla formulario = optional.get();
 		formulario.removePregunta(pos);
-		repositorioFormularios.save(formulario);
+		repositorioPlantillas.save(formulario);
 	}
 
 	@Override
-	public PlantillaFormulario obtenerFormulario(String id) throws EntidadNoEncontrada {
+	public void eliminarPlantilla(String id) throws EntidadNoEncontrada {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
-		
-		Optional<PlantillaFormulario> optional = repositorioFormularios.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		PlantillaFormulario formulario = optional.get();
-		
-		return formulario;
+		repositorioPlantillas.deleteById(id);
 	}
 
 	@Override
-	public Collection<PlantillaFormulario> obtenerFormularios() {
-		Collection<PlantillaFormulario> formularios = new LinkedList<PlantillaFormulario>();
-		repositorioFormularios.findAll().forEach(f -> formularios.add(f));
-		return formularios;
-	}
-	
-	@Override
-	public Collection<PlantillaFormulario> obtenerFormularios(Collection<String> ids) {
-		Collection<PlantillaFormulario> formularios = new LinkedList<PlantillaFormulario>();
-		repositorioFormularios.findAllById(ids).forEach(f -> formularios.add(f));
-		return formularios;
+	public Plantilla obtenerPlantilla(String id) throws EntidadNoEncontrada {
+		return servicioPlantillas.obtenerPlantilla(id);
 	}
 
 	@Override
-	public void eliminarFormulario(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		repositorioFormularios.deleteById(id);
+	public Collection<Plantilla> obtenerPlantillas() {
+		return servicioPlantillas.obtenerPlantillas();
+	}
+
+	@Override
+	public Collection<Plantilla> obtenerPlantillas(Collection<String> ids) {
+		return servicioPlantillas.obtenerPlantillas(ids);
 	}
 }
