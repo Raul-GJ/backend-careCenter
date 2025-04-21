@@ -7,8 +7,10 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public abstract class Usuario {
+@Document(collection = "usuarios")
+public class Usuario {
 	
 	// Atributos
 	
@@ -21,11 +23,13 @@ public abstract class Usuario {
 	private String telefono;
 	@DBRef
 	private List<Alerta> alertas;
+	private TipoUsuario tipo;
 	boolean eliminado;
 	
 	// Constructores
 	
-	public Usuario(String nombre, String apellido1, String apellido2, String email, String telefono) {
+	public Usuario(String nombre, String apellido1, String apellido2, String email, String telefono,
+			TipoUsuario tipo) {
 		super();
 		this.nombre = nombre;
 		this.apellido1 = apellido1;
@@ -33,6 +37,7 @@ public abstract class Usuario {
 		this.email = email;
 		this.telefono = telefono;
 		this.alertas = new LinkedList<Alerta>();
+		this.tipo = tipo;
 		this.eliminado = false;
 	}
 	
@@ -120,10 +125,14 @@ public abstract class Usuario {
 	public void setEliminado(boolean eliminado) {
 		this.eliminado = eliminado;
 	}
+	
+	public TipoUsuario getTipo() {
+		return this.tipo;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alertas, apellido1, apellido2, email, id, nombre, telefono);
+		return Objects.hash(alertas, apellido1, apellido2, email, id, nombre, telefono, tipo);
 	}
 
 	@Override
@@ -138,6 +147,7 @@ public abstract class Usuario {
 		return Objects.equals(alertas, other.alertas) && Objects.equals(apellido1, other.apellido1)
 				&& Objects.equals(apellido2, other.apellido2)
 				&& Objects.equals(email, other.email) && Objects.equals(id, other.id)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(telefono, other.telefono);
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(telefono, other.telefono)
+				&& Objects.equals(tipo, other.tipo);
 	}
 }

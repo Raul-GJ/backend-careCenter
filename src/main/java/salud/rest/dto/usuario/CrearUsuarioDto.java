@@ -1,33 +1,31 @@
 package salud.rest.dto.usuario;
 
-import salud.modelo.Usuario;
+import javax.validation.constraints.NotEmpty;
 
-public class UsuarioDto {
+public class CrearUsuarioDto {
 
 	// Atributos
 	
-	private String id;
+	@NotEmpty(message = "El campo 'nombre' no debe estar vacío")
 	private String nombre;
+	
+	@NotEmpty(message = "El campo 'apellido1' no debe estar vacío")
 	private String apellido1;
+	
 	private String apellido2;
+	
+	@NotEmpty(message = "El campo 'email' no debe estar vacío")
 	private String email;
+	
 	private String telefono;
 	
 	// Constructores
 	
-	public UsuarioDto() {
+	public CrearUsuarioDto() {
 
 	}
 	
 	// Métodos
-	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -67,16 +65,5 @@ public class UsuarioDto {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
-	}
-	
-	public static UsuarioDto from(Usuario usuario) {
-		UsuarioDto usuarioDto = new UsuarioDto();
-		usuarioDto.setId(usuario.getId());
-		usuarioDto.setNombre(usuario.getNombre());
-		usuarioDto.setApellido1(usuario.getApellido1());
-		usuarioDto.setApellido2(usuario.getApellido2());
-		usuarioDto.setEmail(usuario.getEmail());
-		usuarioDto.setTelefono(usuario.getTelefono());
-		return usuarioDto;
 	}
 }

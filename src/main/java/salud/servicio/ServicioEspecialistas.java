@@ -9,7 +9,7 @@ import salud.modelo.Alerta;
 import salud.modelo.Especialista;
 import salud.modelo.Paciente;
 import salud.modelo.Plantilla;
-import salud.repositorio.RepositorioEspecialistas;
+import salud.repositorio.RepositorioUsuarios;
 import salud.rest.excepciones.EntidadNoEncontrada;
 import salud.servicio.obtencion.IServicioObtencionAlertas;
 import salud.servicio.obtencion.IServicioObtencionEspecialistas;
@@ -21,7 +21,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 
 	// Atributos
 	
-	private RepositorioEspecialistas repositorioEspecialistas;
+	private RepositorioUsuarios repositorioUsuarios;
 	private IServicioObtencionEspecialistas servicioEspecialistas;
 	private IServicioPacientes servicioPacientes;
 	private IServicioPlantillas servicioPlantillas;
@@ -29,11 +29,11 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	
 	// Constructores
 	
-	public ServicioEspecialistas(RepositorioEspecialistas repositorioEspecialistas,
+	public ServicioEspecialistas(RepositorioUsuarios repositorioUsuarios,
 			IServicioObtencionEspecialistas servicioEspecialistas, IServicioPacientes servicioPacientes,
 			IServicioPlantillas servicioPlantillas, IServicioObtencionAlertas servicioAlertas) {
 		super();
-		this.repositorioEspecialistas = repositorioEspecialistas;
+		this.repositorioUsuarios = repositorioUsuarios;
 		this.servicioEspecialistas = servicioEspecialistas;
 		this.servicioPacientes = servicioPacientes;
 		this.servicioPlantillas = servicioPlantillas;
@@ -65,7 +65,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		}
 		
 		Especialista especialista = new Especialista(nombre, apellido1, apellido2, email, telefono, nCol, especialidad);
-		return repositorioEspecialistas.save(especialista).getId();
+		return repositorioUsuarios.save(especialista).getId();
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		especialista.setNCol(nCol);
 		especialista.setEspecialidad(especialidad);
 		
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 	
 	@Override
@@ -117,7 +117,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		for (Paciente paciente : lista) {
 			servicioPacientes.agregarEspecialista(paciente.getId(), especialista);
 		}
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
@@ -128,12 +128,12 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		for (Paciente paciente : lista) {
 			servicioPacientes.eliminarEspecialista(paciente.getId(), especialista);
 		}
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
 	public void eliminarEspecialista(String id) throws EntidadNoEncontrada {
-		repositorioEspecialistas.deleteById(id);
+		repositorioUsuarios.deleteById(id);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		Especialista especialista = obtenerEspecialista(id);
 		Collection<Plantilla> lista = servicioPlantillas.obtenerPlantillas(plantillas);
 		especialista.agregarPlantillas(lista);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 			if (!plantillaPlantilla.isPublico())
 				servicioPlantillas.eliminarPlantilla(id);
 		}
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
@@ -161,14 +161,14 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		Especialista especialista = obtenerEspecialista(id);
 		especialista.agregarPaciente(paciente);
 		servicioPacientes.agregarEspecialista(paciente.getId(), especialista);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
 	public void agregarPlantilla(String id, Plantilla plantilla) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
 		especialista.agregarPlantilla(plantilla);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
@@ -176,14 +176,14 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		Especialista especialista = obtenerEspecialista(id);
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		especialista.agregarAlertas(lista);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
 	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
 		especialista.agregarAlerta(alerta);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
@@ -191,28 +191,28 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		Especialista especialista = obtenerEspecialista(id);
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		especialista.eliminarAlertas(lista);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
 	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
 		especialista.eliminarPaciente(paciente);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
 	public void eliminarPlantilla(String id, Plantilla plantilla) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
 		especialista.eliminarPlantilla(plantilla);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override
 	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
 		especialista.eliminarAlerta(alerta);
-		repositorioEspecialistas.save(especialista);
+		repositorioUsuarios.save(especialista);
 	}
 
 	@Override

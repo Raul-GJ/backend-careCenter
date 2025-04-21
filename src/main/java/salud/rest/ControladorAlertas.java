@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.modelo.Alerta;
 import salud.rest.dto.alerta.AlertaDto;
+import salud.rest.dto.alerta.CrearAlertaDto;
 import salud.servicio.IServicioAlertas;
 
 @RestController
@@ -32,7 +33,7 @@ public class ControladorAlertas implements AlertasApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<AlertaDto> crearAlerta(AlertaDto alertaDto) {
+	public ResponseEntity<AlertaDto> crearAlerta(CrearAlertaDto alertaDto) {
 		String id = servicioAlertas.altaAlerta(
 				alertaDto.getAsunto(),
 				alertaDto.getMensaje(),

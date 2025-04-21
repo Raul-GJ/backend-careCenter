@@ -88,7 +88,11 @@ public class ServicioAsignacionEstudio implements IservicioAsignacionEstudio {
 	@Override
 	public Collection<AsignacionEstudio> obtenerEstudios(String id) throws EntidadNoEncontrada {
 		Collection<AsignacionEstudio> lista = new LinkedList<AsignacionEstudio>();
+		System.out.println("id: " + id);
 		repositorioAsignacion.findByEspecialista_Id(id).forEach(ae -> lista.add(ae));
+		for (AsignacionEstudio asignacionEstudio : lista) {
+			asignacionEstudio.toString();
+		}
 		return lista;
 	}
 

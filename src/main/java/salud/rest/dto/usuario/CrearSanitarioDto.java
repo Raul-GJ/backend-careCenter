@@ -2,7 +2,7 @@ package salud.rest.dto.usuario;
 
 import javax.validation.constraints.NotEmpty;
 
-public class CrearSanitarioDto extends UsuarioDto {
+public class CrearSanitarioDto extends CrearUsuarioDto {
 	
 	// Atributos
 	

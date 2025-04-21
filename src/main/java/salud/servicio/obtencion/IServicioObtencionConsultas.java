@@ -12,4 +12,8 @@ public interface IServicioObtencionConsultas {
 	public Collection<Consulta> obtenerConsultas();
 	
 	public Collection<Consulta> obtenerConsultas(Collection<String> ids);
+	
+	public Collection<Consulta> obtenerConsultasPaciente(String id);
+	
+	public Collection<Consulta> obtenerConsultasSanitario(String id);
 }

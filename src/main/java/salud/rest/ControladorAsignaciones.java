@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.rest.dto.asignacion.AsignacionEstudioDto;
+import salud.rest.dto.asignacion.CrearAsignacionEstudioDto;
 import salud.rest.dto.asignacion.ModificarAsignacionDto;
 import salud.rest.excepciones.EntidadNoEncontrada;
 import salud.servicio.IservicioAsignacionEstudio;
@@ -32,7 +33,7 @@ public class ControladorAsignaciones implements AsignacionesApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<Void> agregarAsignacion(AsignacionEstudioDto asignacionDto) 
+	public ResponseEntity<Void> agregarAsignacion(CrearAsignacionEstudioDto asignacionDto) 
 			throws EntidadNoEncontrada {
 		String id = servicioAsignaciones.agregarAsignacion(
 				asignacionDto.getEspecialista(),

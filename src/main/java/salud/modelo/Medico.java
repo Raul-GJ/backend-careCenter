@@ -2,9 +2,6 @@ package salud.modelo;
 
 import java.util.Objects;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "medicos")
 public class Medico extends Sanitario {
 
 	// Atributos
@@ -15,7 +12,7 @@ public class Medico extends Sanitario {
 	
 	public Medico(String nombre, String apellido1, String apellido2, String email, 
 			String telefono, String nCol, String atributoTemporal) {
-		super(nombre, apellido1, apellido2, email, telefono, nCol);
+		super(nombre, apellido1, apellido2, email, telefono, TipoUsuario.MEDICO, nCol);
 		this.atributoTemporal = atributoTemporal;
 	}
 

@@ -2,15 +2,10 @@ package salud.rest.dto.asignacion;
 
 import javax.validation.constraints.NotEmpty;
 
-import salud.modelo.AsignacionEstudio;
-
-public class AsignacionEstudioDto {
+public class CrearAsignacionEstudioDto {
 	
 	//Atributos
 	
-	@NotEmpty(message = "El campo 'id' no debe estar vacío")
-	private String id;
-
 	@NotEmpty(message = "El campo 'especialista' no debe estar vacío")
 	private String especialista;
 	
@@ -22,19 +17,11 @@ public class AsignacionEstudioDto {
 	
 	// Constructores
 	
-	public AsignacionEstudioDto() {
+	public CrearAsignacionEstudioDto() {
 
 	}
 	
 	// Métodos
-	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 	
 	public String getEspecialista() {
 		return especialista;
@@ -58,14 +45,5 @@ public class AsignacionEstudioDto {
 
 	public void setEstudio(String estudio) {
 		this.estudio = estudio;
-	}
-	
-	public static AsignacionEstudioDto from(AsignacionEstudio asignacionEstudio) {
-		AsignacionEstudioDto dto = new AsignacionEstudioDto();
-		dto.setId(asignacionEstudio.getId());
-		dto.setEspecialista(asignacionEstudio.getEspecialista().getId());
-		dto.setEstudio(asignacionEstudio.getEstudio().getId());
-		dto.setRol(asignacionEstudio.getRol().toString());
-		return dto;
 	}
 }

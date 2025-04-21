@@ -7,6 +7,7 @@ public class SeguimientoDto {
 
 	// Atributos
 
+	private String id;
 	private String fecha;
 	private String plazo;
 	private FormularioDto formulario;
@@ -19,6 +20,14 @@ public class SeguimientoDto {
 	}
 	
 	// Métodos
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getFecha() {
 		return fecha;
@@ -54,6 +63,7 @@ public class SeguimientoDto {
 	
 	public static SeguimientoDto from(Seguimiento seguimiento) {
 		SeguimientoDto seguimientoDto = new SeguimientoDto();
+		seguimientoDto.setId(seguimiento.getId());
 		seguimientoDto.setFecha(seguimiento.getFecha().toString());
 		seguimientoDto.setPlazo(seguimiento.getPlazo().toString());
 		seguimientoDto.setFormulario(FormularioDto.from(seguimiento.getFormulario()));

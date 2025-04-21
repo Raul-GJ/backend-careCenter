@@ -6,16 +6,12 @@ public class ConsultaDto {
 
 	// Atributos
 	
+	private String id;
 	private String emisor;
-	
 	private String receptor;
-	
 	private String asunto;
-	
 	private String mensaje;
-	
 	private String fecha;
-	
 	private RespuestaDto respuesta;
 	
 	// Constructores
@@ -25,7 +21,15 @@ public class ConsultaDto {
 	}
 	
 	// Métodos
+	
+	public String getId() {
+		return id;
+	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public String getEmisor() {
 		return emisor;
 	}
@@ -76,6 +80,7 @@ public class ConsultaDto {
 	
 	public static ConsultaDto from(Consulta consulta) {
 		ConsultaDto consultaDto = new ConsultaDto();
+		consultaDto.setId(consulta.getId());
 		consultaDto.setEmisor(consulta.getEmisor().getId());
 		consultaDto.setReceptor(consulta.getReceptor().getId());
 		consultaDto.setAsunto(consulta.getAsunto());

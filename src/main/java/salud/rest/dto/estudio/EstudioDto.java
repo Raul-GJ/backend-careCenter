@@ -8,6 +8,7 @@ public class EstudioDto {
 
 	// Atributos
 	
+	private String id;
 	private String nombre;
 	private String descripcion;
 	private String fechaInicio;
@@ -23,6 +24,14 @@ public class EstudioDto {
 	}
 	
 	// Métodos
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -91,6 +100,7 @@ public class EstudioDto {
 		estudio.getAlertas().forEach(a -> alertas.add(a.getId()));
 		estudio.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
 		
+		estudioDto.setId(estudio.getId());
 		estudioDto.setNombre(estudio.getNombre());
 		estudioDto.setDescripcion(estudio.getDescripcion());
 		estudioDto.setFechaInicio(estudio.getFechaInicio().toString());

@@ -60,6 +60,7 @@ public class PacienteDto extends UsuarioDto {
 
 	public static PacienteDto from(Paciente paciente) {
 		PacienteDto dto = new PacienteDto();
+		dto.setId(paciente.getId());
 		dto.setNombre(paciente.getNombre());
 		dto.setApellido1(paciente.getApellido1());
 		dto.setApellido2(paciente.getApellido2());
@@ -67,15 +68,12 @@ public class PacienteDto extends UsuarioDto {
 		dto.setTelefono(paciente.getTelefono());
 		dto.setMedicoCabecera(paciente.getMedicoCabecera().getId());
 		
-		List<String> alertas = new LinkedList<String>();
 		List<String> especialistas = new LinkedList<String>();
 		List<String> seguimientos = new LinkedList<String>();
 		
-		paciente.getAlertas().forEach(a -> alertas.add(a.getId()));
 		paciente.getEspecialistas().forEach(e -> especialistas.add(e.getId()));
 		paciente.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
 		
-		dto.setAlertas(alertas);
 		dto.setEspecialistas(especialistas);
 		dto.setSeguimientos(seguimientos);
 		

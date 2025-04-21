@@ -9,6 +9,7 @@ public class PlantillaDto {
 	
 	// Atributos
 	
+	private String id;
 	private String nombre;
 	private String descripcion;
 	private boolean publico;
@@ -22,6 +23,14 @@ public class PlantillaDto {
 	
 	// Métodos
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -54,13 +63,14 @@ public class PlantillaDto {
 		this.preguntas = preguntas;
 	}
 	
-	public static PlantillaDto from(Plantilla formulario) {
-		PlantillaDto formularioDto = new PlantillaDto();
-		formularioDto.setPreguntas(formulario.getPreguntas());	
-		formularioDto.setNombre(formulario.getNombre());
-		formularioDto.setDescripcion(formulario.getDescripcion());
-		formularioDto.setPublico(formulario.isPublico());
+	public static PlantillaDto from(Plantilla plantilla) {
+		PlantillaDto plantillaDto = new PlantillaDto();
+		plantillaDto.setId(plantilla.getId());
+		plantillaDto.setPreguntas(plantilla.getPreguntas());	
+		plantillaDto.setNombre(plantilla.getNombre());
+		plantillaDto.setDescripcion(plantilla.getDescripcion());
+		plantillaDto.setPublico(plantilla.isPublico());
 		
-		return formularioDto;
+		return plantillaDto;
 	}
 }

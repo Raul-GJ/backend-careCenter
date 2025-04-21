@@ -5,9 +5,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "especialistas")
 public class Especialista extends Sanitario {
 	
 	// Atributos
@@ -20,7 +18,7 @@ public class Especialista extends Sanitario {
 	
 	public Especialista(String nombre, String apellido1, String apellido2, String email, String telefono,
 			String nCol, String especialidad) {
-		super(nombre, apellido1, apellido2, email, telefono, nCol);
+		super(nombre, apellido1, apellido2, email, telefono, TipoUsuario.ESPECIALISTA, nCol);
 		this.especialidad = especialidad;
 		this.plantillas = new LinkedList<Plantilla>();
 	}

@@ -18,9 +18,14 @@ import salud.rest.dto.consulta.CrearRespuestaDto;
 
 public interface ConsultasApi {
 
-	@Operation(summary = "Crear consulta", description = "Crea una nueva consulta")
-	@PostMapping
-	public ResponseEntity<ConsultaDto> crearConsulta(
+	@Operation(summary = "Crear consulta", description = "Crea una nueva consulta dirigida a un médico")
+	@PostMapping("/medicos")
+	public ResponseEntity<ConsultaDto> crearConsultaMedico(
+			@Valid @RequestBody CrearConsultaDto consultaDto) throws Exception;
+	
+	@Operation(summary = "Crear consulta", description = "Crea una nueva consulta dirigida a un especialista")
+	@PostMapping("/especialistas")
+	public ResponseEntity<ConsultaDto> crearConsultaEspecialista(
 			@Valid @RequestBody CrearConsultaDto consultaDto) throws Exception;
 	
 	@Operation(summary = "Obtener consulta", description = "Obtiene los datos de una consulta")
@@ -31,6 +36,16 @@ public interface ConsultasApi {
 	@Operation(summary = "Obtener consultas", description = "Obtiene los datos de todas las consultas")
 	@GetMapping
 	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas() throws Exception;
+	
+	@Operation(summary = "Obtener consultas paciente", description = "Obtiene todas las consultas de un paciente")
+	@GetMapping("/paciente/{id}")
+	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultasPaciente(
+			@PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Obtener consultas sanitario", description = "Obtiene todas las consultas de un personal de sanidad")
+	@GetMapping("/sanitario/{id}")
+	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultasSanitario(
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Responder consulta", description = "Crea una respuesta para una consulta")
 	@PatchMapping("/{id}")

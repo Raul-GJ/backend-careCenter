@@ -2,6 +2,7 @@ package salud.servicio;
 
 import java.util.Collection;
 
+import salud.modelo.Alerta;
 import salud.modelo.Medico;
 import salud.modelo.Paciente;
 import salud.rest.excepciones.EntidadNoEncontrada;
@@ -19,6 +20,10 @@ public interface IServicioMedicos {
 	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada;
 	
 	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada;
+	
+	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
+	
+	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
 	
 	public Medico obtenerMedico(String id) throws EntidadNoEncontrada;
 	

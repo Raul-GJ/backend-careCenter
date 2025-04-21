@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Especialista;
-import salud.repositorio.RepositorioEspecialistas;
+import salud.modelo.TipoUsuario;
+import salud.modelo.Usuario;
+import salud.repositorio.RepositorioUsuarios;
 import salud.rest.excepciones.EntidadNoEncontrada;
 
 @Service
@@ -17,13 +19,13 @@ public class ServicioObtencionEspecialistas implements IServicioObtencionEspecia
 
 	// Atributos
 	
-	private RepositorioEspecialistas repositorioEspecialistas;
+	private RepositorioUsuarios repositorioUsuarios;
 	
 	// Constructores
 	
-	public ServicioObtencionEspecialistas(RepositorioEspecialistas repositorioEspecialistas) {
+	public ServicioObtencionEspecialistas(RepositorioUsuarios repositorioUsuarios) {
 		super();
-		this.repositorioEspecialistas = repositorioEspecialistas;
+		this.repositorioUsuarios = repositorioUsuarios;
 	}
 	
 	// Métodos
@@ -34,25 +36,41 @@ public class ServicioObtencionEspecialistas implements IServicioObtencionEspecia
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
 		
-		Optional<Especialista> optional = repositorioEspecialistas.findById(id);
+		Optional<Usuario> optional = repositorioUsuarios.findById(id);
 		if (optional.isEmpty()) {
 			throw new EntidadNoEncontrada(id);
 		}
-		Especialista especialista = optional.get();
+		if (!optional.get().getTipo().equals(TipoUsuario.ESPECIALISTA)) {
+			throw new IllegalArgumentException("El usuario con id " + id + " no es un especialista");
+		}
+		Especialista especialista = (Especialista) optional.get();
 		return especialista;
 	}
 
 	@Override
 	public Collection<Especialista> obtenerEspecialistas() {
 		Collection<Especialista> especialistas = new LinkedList<Especialista>();
-		repositorioEspecialistas.findAll().forEach(e -> especialistas.add(e));
+		Collection<Usuario> usuarios = repositorioUsuarios.findByTipo(TipoUsuario.ESPECIALISTA);
+		for (Usuario usuario : usuarios) {
+			if (!usuario.getTipo().equals(TipoUsuario.ESPECIALISTA))
+				throw new IllegalArgumentException("El usuario con id " + usuario.getId() + 
+						" no es un especialista");
+			especialistas.add((Especialista) usuario);
+		}
 		return especialistas;
 	}
 	
 	@Override
 	public Collection<Especialista> obtenerEspecialistas(Collection<String> ids) {
 		Collection<Especialista> especialistas = new LinkedList<Especialista>();
-		repositorioEspecialistas.findAllById(ids).forEach(e -> especialistas.add(e));
+		Collection<Usuario> usuarios = new LinkedList<Usuario>();
+		repositorioUsuarios.findAllById(ids).forEach(u -> usuarios.add(u));
+		for (Usuario usuario : usuarios) {
+			if (!usuario.getTipo().equals(TipoUsuario.ESPECIALISTA))
+				throw new IllegalArgumentException("El usuario con id " + usuario.getId() + 
+						" no es un especialista");
+			especialistas.add((Especialista) usuario);
+		}
 		return especialistas;
 	}
 }

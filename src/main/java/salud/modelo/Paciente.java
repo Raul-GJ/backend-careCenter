@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
 import java.util.LinkedList;
 
-@Document(collection = "pacientes")
 public class Paciente extends Usuario {
 	
 	// Atributos
@@ -25,7 +23,7 @@ public class Paciente extends Usuario {
 
 	public Paciente(String nombre, String apellido1, String apellido2, String email, 
 			String telefono, Medico medicoCabecera) {
-		super(nombre, apellido1, apellido2, email, telefono);
+		super(nombre, apellido1, apellido2, email, telefono, TipoUsuario.PACIENTE);
 		this.setMedicoCabecera(medicoCabecera);
 		this.especialistas = new LinkedList<Especialista>();
 		this.seguimientos = new LinkedList<Seguimiento>();

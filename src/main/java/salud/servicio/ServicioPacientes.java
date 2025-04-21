@@ -10,7 +10,7 @@ import salud.modelo.Especialista;
 import salud.modelo.Medico;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
-import salud.repositorio.RepositorioPacientes;
+import salud.repositorio.RepositorioUsuarios;
 import salud.rest.excepciones.EntidadNoEncontrada;
 import salud.servicio.obtencion.IServicioObtencionAlertas;
 import salud.servicio.obtencion.IServicioObtencionEspecialistas;
@@ -24,7 +24,7 @@ public class ServicioPacientes implements IServicioPacientes {
 
 	// Atributos
 	
-	private RepositorioPacientes repositorioPacientes;
+	private RepositorioUsuarios repositorioUsuarios;
 	private IServicioObtencionPacientes servicioPacientes;
 	private IServicioMedicos servicioMedicos;
 	private IServicioObtencionAlertas servicioAlertas;
@@ -33,12 +33,12 @@ public class ServicioPacientes implements IServicioPacientes {
 	
 	// Constructores
 	
-	public ServicioPacientes(RepositorioPacientes repositorioPacientes, IServicioObtencionPacientes servicioPacientes,
+	public ServicioPacientes(RepositorioUsuarios repositorioUsuarios, IServicioObtencionPacientes servicioPacientes,
 			IServicioMedicos servicioMedicos, IServicioObtencionAlertas servicioAlertas,
 			IServicioObtencionEspecialistas servicioEspecialistas,
 			IServicioObtencionSeguimientos servicioSeguimientos) {
 		super();
-		this.repositorioPacientes = repositorioPacientes;
+		this.repositorioUsuarios = repositorioUsuarios;
 		this.servicioPacientes = servicioPacientes;
 		this.servicioMedicos = servicioMedicos;
 		this.servicioAlertas = servicioAlertas;
@@ -71,7 +71,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		
 		Paciente paciente = new Paciente(nombre, apellido1, apellido2, email, telefono, medico);
 		
-		String idPaciente = repositorioPacientes.save(paciente).getId();
+		String idPaciente = repositorioUsuarios.save(paciente).getId();
 		servicioMedicos.agregarPaciente(medico.getId(), paciente);
 		return idPaciente;
 	}
@@ -117,7 +117,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		paciente.setTelefono(telefono);
 		paciente.setMedicoCabecera(medico);
 		
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class ServicioPacientes implements IServicioPacientes {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
 		obtenerPaciente(id);
-		repositorioPacientes.deleteById(id);
+		repositorioUsuarios.deleteById(id);
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		paciente.agregarAlertas(lista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Especialista> lista = servicioEspecialistas.obtenerEspecialistas(especialistas);
 		paciente.agregarEspecialistas(lista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
@@ -150,28 +150,28 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Seguimiento> lista = servicioSeguimientos.obtenerSeguimientos(seguimientos);
 		paciente.agregarSeguimientos(lista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 	
 	@Override
 	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.agregarAlerta(alerta);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
 	public void agregarEspecialista(String id, Especialista especialista) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.agregarEspecialista(especialista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
 	public void agregarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.agregarSeguimiento(seguimiento);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		paciente.eliminarAlertas(lista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
@@ -187,7 +187,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Especialista> lista = servicioEspecialistas.obtenerEspecialistas(especialistas);
 		paciente.eliminarEspecialistas(lista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
@@ -195,28 +195,28 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Seguimiento> lista = servicioSeguimientos.obtenerSeguimientos(seguimientos);
 		paciente.eliminarSeguimientos(lista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
 	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.eliminarAlerta(alerta);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
 	public void eliminarEspecialista(String id, Especialista especialista) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.eliminarEspecialista(especialista);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override
 	public void eliminarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		paciente.eliminarSeguimiento(seguimiento);
-		repositorioPacientes.save(paciente);
+		repositorioUsuarios.save(paciente);
 	}
 
 	@Override

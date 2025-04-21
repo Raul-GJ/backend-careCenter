@@ -29,6 +29,7 @@ public class MedicoDto extends SanitarioDto {
 	
 	public static MedicoDto from(Medico medico) {
 		MedicoDto dto = new MedicoDto();
+		dto.setId(medico.getId());
 		dto.setNombre(medico.getNombre());
 		dto.setApellido1(medico.getApellido1());
 		dto.setApellido2(medico.getApellido2());

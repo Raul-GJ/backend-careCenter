@@ -5,9 +5,10 @@ import java.util.Collection;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import salud.modelo.Alerta;
 import salud.modelo.Medico;
 import salud.modelo.Paciente;
-import salud.repositorio.RepositorioMedicos;
+import salud.repositorio.RepositorioUsuarios;
 import salud.rest.excepciones.EntidadNoEncontrada;
 import salud.servicio.obtencion.IServicioObtencionMedicos;
 import salud.utils.ValidadorEmail;
@@ -18,15 +19,15 @@ public class ServicioMedicos implements IServicioMedicos {
 
 	// Atributos
 	
-	private RepositorioMedicos repositorioMedicos;
+	private RepositorioUsuarios repositorioUsuarios;
 	private IServicioObtencionMedicos servicioMedicos;
 	
 	// Constructores
 	
-	public ServicioMedicos(RepositorioMedicos repositorioMedicos, 
+	public ServicioMedicos(RepositorioUsuarios repositorioUsuarios, 
 			IServicioObtencionMedicos servicioMedicos) {
 		super();
-		this.repositorioMedicos = repositorioMedicos;
+		this.repositorioUsuarios = repositorioUsuarios;
 		this.servicioMedicos = servicioMedicos;
 	}
 	
@@ -55,7 +56,7 @@ public class ServicioMedicos implements IServicioMedicos {
 		}
 		
 		Medico medico = new Medico(nombre, apellido1, apellido2, email, telefono, nCol, atributoTemporal);
-		return repositorioMedicos.save(medico).getId();
+		return repositorioUsuarios.save(medico).getId();
 	}
 
 	@Override
@@ -93,7 +94,7 @@ public class ServicioMedicos implements IServicioMedicos {
 		medico.setNCol(nCol);
 		medico.setAtributoTemporal(atributoTemporal);
 		
-		repositorioMedicos.save(medico);
+		repositorioUsuarios.save(medico);
 	}
 
 	@Override
@@ -101,21 +102,35 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (id == null || id.isEmpty()) {
 			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
 		}
-		repositorioMedicos.deleteById(id);
+		repositorioUsuarios.deleteById(id);
 	}
 
 	@Override
 	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
 		Medico medico = obtenerMedico(id);
 		medico.agregarPaciente(paciente);
-		repositorioMedicos.save(medico);
+		repositorioUsuarios.save(medico);
 	}
 
 	@Override
 	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
 		Medico medico = obtenerMedico(id);
 		medico.eliminarPaciente(paciente);
-		repositorioMedicos.save(medico);
+		repositorioUsuarios.save(medico);
+	}
+	
+	@Override
+	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
+		Medico medico = obtenerMedico(id);
+		medico.agregarAlerta(alerta);
+		repositorioUsuarios.save(medico);
+	}
+
+	@Override
+	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
+		Medico medico = obtenerMedico(id);
+		medico.eliminarAlerta(alerta);
+		repositorioUsuarios.save(medico);
 	}
 
 	@Override

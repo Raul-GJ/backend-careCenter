@@ -32,8 +32,22 @@ public class ControladorConsultas implements ConsultasApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<ConsultaDto> crearConsulta(CrearConsultaDto consultaDto) throws Exception {
-		String id = servicioConsultas.altaConsulta(
+	public ResponseEntity<ConsultaDto> crearConsultaMedico(CrearConsultaDto consultaDto) throws Exception {
+		String id = servicioConsultas.altaConsultaMedico(
+				consultaDto.getAsunto(),
+				consultaDto.getMensaje(),
+				consultaDto.getEmisor(),
+				consultaDto.getReceptor());
+		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
+		
+		return ResponseEntity.created(uri).build();
+	}
+	
+	@Override
+	public ResponseEntity<ConsultaDto> crearConsultaEspecialista(CrearConsultaDto consultaDto) 
+			throws Exception {
+		String id = servicioConsultas.altaConsultaEspecialista(
 				consultaDto.getAsunto(),
 				consultaDto.getMensaje(),
 				consultaDto.getEmisor(),
@@ -53,6 +67,23 @@ public class ControladorConsultas implements ConsultasApi {
 	@Override
 	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultas() throws Exception {
 		Collection<Consulta> consultas = servicioConsultas.obtenerConsultas();
+		Collection<ConsultaDto> dtos = new LinkedList<ConsultaDto>();
+		consultas.forEach(a -> dtos.add(ConsultaDto.from(a)));
+		return ResponseEntity.ok(dtos);
+	}
+	
+
+	@Override
+	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultasPaciente(String id) throws Exception {
+		Collection<Consulta> consultas = servicioConsultas.obtenerConsultasPaciente(id);
+		Collection<ConsultaDto> dtos = new LinkedList<ConsultaDto>();
+		consultas.forEach(a -> dtos.add(ConsultaDto.from(a)));
+		return ResponseEntity.ok(dtos);
+	}
+
+	@Override
+	public ResponseEntity<Collection<ConsultaDto>> obtenerConsultasSanitario(String id) throws Exception {
+		Collection<Consulta> consultas = servicioConsultas.obtenerConsultasSanitario(id);
 		Collection<ConsultaDto> dtos = new LinkedList<ConsultaDto>();
 		consultas.forEach(a -> dtos.add(ConsultaDto.from(a)));
 		return ResponseEntity.ok(dtos);

@@ -55,4 +55,18 @@ public class ServicioObtencionConsultas implements IServicioObtencionConsultas {
 		repositorioConsultas.findAllById(ids).forEach(consulta -> consultas.add(consulta));
 		return consultas;
 	}
+
+	@Override
+	public Collection<Consulta> obtenerConsultasPaciente(String id) {
+		Collection<Consulta> consultas = new LinkedList<Consulta>();
+		repositorioConsultas.findByEmisor(id).forEach(consulta -> consultas.add(consulta));
+		return consultas;
+	}
+
+	@Override
+	public Collection<Consulta> obtenerConsultasSanitario(String id) {
+		Collection<Consulta> consultas = new LinkedList<Consulta>();
+		repositorioConsultas.findByReceptor(id).forEach(consulta -> consultas.add(consulta));
+		return consultas;
+	}
 }

@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
 import salud.rest.dto.alerta.AlertaDto;
+import salud.rest.dto.alerta.CrearAlertaDto;
 
 public interface AlertasApi {
 
 	@Operation(summary = "Crear alerta", description = "Crea una nueva alerta")
 	@PostMapping
 	public ResponseEntity<AlertaDto> crearAlerta(
-			@Valid @RequestBody AlertaDto alertaDto);
+			@Valid @RequestBody CrearAlertaDto alertaDto);
 	
 	@Operation(summary = "Modificar alerta", description = "Modifica los datos de una alerta")
 	@PatchMapping("/{id}")
