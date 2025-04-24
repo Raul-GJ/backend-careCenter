@@ -31,8 +31,7 @@ public class MedicoDto extends SanitarioDto {
 		MedicoDto dto = new MedicoDto();
 		dto.setId(medico.getId());
 		dto.setNombre(medico.getNombre());
-		dto.setApellido1(medico.getApellido1());
-		dto.setApellido2(medico.getApellido2());
+		dto.setApellidos(medico.getApellidos());
 		dto.setEmail(medico.getEmail());
 		dto.setTelefono(medico.getTelefono());
 		dto.setnCol(medico.getNCol());

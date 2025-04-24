@@ -17,8 +17,7 @@ public class Usuario {
 	@Id
 	private String id;
 	private String nombre;
-	private String apellido1;
-	private String apellido2;
+	private String apellidos;
 	private String email;
 	private String telefono;
 	@DBRef
@@ -28,12 +27,11 @@ public class Usuario {
 	
 	// Constructores
 	
-	public Usuario(String nombre, String apellido1, String apellido2, String email, String telefono,
+	public Usuario(String nombre, String apellidos, String email, String telefono,
 			TipoUsuario tipo) {
 		super();
 		this.nombre = nombre;
-		this.apellido1 = apellido1;
-		this.apellido2 = apellido2;
+		this.apellidos = apellidos;
 		this.email = email;
 		this.telefono = telefono;
 		this.alertas = new LinkedList<Alerta>();
@@ -59,20 +57,12 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	public String getApellido1() {
-		return apellido1;
+	public String getApellidos() {
+		return apellidos;
 	}
 
-	public void setApellido1(String apellido1) {
-		this.apellido1 = apellido1;
-	}
-
-	public String getApellido2() {
-		return apellido2;
-	}
-
-	public void setApellido2(String apellido2) {
-		this.apellido2 = apellido2;
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
 	}
 
 	public String getEmail() {
@@ -132,7 +122,7 @@ public class Usuario {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alertas, apellido1, apellido2, email, id, nombre, telefono, tipo);
+		return Objects.hash(alertas, apellidos, eliminado, email, id, nombre, telefono, tipo);
 	}
 
 	@Override
@@ -144,10 +134,9 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(alertas, other.alertas) && Objects.equals(apellido1, other.apellido1)
-				&& Objects.equals(apellido2, other.apellido2)
-				&& Objects.equals(email, other.email) && Objects.equals(id, other.id)
+		return Objects.equals(alertas, other.alertas) && Objects.equals(apellidos, other.apellidos)
+				&& eliminado == other.eliminado && Objects.equals(email, other.email) && Objects.equals(id, other.id)
 				&& Objects.equals(nombre, other.nombre) && Objects.equals(telefono, other.telefono)
-				&& Objects.equals(tipo, other.tipo);
+				&& tipo == other.tipo;
 	}
 }

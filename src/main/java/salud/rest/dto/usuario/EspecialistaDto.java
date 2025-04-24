@@ -41,8 +41,7 @@ public class EspecialistaDto extends SanitarioDto {
 		EspecialistaDto dto = new EspecialistaDto();
 		dto.setId(especialista.getId());
 		dto.setNombre(especialista.getNombre());
-		dto.setApellido1(especialista.getApellido1());
-		dto.setApellido2(especialista.getApellido2());
+		dto.setApellidos(especialista.getApellidos());
 		dto.setEmail(especialista.getEmail());
 		dto.setTelefono(especialista.getTelefono());
 		dto.setnCol(especialista.getNCol());

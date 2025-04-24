@@ -33,7 +33,8 @@ public class ServicioPacientes implements IServicioPacientes {
 	
 	// Constructores
 	
-	public ServicioPacientes(RepositorioUsuarios repositorioUsuarios, IServicioObtencionPacientes servicioPacientes,
+	public ServicioPacientes(RepositorioUsuarios repositorioUsuarios, 
+			IServicioObtencionPacientes servicioPacientes,
 			IServicioMedicos servicioMedicos, IServicioObtencionAlertas servicioAlertas,
 			IServicioObtencionEspecialistas servicioEspecialistas,
 			IServicioObtencionSeguimientos servicioSeguimientos) {
@@ -49,12 +50,12 @@ public class ServicioPacientes implements IServicioPacientes {
 	// Métodos
 	
 	@Override
-	public String altaPaciente(String nombre, String apellido1, String apellido2, String email, 
+	public String altaPaciente(String nombre, String apellidos, String email, 
 			String telefono, String medicoCabecera) throws EntidadNoEncontrada {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
-		if (apellido1 == null || apellido1.isEmpty()) {
+		if (apellidos == null || apellidos.isEmpty()) {
 			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
 		}
 		if (email == null || email.isEmpty()) {
@@ -69,7 +70,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		
 		Medico medico = servicioMedicos.obtenerMedico(medicoCabecera);
 		
-		Paciente paciente = new Paciente(nombre, apellido1, apellido2, email, telefono, medico);
+		Paciente paciente = new Paciente(nombre, apellidos, email, telefono, medico);
 		
 		String idPaciente = repositorioUsuarios.save(paciente).getId();
 		servicioMedicos.agregarPaciente(medico.getId(), paciente);
@@ -77,45 +78,28 @@ public class ServicioPacientes implements IServicioPacientes {
 	}
 
 	@Override
-	public void modificarPaciente(String id, String nombre, String apellido1, String apellido2, 
+	public void modificarPaciente(String id, String nombre, String apellidos, 
 			String email, String telefono, String medicoCabecera) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		if (nombre == null || nombre.isEmpty()) {
-			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
-		}
-		if (apellido1 == null || apellido1.isEmpty()) {
-			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
-		}
-		if (apellido2 == null || apellido2.isEmpty()) {
-			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
-		}
-		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("El email no puede ser nulo o vacío");
-		}
-		if (!ValidadorEmail.esValido(email)) {
-			throw new IllegalArgumentException("El email debe ser válido");
-		}
-		if (medicoCabecera == null) {
-			throw new IllegalArgumentException("El médico de cabecera no puede ser nulo");
-		}
-		
 		Paciente paciente = obtenerPaciente(id);
 		
-		Medico medico = servicioMedicos.obtenerMedico(medicoCabecera);
-		Medico anteriorMedico = paciente.getMedicoCabecera();
-		if (!medico.getId().equals(anteriorMedico.getId())) {
-			servicioMedicos.eliminarPaciente(medico.getId(), paciente);
-			servicioMedicos.eliminarPaciente(anteriorMedico.getId(), paciente);
+		if (medicoCabecera != null) {
+			Medico medico = servicioMedicos.obtenerMedico(medicoCabecera);
+			Medico anteriorMedico = paciente.getMedicoCabecera();
+			if (!medico.getId().equals(anteriorMedico.getId())) {
+				servicioMedicos.eliminarPaciente(medico.getId(), paciente);
+				servicioMedicos.eliminarPaciente(anteriorMedico.getId(), paciente);
+				paciente.setMedicoCabecera(medico);
+			}
 		}
 		
-		paciente.setNombre(nombre);
-		paciente.setApellido1(apellido1);
-		paciente.setApellido2(apellido2);
-		paciente.setEmail(email);
-		paciente.setTelefono(telefono);
-		paciente.setMedicoCabecera(medico);
+		if (nombre != null && !nombre.isBlank())
+			paciente.setNombre(nombre);
+		if (apellidos != null && !apellidos.isBlank())
+			paciente.setApellidos(apellidos);
+		if (email != null && !email.isBlank())
+			paciente.setEmail(email);
+		if (telefono != null && !telefono.isBlank())
+			paciente.setTelefono(telefono);
 		
 		repositorioUsuarios.save(paciente);
 	}

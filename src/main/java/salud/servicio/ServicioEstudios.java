@@ -124,24 +124,14 @@ public class ServicioEstudios implements IServicioEstudios {
 	@Override
 	public void modificarEstudio(String id, String nombre, String descripcion, LocalDateTime fechaFin)
 			throws EntidadNoEncontrada {
-		if (nombre == null || nombre.isEmpty()) {
-			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
-		}
-		if (descripcion == null || descripcion.isEmpty()) {
-			throw new IllegalArgumentException("La descripción no puede ser nula o vacía");
-		}
-		if (fechaFin == null) {
-			throw new IllegalArgumentException("La fecha de fin no puede ser nula");
-		}
-		if (fechaFin.isBefore(LocalDateTime.now())) {
-			throw new IllegalArgumentException("La fecha de fin no puede ser anterior al dia de hoy");
-		}
-		
 		Estudio estudio = obtenerEstudio(id);
 		
-		estudio.setNombre(nombre);
-		estudio.setDescripcion(descripcion);
-		estudio.setFechaFin(fechaFin);
+		if (nombre != null && !nombre.isBlank())
+			estudio.setNombre(nombre);
+		if (descripcion != null && !descripcion.isBlank())
+			estudio.setDescripcion(descripcion);
+		if (fechaFin != null && fechaFin.isAfter(LocalDateTime.now()))
+			estudio.setFechaFin(fechaFin);
 		
 		repositorioEstudios.save(estudio);
 		

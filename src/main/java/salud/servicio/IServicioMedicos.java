@@ -11,10 +11,10 @@ public interface IServicioMedicos {
 
 	// Medicos de familia
 	
-	public String altaMedico(String nombre, String apellido1, String apellido2, String email, 
+	public String altaMedico(String nombre, String apellidos, String email, 
 			String telefono, String nCol, String atributoTemporal);
 	
-	public void modificarMedico(String id, String nombre, String apellido1, String apellido2, String email, 
+	public void modificarMedico(String id, String nombre, String apellidos, String email, 
 			String telefono, String nCol, String atributoTemporal) throws EntidadNoEncontrada;
 	
 	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada;

@@ -17,9 +17,9 @@ public abstract class Sanitario extends Usuario {
 	
 	// Constructores
 	
-	public Sanitario(String nombre, String apellido1, String apellido2, String email, String telefono,
+	public Sanitario(String nombre, String apellidos, String email, String telefono,
 			TipoUsuario tipo, String nCol) {
-		super(nombre, apellido1, apellido2, email, telefono, tipo);
+		super(nombre, apellidos, email, telefono, tipo);
 		this.nCol = nCol;
 		this.pacientes = new LinkedList<Paciente>();
 	}

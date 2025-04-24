@@ -62,8 +62,7 @@ public class PacienteDto extends UsuarioDto {
 		PacienteDto dto = new PacienteDto();
 		dto.setId(paciente.getId());
 		dto.setNombre(paciente.getNombre());
-		dto.setApellido1(paciente.getApellido1());
-		dto.setApellido2(paciente.getApellido2());
+		dto.setApellidos(paciente.getApellidos());
 		dto.setEmail(paciente.getEmail());
 		dto.setTelefono(paciente.getTelefono());
 		dto.setMedicoCabecera(paciente.getMedicoCabecera().getId());

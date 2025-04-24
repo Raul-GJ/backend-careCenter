@@ -104,29 +104,26 @@ public class ServicioConsultas implements IServicioConsultas {
 		repositorioConsultas.deleteById(id);
 	}
 	
-	private String getNombreCompleto(Usuario usuario) {
-		if (usuario.getApellido2() == null)
-			return usuario.getNombre() + " " + usuario.getApellido1();
-		else 
-			return usuario.getNombre() + " " + usuario.getApellido1() + " " + usuario.getApellido2();
-	}
-	
 	private Alerta generarAlertaRespuesta(Consulta consulta) {
-		String asunto = getNombreCompleto(consulta.getReceptor()) + 
+		Usuario receptor = consulta.getReceptor();
+		Usuario emisor = consulta.getReceptor();
+		String asunto = receptor.getNombre() + " " + receptor.getApellidos() + 
 				" ha respondido a tu consulta";
 		String mensaje = "Hola " + 
-				getNombreCompleto(consulta.getEmisor()) + 
+				emisor.getNombre() + " " + emisor.getApellidos() + 
 				", tu consulta ha sido respondida, revisa tu buzón de consultas";
 		
 		return new Alerta(asunto, mensaje, LocalDateTime.now());
 	}
 	
 	private Alerta generarAlertaConsulta(Consulta consulta) {
+		Usuario receptor = consulta.getReceptor();
+		Usuario emisor = consulta.getReceptor();
 		String asunto = "Tienes una nueva consulta";
 		String mensaje = "Hola " + 
-				getNombreCompleto(consulta.getReceptor()) + 
+				receptor.getNombre() + " " + receptor.getApellidos() + 
 				", tienes una nueva consulta de " + 
-				consulta.getEmisor() + 
+				emisor.getNombre() + " " + emisor.getApellidos() + 
 				", revisa tu buzón de consultas";
 		
 		return new Alerta(asunto, mensaje, LocalDateTime.now());

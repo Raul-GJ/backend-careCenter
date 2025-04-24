@@ -12,10 +12,10 @@ public interface IServicioEspecialistas {
 
 	// Especialistas
 	
-	public String altaEspecialista(String nombre, String apellido1, String apellido2, String email, 
+	public String altaEspecialista(String nombre, String apellidos, String email, 
 			String telefono, String nCol, String especialidad);
 	
-	public void modificarEspecialista(String id, String nombre, String apellido1, String apellido2, 
+	public void modificarEspecialista(String id, String nombre, String apellidos, 
 			String email, String telefono, String nCol, String especialidad) throws EntidadNoEncontrada;
 	
 	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;

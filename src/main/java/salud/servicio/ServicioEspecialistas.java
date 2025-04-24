@@ -43,12 +43,12 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	// Métodos
 	
 	@Override
-	public String altaEspecialista(String nombre, String apellido1, String apellido2, String email, 
+	public String altaEspecialista(String nombre, String apellidos, String email, 
 			String telefono, String nCol, String especialidad) {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
-		if (apellido1 == null || apellido1.isEmpty()) {
+		if (apellidos == null || apellidos.isEmpty()) {
 			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
 		}
 		if (email == null || email.isEmpty()) {
@@ -64,47 +64,27 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 			throw new IllegalArgumentException("La especialidad no puede ser nula o vacía");
 		}
 		
-		Especialista especialista = new Especialista(nombre, apellido1, apellido2, email, telefono, nCol, especialidad);
+		Especialista especialista = new Especialista(nombre, apellidos, email, telefono, nCol, especialidad);
 		return repositorioUsuarios.save(especialista).getId();
 	}
 
 	@Override
-	public void modificarEspecialista(String id, String nombre, String apellido1, String apellido2, 
+	public void modificarEspecialista(String id, String nombre, String apellidos, 
 			String email, String telefono, String nCol, String especialidad) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		if (nombre == null || nombre.isEmpty()) {
-			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
-		}
-		if (apellido1 == null || apellido1.isEmpty()) {
-			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
-		}
-		if (apellido2 == null || apellido2.isEmpty()) {
-			throw new IllegalArgumentException("El apellido no puede ser nulo o vacío");
-		}
-		if (email == null || email.isEmpty()) {
-			throw new IllegalArgumentException("El email no puede ser nulo o vacío");
-		}
-		if (!ValidadorEmail.esValido(email)) {
-			throw new IllegalArgumentException("El email debe ser válido");
-		}
-		if (nCol == null || nCol.isEmpty()) {
-			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
-		}
-		if (especialidad == null || especialidad.isEmpty()) {
-			throw new IllegalArgumentException("La especialidad no puede ser nula o vacía");
-		}
-		
 		Especialista especialista = obtenerEspecialista(id);
 		
-		especialista.setNombre(nombre);
-		especialista.setApellido1(apellido1);
-		especialista.setApellido2(apellido2);
-		especialista.setEmail(email);
-		especialista.setTelefono(telefono);
-		especialista.setNCol(nCol);
-		especialista.setEspecialidad(especialidad);
+		if (nombre != null && !nombre.isBlank())
+			especialista.setNombre(nombre);
+		if (apellidos != null && !apellidos.isBlank())
+			especialista.setApellidos(apellidos);
+		if (email != null && !email.isBlank())
+			especialista.setEmail(email);
+		if (telefono != null && !telefono.isBlank())
+			especialista.setTelefono(telefono);
+		if (nCol != null && !nCol.isBlank())
+			especialista.setNCol(nCol);
+		if (especialidad != null && !especialidad.isBlank())
+			especialista.setEspecialidad(especialidad);
 		
 		repositorioUsuarios.save(especialista);
 	}

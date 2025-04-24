@@ -10,9 +10,9 @@ public class Medico extends Sanitario {
 	
 	// Constructores
 	
-	public Medico(String nombre, String apellido1, String apellido2, String email, 
+	public Medico(String nombre, String apellidos, String email, 
 			String telefono, String nCol, String atributoTemporal) {
-		super(nombre, apellido1, apellido2, email, telefono, TipoUsuario.MEDICO, nCol);
+		super(nombre, apellidos, email, telefono, TipoUsuario.MEDICO, nCol);
 		this.atributoTemporal = atributoTemporal;
 	}
 

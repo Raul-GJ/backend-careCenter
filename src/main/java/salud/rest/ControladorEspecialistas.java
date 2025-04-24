@@ -36,8 +36,7 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	public ResponseEntity<EspecialistaDto> altaEspecialista(@Valid EspecialistaDto especialistaDto)
 			throws Exception {
 		String id = servicioEspecialistas.altaEspecialista(especialistaDto.getNombre(), 
-				especialistaDto.getApellido1(), 
-				especialistaDto.getApellido2(), 
+				especialistaDto.getApellidos(), 
 				especialistaDto.getEmail(), 
 				especialistaDto.getTelefono(), 
 				especialistaDto.getnCol(),
@@ -53,8 +52,7 @@ public class ControladorEspecialistas implements EspecialistasApi {
 			throws Exception {
 		servicioEspecialistas.modificarEspecialista(id,
 				especialistaDto.getNombre(), 
-				especialistaDto.getApellido1(), 
-				especialistaDto.getApellido2(), 
+				especialistaDto.getApellidos(), 
 				especialistaDto.getEmail(), 
 				especialistaDto.getTelefono(), 
 				especialistaDto.getnCol(),

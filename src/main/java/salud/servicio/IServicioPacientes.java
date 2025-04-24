@@ -10,10 +10,10 @@ import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioPacientes {
 	
-	public String altaPaciente(String nombre, String apellido1, String apellido2, String email, 
+	public String altaPaciente(String nombre, String apellidos, String email, 
 			String telefono, String medicoCabecera) throws EntidadNoEncontrada;
 	
-	public void modificarPaciente(String id, String nombre, String apellido1, String apellido2, 
+	public void modificarPaciente(String id, String nombre, String apellidos, 
 			String email, String telefono, String medicoCabecera) throws EntidadNoEncontrada;
 	
 	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada;

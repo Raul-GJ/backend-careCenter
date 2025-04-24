@@ -21,9 +21,9 @@ public class Paciente extends Usuario {
 	
 	// Constructores
 
-	public Paciente(String nombre, String apellido1, String apellido2, String email, 
+	public Paciente(String nombre, String apellidos, String email, 
 			String telefono, Medico medicoCabecera) {
-		super(nombre, apellido1, apellido2, email, telefono, TipoUsuario.PACIENTE);
+		super(nombre, apellidos, email, telefono, TipoUsuario.PACIENTE);
 		this.setMedicoCabecera(medicoCabecera);
 		this.especialistas = new LinkedList<Especialista>();
 		this.seguimientos = new LinkedList<Seguimiento>();

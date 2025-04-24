@@ -36,8 +36,7 @@ public class ControladorPacientes implements PacientesApi {
 	@Override
 	public ResponseEntity<PacienteDto> altaPaciente(@Valid CrearPacienteDto pacienteDto) throws Exception {
 		String id = servicioPacientes.altaPaciente(pacienteDto.getNombre(), 
-				pacienteDto.getApellido1(), 
-				pacienteDto.getApellido2(), 
+				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(), 
 				pacienteDto.getMedicoCabecera());
@@ -51,8 +50,7 @@ public class ControladorPacientes implements PacientesApi {
 	public ResponseEntity<Void> modificarPaciente(@Valid PacienteDto pacienteDto, @Valid String id) throws Exception {
 		servicioPacientes.modificarPaciente(id,
 				pacienteDto.getNombre(), 
-				pacienteDto.getApellido1(), 
-				pacienteDto.getApellido2(), 
+				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(), 
 				pacienteDto.getMedicoCabecera());

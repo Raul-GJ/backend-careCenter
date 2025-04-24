@@ -48,24 +48,12 @@ public class ServicioPlantillas implements IServicioPlantillas {
 
 	@Override
 	public void modificarPlantilla(String id, String nombre, String descripcion) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		if (nombre == null || nombre.isEmpty()) {
-			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
-		}
-		if (descripcion == null || descripcion.isEmpty()) {
-			throw new IllegalArgumentException("La descripción no puede ser nula o vacía");
-		}
+		Plantilla formulario = obtenerPlantilla(id);
 		
-		Optional<Plantilla> optional = repositorioPlantillas.findById(id);
-		if (optional.isEmpty()) {
-			throw new EntidadNoEncontrada(id);
-		}
-		Plantilla formulario = optional.get();
-		
-		formulario.setNombre(nombre);
-		formulario.setDescripcion(descripcion);
+		if (nombre != null && !nombre.isBlank())
+			formulario.setNombre(nombre);
+		if (descripcion != null && !descripcion.isBlank())
+			formulario.setDescripcion(descripcion);
 		
 		repositorioPlantillas.save(formulario);
 	}

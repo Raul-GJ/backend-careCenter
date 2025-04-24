@@ -1,4 +1,4 @@
-package salud.modelo;
+	package salud.modelo;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

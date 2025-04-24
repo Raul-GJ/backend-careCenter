@@ -65,24 +65,19 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 	@Override
 	public void modificarSeguimiento(String id, LocalDateTime fecha, LocalDateTime plazo,
 			String plantilla, String motivo) throws EntidadNoEncontrada {
-		if (fecha == null) {
-			throw new IllegalArgumentException("La fecha no puede ser nula");
-		}
-		if (fecha.isBefore(LocalDateTime.now())) {
-			throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
-		}
-		if (motivo == null || motivo.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
 		Seguimiento seguimiento = obtenerSeguimiento(id);
 		
-		Plantilla formulario = servicioPlantillas.obtenerPlantilla(plantilla);
+		if (plantilla != null) {
+			Plantilla formulario = servicioPlantillas.obtenerPlantilla(plantilla);
+			seguimiento.getFormulario().setPlantilla(formulario);
+		}
 		
-		seguimiento.setFecha(fecha);
-		seguimiento.setPlazo(plazo);
-		seguimiento.getFormulario().setPlantilla(formulario);
-		seguimiento.setMotivo(motivo);
+		if (fecha != null && fecha.isAfter(LocalDateTime.now()))
+			seguimiento.setFecha(fecha);
+		if (plazo != null && plazo.isAfter(fecha))
+			seguimiento.setPlazo(plazo);
+		if (motivo != null && !motivo.isBlank())
+			seguimiento.setMotivo(motivo);
 		
 		repositorioSeguimientos.save(seguimiento);
 

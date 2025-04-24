@@ -53,27 +53,14 @@ public class ServicioAlertas implements IServicioAlertas {
 	@Override
 	public void modificarAlerta(String id, String asunto, String mensaje, LocalDateTime fecha)
 			throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		if (asunto == null || asunto.isEmpty()) {
-			throw new IllegalArgumentException("El asunto no puede ser nulo o vacío");
-		}
-		if (mensaje == null || mensaje.isEmpty()) {
-			throw new IllegalArgumentException("El mensaje no puede ser nulo o vacío");
-		}
-		if (fecha == null) {
-			throw new IllegalArgumentException("La fecha no puede ser nula");
-		}
-		if (fecha.isBefore(LocalDateTime.now())) {
-			throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
-		}
-		
 		Alerta alerta = obtenerAlerta(id);
 		
-		alerta.setAsunto(asunto);
-		alerta.setFecha(fecha);
-		alerta.setMensaje(mensaje);
+		if (asunto != null && !asunto.isBlank())
+			alerta.setAsunto(asunto);
+		if (fecha != null)
+			alerta.setFecha(fecha);
+		if (mensaje != null && !mensaje.isBlank())
+			alerta.setMensaje(mensaje);
 		
 		repositorioAlertas.save(alerta);
 
