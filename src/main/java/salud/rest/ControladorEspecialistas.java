@@ -1,6 +1,5 @@
 package salud.rest;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -9,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.modelo.Especialista;
 import salud.rest.dto.usuario.EspecialistaDto;
@@ -31,21 +29,6 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	}
 	
 	// Métodos
-	
-	@Override
-	public ResponseEntity<EspecialistaDto> altaEspecialista(@Valid EspecialistaDto especialistaDto)
-			throws Exception {
-		String id = servicioEspecialistas.altaEspecialista(especialistaDto.getNombre(), 
-				especialistaDto.getApellidos(), 
-				especialistaDto.getEmail(), 
-				especialistaDto.getTelefono(), 
-				especialistaDto.getnCol(),
-				especialistaDto.getEspecialidad());
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
-		
-		return ResponseEntity.created(uri).build();
-	}
 
 	@Override
 	public ResponseEntity<Void> modificarEspecialista(@Valid EspecialistaDto especialistaDto, @Valid String id)

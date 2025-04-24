@@ -16,9 +16,9 @@ public class Especialista extends Sanitario {
 	
 	// Constructores
 	
-	public Especialista(String nombre, String apellidos, String email, String telefono,
+	public Especialista(String nombre, String apellidos, String email, String telefono, String contrasenya,
 			String nCol, String especialidad) {
-		super(nombre, apellidos, email, telefono, TipoUsuario.ESPECIALISTA, nCol);
+		super(nombre, apellidos, email, telefono, TipoUsuario.ESPECIALISTA, contrasenya, nCol);
 		this.especialidad = especialidad;
 		this.plantillas = new LinkedList<Plantilla>();
 	}

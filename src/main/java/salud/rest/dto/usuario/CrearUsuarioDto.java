@@ -9,15 +9,16 @@ public class CrearUsuarioDto {
 	@NotEmpty(message = "El campo 'nombre' no debe estar vacío")
 	private String nombre;
 	
-	@NotEmpty(message = "El campo 'apellido1' no debe estar vacío")
-	private String apellido1;
-	
-	private String apellido2;
+	@NotEmpty(message = "El campo 'apellidos' no debe estar vacío")
+	private String apellidos;
 	
 	@NotEmpty(message = "El campo 'email' no debe estar vacío")
 	private String email;
 	
 	private String telefono;
+	
+	@NotEmpty(message = "El campo 'contrasenya' no debe estar vacío")
+	private String contrasenya;
 	
 	// Constructores
 	
@@ -35,20 +36,12 @@ public class CrearUsuarioDto {
 		this.nombre = nombre;
 	}
 
-	public String getApellido1() {
-		return apellido1;
+	public String getApellidos() {
+		return apellidos;
 	}
 
-	public void setApellido1(String apellido1) {
-		this.apellido1 = apellido1;
-	}
-
-	public String getApellido2() {
-		return apellido2;
-	}
-
-	public void setApellido2(String apellido2) {
-		this.apellido2 = apellido2;
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
 	}
 
 	public String getEmail() {
@@ -65,5 +58,13 @@ public class CrearUsuarioDto {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+
+	public String getContrasenya() {
+		return contrasenya;
+	}
+
+	public void setContrasenya(String contrasenya) {
+		this.contrasenya = contrasenya;
 	}
 }

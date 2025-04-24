@@ -1,6 +1,5 @@
 package salud.rest;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -9,7 +8,6 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.modelo.Medico;
 import salud.rest.dto.usuario.MedicoDto;
@@ -31,20 +29,6 @@ public class ControladorMedicos implements MedicosApi {
 	}
 	
 	// Métodos
-	
-	@Override
-	public ResponseEntity<MedicoDto> altaMedico(@Valid MedicoDto medicoDto) {
-		String id = servicioMedicos.altaMedico(medicoDto.getNombre(), 
-				medicoDto.getApellidos(), 
-				medicoDto.getEmail(), 
-				medicoDto.getTelefono(), 
-				medicoDto.getnCol(),
-				medicoDto.getAtributoTemporal());
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
-		
-		return ResponseEntity.created(uri).build();
-	}
 
 	@Override
 	public ResponseEntity<Void> modificarMedico(@Valid MedicoDto medicoDto, @Valid String id) throws Exception {
@@ -52,7 +36,7 @@ public class ControladorMedicos implements MedicosApi {
 				medicoDto.getNombre(), 
 				medicoDto.getApellidos(), 
 				medicoDto.getEmail(), 
-				medicoDto.getTelefono(), 
+				medicoDto.getTelefono(),
 				medicoDto.getnCol(),
 				medicoDto.getAtributoTemporal());
 		

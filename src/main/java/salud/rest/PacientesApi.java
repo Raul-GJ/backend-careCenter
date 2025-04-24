@@ -5,77 +5,81 @@ import java.util.Collection;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
-import salud.rest.dto.usuario.CrearPacienteDto;
 import salud.rest.dto.usuario.PacienteDto;
 
 public interface PacientesApi {
 	
-	@Operation(summary = "Alta paciente", description = "Da de alta un nuevo paciente")
-	@PostMapping
-	public ResponseEntity<PacienteDto> altaPaciente(
-			@Valid @RequestBody CrearPacienteDto pacienteDto) throws Exception;
-	
 	@Operation(summary = "Modificar paciente", description = "Modifica los datos de un paciente")
 	@PatchMapping("/{id}")
+	@PreAuthorize("hasAuthority('PACIENTE')")
 	public ResponseEntity<Void> modificarPaciente(
 			@Valid @RequestBody PacienteDto pacienteDto,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar alertas", description = "Agrega alertas a un paciente")
 	@PatchMapping("/{id}/alertas/agregar")
+	@PreAuthorize("hasAuthority('SANITARIO')")
 	public ResponseEntity<Void> agregarAlertas(
 			@Valid @RequestBody Collection<String> alertas,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar especialistas", description = "Agrega especialistas a un paciente")
 	@PatchMapping("/{id}/especialistas/agregar")
+	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarEspecialistas(
 			@Valid @RequestBody Collection<String> especialistas,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar seguimientos", description = "Agrega seguimientos a un paciente")
 	@PatchMapping("/{id}/seguimientos/agregar")
+	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar alertas", description = "Elimina alertas de un paciente")
 	@PatchMapping("/{id}/alertas/eliminar")
+	@PreAuthorize("hasAuthority('SNAITARIO')")
 	public ResponseEntity<Void> eliminarAlertas(
 			@Valid @RequestBody Collection<String> alertas,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar especialistas", description = "Elimina especialistas de un paciente")
 	@PatchMapping("/{id}/especialistas/eliminar")
+	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> eliminarEspecialistas(
 			@Valid @RequestBody Collection<String> especialistas,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar seguimientos", description = "Elimina seguimientos de un paciente")
 	@PatchMapping("/{id}/seguimientos/eliminar")
+	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> eliminarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener paciente", description = "Obtiene los datos de un paciente")
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('USUARIO')")
 	public ResponseEntity<PacienteDto> obtenerPaciente(
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Obtener pacientes", description = "Obtiene los datos de todos los pacientes")
 	@GetMapping
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Collection<PacienteDto>> obtenerPacientes() throws Exception;
 	
 	@Operation(summary = "Eliminar paciente", description = "Elimina un paciente de la base de datos")
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('PACIENTE')")
 	public ResponseEntity<Void> eliminarPaciente(
 			@PathVariable String id) throws Exception;
 }

@@ -24,11 +24,12 @@ public class Usuario {
 	private List<Alerta> alertas;
 	private TipoUsuario tipo;
 	boolean eliminado;
+	private String contrasenya;
 	
 	// Constructores
 	
 	public Usuario(String nombre, String apellidos, String email, String telefono,
-			TipoUsuario tipo) {
+			TipoUsuario tipo, String contrasenya) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -37,6 +38,7 @@ public class Usuario {
 		this.alertas = new LinkedList<Alerta>();
 		this.tipo = tipo;
 		this.eliminado = false;
+		this.setContrasenya(contrasenya);
 	}
 	
 	// Métodos
@@ -118,6 +120,14 @@ public class Usuario {
 	
 	public TipoUsuario getTipo() {
 		return this.tipo;
+	}
+	
+	public String getContrasenya() {
+		return contrasenya;
+	}
+
+	public void setContrasenya(String contrasenya) {
+		this.contrasenya = contrasenya;
 	}
 
 	@Override

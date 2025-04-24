@@ -1,6 +1,5 @@
 package salud.rest;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -9,10 +8,8 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.modelo.Paciente;
-import salud.rest.dto.usuario.CrearPacienteDto;
 import salud.rest.dto.usuario.PacienteDto;
 import salud.servicio.IServicioPacientes;
 
@@ -32,19 +29,6 @@ public class ControladorPacientes implements PacientesApi {
 	}
 	
 	// Métodos
-	
-	@Override
-	public ResponseEntity<PacienteDto> altaPaciente(@Valid CrearPacienteDto pacienteDto) throws Exception {
-		String id = servicioPacientes.altaPaciente(pacienteDto.getNombre(), 
-				pacienteDto.getApellidos(), 
-				pacienteDto.getEmail(), 
-				pacienteDto.getTelefono(), 
-				pacienteDto.getMedicoCabecera());
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
-		
-		return ResponseEntity.created(uri).build();
-	}
 
 	@Override
 	public ResponseEntity<Void> modificarPaciente(@Valid PacienteDto pacienteDto, @Valid String id) throws Exception {

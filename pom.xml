@@ -69,6 +69,28 @@
 		    <version>1.5.10</version>
 		</dependency>
 		
+		<!-- Auth -->
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
+		<!-- token JWT -->
+		
+		<dependency>
+		    <groupId>io.jsonwebtoken</groupId>
+		    <artifactId>jjwt</artifactId>
+		    <version>0.9.1</version>
+		</dependency>
+		
+		<!-- OAuth 2 -->
+		
+		<dependency>
+ 			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+ 		</dependency>
+		
 	</dependencies>
 
 	<build>

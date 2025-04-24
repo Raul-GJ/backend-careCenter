@@ -69,4 +69,6 @@ public class UsuarioDto {
 		usuarioDto.setTelefono(usuario.getTelefono());
 		return usuarioDto;
 	}
+
+	
 }

@@ -13,7 +13,7 @@ public interface IServicioEspecialistas {
 	// Especialistas
 	
 	public String altaEspecialista(String nombre, String apellidos, String email, 
-			String telefono, String nCol, String especialidad);
+			String telefono, String contrasenya, String nCol, String especialidad);
 	
 	public void modificarEspecialista(String id, String nombre, String apellidos, 
 			String email, String telefono, String nCol, String especialidad) throws EntidadNoEncontrada;

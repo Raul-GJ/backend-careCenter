@@ -44,7 +44,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	
 	@Override
 	public String altaEspecialista(String nombre, String apellidos, String email, 
-			String telefono, String nCol, String especialidad) {
+			String telefono, String contrasenya, String nCol, String especialidad) {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
@@ -57,6 +57,12 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 		if (!ValidadorEmail.esValido(email)) {
 			throw new IllegalArgumentException("El email debe ser válido");
 		}
+		if (repositorioUsuarios.findByEmail(email).isPresent()) {
+			throw new IllegalArgumentException("Ya existe un usuario con ese email");
+		}
+		if (contrasenya == null || contrasenya.isEmpty()) {
+			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
+		}
 		if (nCol == null || nCol.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
@@ -64,7 +70,8 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 			throw new IllegalArgumentException("La especialidad no puede ser nula o vacía");
 		}
 		
-		Especialista especialista = new Especialista(nombre, apellidos, email, telefono, nCol, especialidad);
+		Especialista especialista = new Especialista(nombre, apellidos, email, telefono, contrasenya,
+				nCol, especialidad);
 		return repositorioUsuarios.save(especialista).getId();
 	}
 
@@ -77,8 +84,16 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 			especialista.setNombre(nombre);
 		if (apellidos != null && !apellidos.isBlank())
 			especialista.setApellidos(apellidos);
-		if (email != null && !email.isBlank())
+		if (email != null && !email.isBlank()) {
+			if (!ValidadorEmail.esValido(email)) {
+				throw new IllegalArgumentException("El email debe ser válido");
+			}
+			if (repositorioUsuarios.findByEmail(email).isPresent()) {
+				throw new IllegalArgumentException("Ya existe un usuario con ese email");
+			}
 			especialista.setEmail(email);
+		}
+			
 		if (telefono != null && !telefono.isBlank())
 			especialista.setTelefono(telefono);
 		if (nCol != null && !nCol.isBlank())

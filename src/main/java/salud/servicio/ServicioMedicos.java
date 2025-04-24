@@ -34,8 +34,8 @@ public class ServicioMedicos implements IServicioMedicos {
 	// Métodos
 	
 	@Override
-	public String altaMedico(String nombre, String apellidos, String email, 
-			String telefono, String nCol, String atributoTemporal) {
+	public String altaMedico(String nombre, String apellidos, String email, String telefono, 
+			String contrasenya, String nCol, String atributoTemporal) {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
@@ -48,6 +48,12 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (!ValidadorEmail.esValido(email)) {
 			throw new IllegalArgumentException("El email debe ser válido");
 		}
+		if (repositorioUsuarios.findByEmail(email).isPresent()) {
+			throw new IllegalArgumentException("Ya existe un usuario con ese email");
+		}
+		if (contrasenya == null || contrasenya.isEmpty()) {
+			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
+		}
 		if (nCol == null || nCol.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
@@ -55,7 +61,7 @@ public class ServicioMedicos implements IServicioMedicos {
 			throw new IllegalArgumentException("El atributo temporal no puede ser nulo o vacío");
 		}
 		
-		Medico medico = new Medico(nombre, apellidos, email, telefono, nCol, atributoTemporal);
+		Medico medico = new Medico(nombre, apellidos, email, telefono, contrasenya, nCol, atributoTemporal);
 		return repositorioUsuarios.save(medico).getId();
 	}
 
@@ -68,8 +74,15 @@ public class ServicioMedicos implements IServicioMedicos {
 			medico.setNombre(nombre);
 		if (apellidos != null && !apellidos.isBlank())
 			medico.setApellidos(apellidos);
-		if (email != null && ! email.isBlank())
+		if (email != null && ! email.isBlank()) {
+			if (!ValidadorEmail.esValido(email)) {
+				throw new IllegalArgumentException("El email debe ser válido");
+			}
+			if (repositorioUsuarios.findByEmail(email).isPresent()) {
+				throw new IllegalArgumentException("Ya existe un usuario con ese email");
+			}
 			medico.setEmail(email);
+		}
 		if (telefono != null && !telefono.isBlank())
 			medico.setTelefono(telefono);
 		if (nCol != null && !nCol.isBlank())

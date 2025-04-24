@@ -11,8 +11,8 @@ public class Medico extends Sanitario {
 	// Constructores
 	
 	public Medico(String nombre, String apellidos, String email, 
-			String telefono, String nCol, String atributoTemporal) {
-		super(nombre, apellidos, email, telefono, TipoUsuario.MEDICO, nCol);
+			String telefono, String contrasenya, String nCol, String atributoTemporal) {
+		super(nombre, apellidos, email, telefono, TipoUsuario.MEDICO, contrasenya, nCol);
 		this.atributoTemporal = atributoTemporal;
 	}
 

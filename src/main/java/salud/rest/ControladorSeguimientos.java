@@ -81,8 +81,6 @@ public class ControladorSeguimientos implements SeguimientosApi {
 		servicioSeguimientos.eliminarSeguimiento(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-	// Formularios
 
 	@Override
 	public ResponseEntity<Void> rellenarFormulario(@Valid String id, 

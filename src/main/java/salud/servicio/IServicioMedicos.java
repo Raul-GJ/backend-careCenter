@@ -12,7 +12,7 @@ public interface IServicioMedicos {
 	// Medicos de familia
 	
 	public String altaMedico(String nombre, String apellidos, String email, 
-			String telefono, String nCol, String atributoTemporal);
+			String telefono, String contrasenya, String nCol, String atributoTemporal);
 	
 	public void modificarMedico(String id, String nombre, String apellidos, String email, 
 			String telefono, String nCol, String atributoTemporal) throws EntidadNoEncontrada;
