@@ -17,13 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import salud.auth.JwtUtils;
+import salud.modelo.Usuario;
 import salud.rest.dto.auth.LoginDto;
 import salud.rest.dto.usuario.CrearEspecialistaDto;
 import salud.rest.dto.usuario.CrearMedicoDto;
 import salud.rest.dto.usuario.CrearPacienteDto;
+import salud.rest.excepciones.EntidadNoEncontrada;
 import salud.servicio.IServicioEspecialistas;
 import salud.servicio.IServicioMedicos;
 import salud.servicio.IServicioPacientes;
+import salud.servicio.IServicioUsuarios;
 
 @RestController
 @RequestMapping("/salud/api/auth")
@@ -31,6 +34,7 @@ public class ControladorAuth implements AuthApi {
 
 	// Atributos
 	
+	private IServicioUsuarios servicioUsuarios;
 	private IServicioEspecialistas servicioEspecialistas;
 	private IServicioMedicos servicioMedicos;
 	private IServicioPacientes servicioPacientes;
@@ -38,11 +42,12 @@ public class ControladorAuth implements AuthApi {
 	// Constructores
 	
 	public ControladorAuth(IServicioEspecialistas servicioEspecialistas, IServicioMedicos servicioMedicos,
-			IServicioPacientes servicioPacientes) {
+			IServicioPacientes servicioPacientes, IServicioUsuarios servicioUsuarios) {
 		super();
 		this.servicioEspecialistas = servicioEspecialistas;
 		this.servicioMedicos = servicioMedicos;
 		this.servicioPacientes = servicioPacientes;
+		this.servicioUsuarios = servicioUsuarios;
 	}
 	
 	// Métodos
@@ -52,7 +57,18 @@ public class ControladorAuth implements AuthApi {
 		String correo = dto.getCorreo();
 		String contrasenya = dto.getContrasenya();
 		
-		Map<String, Object> claims = verificarCredenciales(correo, contrasenya);
+		Usuario usuario;
+		try {
+			usuario = servicioUsuarios.obtenerUsuarioPorCorreo(correo);
+		} catch (EntidadNoEncontrada e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body(Collections.singletonMap("message", "Credenciales inválidas"));
+		}
+		if (!usuario.getContrasenya().equals(contrasenya)) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body(Collections.singletonMap("message", "Credenciales inválidas"));
+		}
+		Map<String, Object> claims = verificarCredenciales(usuario);
 		if (claims != null) {
 
 			String token = JwtUtils.generateToken(claims);
@@ -67,7 +83,7 @@ public class ControladorAuth implements AuthApi {
 
 			Map<String, Object> jsonResponse = new HashMap<>();
 			jsonResponse.put("token", token);
-			jsonResponse.put("id", correo);
+			jsonResponse.put("id", usuario.getId());
 			// El nombre completo se puede extraer de un repositorio o
 			jsonResponse.put("fullName", claims.get("fullName"));
 			jsonResponse.put("roles", claims.get("roles"));
@@ -104,8 +120,7 @@ public class ControladorAuth implements AuthApi {
 				medicoDto.getEmail(), 
 				medicoDto.getTelefono(),
 				medicoDto.getContrasenya(),
-				medicoDto.getnCol(),
-				medicoDto.getAtributoTemporal());
+				medicoDto.getnCol());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -118,8 +133,7 @@ public class ControladorAuth implements AuthApi {
 				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(),
-				pacienteDto.getContrasenya(),
-				pacienteDto.getMedicoCabecera());
+				pacienteDto.getContrasenya());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -168,34 +182,29 @@ public class ControladorAuth implements AuthApi {
 		return ResponseEntity.ok(jsonResponse);
 	}
 	
-	private Map<String, Object> verificarCredenciales(String username, String password) {
-
-	    if ("admin@ejemplo.com".equals(username) && "admin".equals(password)) {
-	        Map<String, Object> claims = new HashMap<>();
-	        claims.put("sub", username);
+	private Map<String, Object> verificarCredenciales(Usuario usuario) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("sub", usuario.getNombre());
+		switch (usuario.getTipo()) {
+		case ADMIN:
 	        claims.put("roles", "ADMIN,ESPECIALISTA,MEDICO,SANITARIO,PACIENTE,USUARIO");
 	        claims.put("fullName", "Administrador del Sistema");
-	        return claims;
-	    } else if ("paciente@ejemplo.com".equals(username) && "paciente".equals(password)) {
-	        Map<String, Object> claims = new HashMap<>();
-	        claims.put("sub", username);
+			break;
+		case PACIENTE:
 	        claims.put("roles", "PACIENTE,USUARIO");
 	        claims.put("fullName", "Paciente");
-	        return claims;
-	    } else if ("medico@ejemplo.com".equals(username) && "medico".equals(password)) {
-	        Map<String, Object> claims = new HashMap<>();
-	        claims.put("sub", username);
-	        claims.put("roles", "MEDICO,SANITARIO,USUARIO");
+			break;
+		case MEDICO:
+			claims.put("roles", "MEDICO,SANITARIO,USUARIO");
 	        claims.put("fullName", "Medico de familia");
-	        return claims;
-	    } else if ("especialista@ejemplo.com".equals(username) && "especialista".equals(password)) {
-	        Map<String, Object> claims = new HashMap<>();
-	        claims.put("sub", username);
-	        claims.put("roles", "ESPECIALISTA,SANITARIO,USUARIO");
+			break;
+		case ESPECIALISTA:
+			claims.put("roles", "ESPECIALISTA,SANITARIO,USUARIO");
 	        claims.put("fullName", "Especialista");
-	        return claims;
-	    } else {
-	        return null;
-	    }
+			break;
+		default:
+			return null;
+		}
+		return claims;
 	}
 }

@@ -47,6 +47,12 @@ public class EspecialistaDto extends SanitarioDto {
 		dto.setnCol(especialista.getNCol());
 		dto.setEspecialidad(especialista.getEspecialidad());
 		
+		Collection<String> alertas = new LinkedList<String>();
+		especialista.getAlertas().forEach(a -> alertas.add(a.getId()));
+		dto.setAlertas(alertas);
+		
+		dto.setTipo(especialista.getTipo().toString());
+		
 		List<String> pacientes = new LinkedList<String>();
 		especialista.getPacientes().forEach(p -> pacientes.add(p.getId()));
 		dto.setPacientes(pacientes);

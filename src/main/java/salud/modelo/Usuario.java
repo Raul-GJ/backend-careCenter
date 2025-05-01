@@ -2,7 +2,6 @@ package salud.modelo;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
@@ -21,7 +20,7 @@ public class Usuario {
 	private String email;
 	private String telefono;
 	@DBRef
-	private List<Alerta> alertas;
+	private Collection<Alerta> alertas;
 	private TipoUsuario tipo;
 	boolean eliminado;
 	private String contrasenya;
@@ -83,11 +82,11 @@ public class Usuario {
 		this.telefono = telefono;
 	}
 	
-	public List<Alerta> getAlertas() {
+	public Collection<Alerta> getAlertas() {
 		return alertas;
 	}
 
-	public void setAlertas(List<Alerta> alertas) {
+	public void setAlertas(Collection<Alerta> alertas) {
 		this.alertas = alertas;
 	}
 	

@@ -1,5 +1,8 @@
 package salud.rest.dto.usuario;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 import salud.modelo.Usuario;
 
 public class UsuarioDto {
@@ -11,9 +14,11 @@ public class UsuarioDto {
 	private String apellidos;
 	private String email;
 	private String telefono;
+	private Collection<String> alertas;
+	private String tipo;
 	
 	// Constructores
-	
+
 	public UsuarioDto() {
 
 	}
@@ -60,6 +65,22 @@ public class UsuarioDto {
 		this.telefono = telefono;
 	}
 	
+	public Collection<String> getAlertas() {
+		return alertas;
+	}
+
+	public void setAlertas(Collection<String> alertas) {
+		this.alertas = alertas;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
 	public static UsuarioDto from(Usuario usuario) {
 		UsuarioDto usuarioDto = new UsuarioDto();
 		usuarioDto.setId(usuario.getId());
@@ -67,6 +88,13 @@ public class UsuarioDto {
 		usuarioDto.setApellidos(usuario.getApellidos());
 		usuarioDto.setEmail(usuario.getEmail());
 		usuarioDto.setTelefono(usuario.getTelefono());
+		
+		Collection<String> alertas = new LinkedList<String>();
+		usuario.getAlertas().forEach(a -> alertas.add(a.getId()));
+		usuarioDto.setAlertas(alertas);
+		
+		usuarioDto.setTipo(usuario.getTipo().toString());
+		
 		return usuarioDto;
 	}
 

@@ -1,13 +1,16 @@
 package salud.rest.dto.usuario;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import salud.modelo.Sanitario;
 
 public class SanitarioDto extends UsuarioDto {
 	
 	// Atributos
 	
 	private String nCol;
-	private List<String> pacientes;
+	private Collection<String> pacientes;
 	
 	// Constructores
 
@@ -25,11 +28,33 @@ public class SanitarioDto extends UsuarioDto {
 		this.nCol = nCol;
 	}
 	
-	public List<String> getPacientes() {
+	public Collection<String> getPacientes() {
 		return pacientes;
 	}
 
-	public void setPacientes(List<String> pacientes) {
+	public void setPacientes(Collection<String> pacientes) {
 		this.pacientes = pacientes;
+	}
+	
+	public static SanitarioDto from (Sanitario sanitario) {
+		SanitarioDto sanitarioDto = new SanitarioDto();
+		sanitarioDto.setId(sanitario.getId());
+		sanitarioDto.setNombre(sanitario.getNombre());
+		sanitarioDto.setApellidos(sanitario.getApellidos());
+		sanitarioDto.setEmail(sanitario.getEmail());
+		sanitarioDto.setTelefono(sanitario.getTelefono());
+		
+		Collection<String> alertas = new LinkedList<String>();
+		sanitario.getAlertas().forEach(a -> alertas.add(a.getId()));
+		sanitarioDto.setAlertas(alertas);
+		
+		Collection<String> pacientes = new LinkedList<String>();
+		sanitario.getPacientes().forEach(p -> pacientes.add(p.getId()));
+		sanitarioDto.setPacientes(pacientes);
+		
+		sanitarioDto.setTipo(sanitario.getTipo().toString());
+		sanitarioDto.setnCol(sanitario.getNCol());
+		
+		return sanitarioDto;
 	}
 }

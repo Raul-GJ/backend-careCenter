@@ -21,21 +21,23 @@ public class ServicioMedicos implements IServicioMedicos {
 	
 	private RepositorioUsuarios repositorioUsuarios;
 	private IServicioObtencionMedicos servicioMedicos;
+	private IServicioPacientes servicioPacientes;
 	
 	// Constructores
 	
 	public ServicioMedicos(RepositorioUsuarios repositorioUsuarios, 
-			IServicioObtencionMedicos servicioMedicos) {
+			IServicioObtencionMedicos servicioMedicos, IServicioPacientes servicioPacientes) {
 		super();
 		this.repositorioUsuarios = repositorioUsuarios;
 		this.servicioMedicos = servicioMedicos;
+		this.servicioPacientes = servicioPacientes;
 	}
 	
 	// Métodos
 	
 	@Override
 	public String altaMedico(String nombre, String apellidos, String email, String telefono, 
-			String contrasenya, String nCol, String atributoTemporal) {
+			String contrasenya, String nCol) {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
@@ -57,17 +59,14 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (nCol == null || nCol.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
-		if (atributoTemporal == null || atributoTemporal.isEmpty()) {
-			throw new IllegalArgumentException("El atributo temporal no puede ser nulo o vacío");
-		}
 		
-		Medico medico = new Medico(nombre, apellidos, email, telefono, contrasenya, nCol, atributoTemporal);
+		Medico medico = new Medico(nombre, apellidos, email, telefono, contrasenya, nCol);
 		return repositorioUsuarios.save(medico).getId();
 	}
 
 	@Override
 	public void modificarMedico(String id, String nombre, String apellidos, String email, 
-			String telefono, String nCol, String atributoTemporal) throws EntidadNoEncontrada {	
+			String telefono, String nCol) throws EntidadNoEncontrada {	
 		Medico medico = obtenerMedico(id);
 		
 		if (nombre != null && !nombre.isBlank())
@@ -87,8 +86,6 @@ public class ServicioMedicos implements IServicioMedicos {
 			medico.setTelefono(telefono);
 		if (nCol != null && !nCol.isBlank())
 			medico.setNCol(nCol);
-		if (atributoTemporal != null && !atributoTemporal.isBlank())
-			medico.setAtributoTemporal(atributoTemporal);
 		
 		repositorioUsuarios.save(medico);
 	}
@@ -100,11 +97,37 @@ public class ServicioMedicos implements IServicioMedicos {
 		}
 		repositorioUsuarios.deleteById(id);
 	}
+	
+	@Override
+	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
+		Medico medico = obtenerMedico(id);
+		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
+		medico.agregarPacientes(lista);
+		for (Paciente paciente : lista) {
+			if (paciente.getMedicoCabecera() != null) {
+				Medico anterior = paciente.getMedicoCabecera();
+				eliminarPaciente(anterior.getId(), paciente);
+			}
+			servicioPacientes.establecerMedico(paciente.getId(), medico);
+		}
+		repositorioUsuarios.save(medico);
+	}
 
 	@Override
 	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
 		Medico medico = obtenerMedico(id);
 		medico.agregarPaciente(paciente);
+		repositorioUsuarios.save(medico);
+	}
+	
+	@Override
+	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
+		Medico medico = obtenerMedico(id);
+		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
+		medico.eliminarPacientes(lista);
+		for (Paciente paciente : lista) {
+			servicioPacientes.establecerMedico(paciente.getId(), null);
+		}
 		repositorioUsuarios.save(medico);
 	}
 

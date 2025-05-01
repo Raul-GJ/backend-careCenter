@@ -1,7 +1,7 @@
 package salud.rest.dto.usuario;
 
+import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import salud.modelo.Paciente;
 
@@ -10,9 +10,8 @@ public class PacienteDto extends UsuarioDto {
 	// Atributos
 	
 	private String medicoCabecera;
-	private List<String> alertas;
-	private List<String> especialistas;
-	private List<String> seguimientos;
+	private Collection<String> especialistas;
+	private Collection<String> seguimientos;
 	
 	// Constructores
 
@@ -26,35 +25,24 @@ public class PacienteDto extends UsuarioDto {
 		return medicoCabecera;
 	}
 
-
 	public void setMedicoCabecera(String medicoCabecera) {
 		this.medicoCabecera = medicoCabecera;
 	}
 
-
-	public List<String> getAlertas() {
-		return alertas;
-	}
-
-
-	public void setAlertas(List<String> alertas) {
-		this.alertas = alertas;
-	}
-
-	public List<String> getEspecialistas() {
+	public Collection<String> getEspecialistas() {
 		return especialistas;
 	}
 
 
-	public void setEspecialistas(List<String> especialistas) {
+	public void setEspecialistas(Collection<String> especialistas) {
 		this.especialistas = especialistas;
 	}
 	
-	public List<String> getSeguimientos() {
+	public Collection<String> getSeguimientos() {
 		return seguimientos;
 	}
 
-	public void setSeguimientos(List<String> seguimientos) {
+	public void setSeguimientos(Collection<String> seguimientos) {
 		this.seguimientos = seguimientos;
 	}
 
@@ -65,14 +53,19 @@ public class PacienteDto extends UsuarioDto {
 		dto.setApellidos(paciente.getApellidos());
 		dto.setEmail(paciente.getEmail());
 		dto.setTelefono(paciente.getTelefono());
-		dto.setMedicoCabecera(paciente.getMedicoCabecera().getId());
+		if (paciente.getMedicoCabecera() != null)
+			dto.setMedicoCabecera(paciente.getMedicoCabecera().getId());
+		dto.setTipo(paciente.getTipo().toString());
 		
-		List<String> especialistas = new LinkedList<String>();
-		List<String> seguimientos = new LinkedList<String>();
+		Collection<String> especialistas = new LinkedList<String>();
+		Collection<String> seguimientos = new LinkedList<String>();
+		Collection<String> alertas = new LinkedList<String>();
 		
+		paciente.getAlertas().forEach(a -> alertas.add(a.getId()));
 		paciente.getEspecialistas().forEach(e -> especialistas.add(e.getId()));
 		paciente.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
 		
+		dto.setAlertas(alertas);
 		dto.setEspecialistas(especialistas);
 		dto.setSeguimientos(seguimientos);
 		

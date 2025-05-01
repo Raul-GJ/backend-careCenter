@@ -36,8 +36,7 @@ public class ControladorPacientes implements PacientesApi {
 				pacienteDto.getNombre(), 
 				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
-				pacienteDto.getTelefono(), 
-				pacienteDto.getMedicoCabecera());
+				pacienteDto.getTelefono());
 		
 		return ResponseEntity.noContent().build();
 	}

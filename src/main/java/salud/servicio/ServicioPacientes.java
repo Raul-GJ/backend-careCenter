@@ -26,7 +26,6 @@ public class ServicioPacientes implements IServicioPacientes {
 	
 	private RepositorioUsuarios repositorioUsuarios;
 	private IServicioObtencionPacientes servicioPacientes;
-	private IServicioMedicos servicioMedicos;
 	private IServicioObtencionAlertas servicioAlertas;
 	private IServicioObtencionEspecialistas servicioEspecialistas;
 	private IServicioObtencionSeguimientos servicioSeguimientos;
@@ -34,14 +33,12 @@ public class ServicioPacientes implements IServicioPacientes {
 	// Constructores
 	
 	public ServicioPacientes(RepositorioUsuarios repositorioUsuarios, 
-			IServicioObtencionPacientes servicioPacientes,
-			IServicioMedicos servicioMedicos, IServicioObtencionAlertas servicioAlertas,
+			IServicioObtencionPacientes servicioPacientes, IServicioObtencionAlertas servicioAlertas,
 			IServicioObtencionEspecialistas servicioEspecialistas,
 			IServicioObtencionSeguimientos servicioSeguimientos) {
 		super();
 		this.repositorioUsuarios = repositorioUsuarios;
 		this.servicioPacientes = servicioPacientes;
-		this.servicioMedicos = servicioMedicos;
 		this.servicioAlertas = servicioAlertas;
 		this.servicioEspecialistas = servicioEspecialistas;
 		this.servicioSeguimientos = servicioSeguimientos;
@@ -51,7 +48,7 @@ public class ServicioPacientes implements IServicioPacientes {
 	
 	@Override
 	public String altaPaciente(String nombre, String apellidos, String email, String telefono, 
-			String contrasenya, String medicoCabecera) throws EntidadNoEncontrada {
+			String contrasenya) throws EntidadNoEncontrada {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
@@ -70,33 +67,24 @@ public class ServicioPacientes implements IServicioPacientes {
 		if (contrasenya == null || contrasenya.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
-		if (medicoCabecera == null) {
-			throw new IllegalArgumentException("El médico de cabecera no puede ser nulo");
-		}
 		
-		Medico medico = servicioMedicos.obtenerMedico(medicoCabecera);
-		
-		Paciente paciente = new Paciente(nombre, apellidos, email, telefono, contrasenya, medico);
+		Paciente paciente = new Paciente(nombre, apellidos, email, telefono, contrasenya);
 		
 		String idPaciente = repositorioUsuarios.save(paciente).getId();
-		servicioMedicos.agregarPaciente(medico.getId(), paciente);
 		return idPaciente;
 	}
 
 	@Override
-	public void modificarPaciente(String id, String nombre, String apellidos, 
-			String email, String telefono, String medicoCabecera) throws EntidadNoEncontrada {
+	public void establecerMedico(String id, Medico Medico) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
-		
-		if (medicoCabecera != null) {
-			Medico medico = servicioMedicos.obtenerMedico(medicoCabecera);
-			Medico anteriorMedico = paciente.getMedicoCabecera();
-			if (!medico.getId().equals(anteriorMedico.getId())) {
-				servicioMedicos.eliminarPaciente(medico.getId(), paciente);
-				servicioMedicos.eliminarPaciente(anteriorMedico.getId(), paciente);
-				paciente.setMedicoCabecera(medico);
-			}
-		}
+		paciente.setMedicoCabecera(Medico);
+		repositorioUsuarios.save(paciente);
+	}
+
+	@Override
+	public void modificarPaciente(String id, String nombre, String apellidos, 
+			String email, String telefono) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
 		
 		if (nombre != null && !nombre.isBlank())
 			paciente.setNombre(nombre);
@@ -119,9 +107,6 @@ public class ServicioPacientes implements IServicioPacientes {
 
 	@Override
 	public void eliminarPaciente(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
 		obtenerPaciente(id);
 		repositorioUsuarios.deleteById(id);
 	}

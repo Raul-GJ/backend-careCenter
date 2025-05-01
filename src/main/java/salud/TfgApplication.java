@@ -22,7 +22,8 @@ public class TfgApplication {
 					.allowedOrigins("http://localhost:3000")
 					.allowedMethods("*")
 					.allowedHeaders("*")
-					.exposedHeaders("*");
+					.exposedHeaders("*")
+					.allowCredentials(true);
 			}
 		};
 	}

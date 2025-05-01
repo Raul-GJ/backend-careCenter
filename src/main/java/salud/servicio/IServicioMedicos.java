@@ -12,12 +12,16 @@ public interface IServicioMedicos {
 	// Medicos de familia
 	
 	public String altaMedico(String nombre, String apellidos, String email, 
-			String telefono, String contrasenya, String nCol, String atributoTemporal);
+			String telefono, String contrasenya, String nCol);
 	
 	public void modificarMedico(String id, String nombre, String apellidos, String email, 
-			String telefono, String nCol, String atributoTemporal) throws EntidadNoEncontrada;
+			String telefono, String nCol) throws EntidadNoEncontrada;
+	
+	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;
 	
 	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada;
+	
+	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;
 	
 	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada;
 	

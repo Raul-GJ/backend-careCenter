@@ -1,6 +1,5 @@
 package salud.modelo;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -15,32 +14,36 @@ public class Paciente extends Usuario {
 	@DBRef
 	private Medico medicoCabecera;
 	@DBRef
-	private List<Especialista> especialistas;
+	private Collection<Especialista> especialistas;
 	@DBRef
-	private List<Seguimiento> seguimientos;
+	private Collection<Seguimiento> seguimientos;
 	
 	// Constructores
 
 	public Paciente(String nombre, String apellidos, String email, 
-			String telefono, String contrasenya, Medico medicoCabecera) {
+			String telefono, String contrasenya) {
 		super(nombre, apellidos, email, telefono, TipoUsuario.PACIENTE, contrasenya);
-		this.setMedicoCabecera(medicoCabecera);
+		this.medicoCabecera = null;
 		this.especialistas = new LinkedList<Especialista>();
 		this.seguimientos = new LinkedList<Seguimiento>();
 	}
 	
 	// Métodos
 
-	public List<Especialista> getEspecialistas() {
+	public Collection<Especialista> getEspecialistas() {
 		return especialistas;
 	}
 
-	public void setEspecialistas(List<Especialista> especialistas) {
+	public void setEspecialistas(Collection<Especialista> especialistas) {
 		this.especialistas = especialistas;
 	}
 	
-	public Especialista getEspecialista(int pos) {
-		return this.especialistas.get(pos);
+	public Especialista getEspecialista(String id) {
+		for (Especialista especialista : especialistas) {
+			if (especialista.getId().equals(id))
+				return especialista;
+		}
+		return null;
 	}
 	
 	public void agregarEspecialistas(Collection<Especialista> especialistas) {
@@ -70,16 +73,20 @@ public class Paciente extends Usuario {
 		this.medicoCabecera = medicoCabecera;
 	}
 	
-	public List<Seguimiento> getSeguimientos() {
+	public Collection<Seguimiento> getSeguimientos() {
 		return seguimientos;
 	}
 
-	public void setSeguimientos(List<Seguimiento> seguimientos) {
+	public void setSeguimientos(Collection<Seguimiento> seguimientos) {
 		this.seguimientos = seguimientos;
 	}
 	
-	public Seguimiento getSeguimiento(int pos) {
-		return this.seguimientos.get(pos);
+	public Seguimiento getSeguimiento(String id) {
+		for (Seguimiento seguimiento : seguimientos) {
+			if (seguimiento.getId().equals(id))
+				return seguimiento;
+		}
+		return null;
 	}
 	
 	public void agregarSeguimientos(Collection<Seguimiento> seguimientos) {

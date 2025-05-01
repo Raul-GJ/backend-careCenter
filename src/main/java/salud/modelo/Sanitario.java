@@ -2,7 +2,6 @@ package salud.modelo;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -13,7 +12,7 @@ public abstract class Sanitario extends Usuario {
 	
 	private String nCol;
 	@DBRef
-	private List<Paciente> pacientes;
+	private Collection<Paciente> pacientes;
 	
 	// Constructores
 	
@@ -34,11 +33,11 @@ public abstract class Sanitario extends Usuario {
 		this.nCol = nCol;
 	}
 
-	public List<Paciente> getPacientes() {
+	public Collection<Paciente> getPacientes() {
 		return pacientes;
 	}
 
-	public void setPacientes(List<Paciente> pacientes) {
+	public void setPacientes(Collection<Paciente> pacientes) {
 		this.pacientes = pacientes;
 	}
 	

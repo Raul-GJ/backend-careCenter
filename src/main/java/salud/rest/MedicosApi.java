@@ -35,6 +35,20 @@ public interface MedicosApi {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos() throws Exception;
 	
+	@Operation(summary = "Agregar pacientes", description = "Agrega una lista de pacientes a un médico de familia")
+	@PatchMapping("/{id}/pacientes/agregar")
+	@PreAuthorize("hasAuthority('MEDICO')")
+	public ResponseEntity<Void> agregarPacientes(
+			@PathVariable String id,
+			@RequestBody Collection<String> ids) throws Exception;
+	
+	@Operation(summary = "Eliminar pacientes", description = "Elimina una lista de pacientes de un médico de familia")
+	@PatchMapping("/{id}/pacientes/eliminar")
+	@PreAuthorize("hasAuthority('MEDICO')")
+	public ResponseEntity<Void> eliminarPacientes(
+			@PathVariable String id,
+			@RequestBody Collection<String> ids) throws Exception;
+	
 	@Operation(summary = "Eliminar médico", description = "Elimina un médico de familia de la base de datos")
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('MEDICO')")

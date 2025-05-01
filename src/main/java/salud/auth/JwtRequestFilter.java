@@ -23,12 +23,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        // Comprueba que la petición lleve el token JWT y lo valida
+    	
+    	// Comprueba que la petición lleve el token JWT y lo valida
     	String authorization = request.getHeader("Authorization");
-    	String token = null;
+    	String token = null;;
     	if (authorization != null && authorization.startsWith("Bearer ")) {
-    	    token = authorization.substring("Bearer ".length()).trim();
+    		token = authorization.substring("Bearer ".length()).trim();
     	} else if (request.getCookies() != null) {
     	    for (Cookie cookie : request.getCookies()) {
     	        if ("jwt".equals(cookie.getName())) {
@@ -56,7 +56,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     	        return;
     	    }
     	}
-
         
         chain.doFilter(request, response);
         

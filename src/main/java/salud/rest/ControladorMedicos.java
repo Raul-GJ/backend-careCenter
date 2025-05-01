@@ -37,8 +37,7 @@ public class ControladorMedicos implements MedicosApi {
 				medicoDto.getApellidos(), 
 				medicoDto.getEmail(), 
 				medicoDto.getTelefono(),
-				medicoDto.getnCol(),
-				medicoDto.getAtributoTemporal());
+				medicoDto.getnCol());
 		
 		return ResponseEntity.noContent().build();
 	}
@@ -60,6 +59,20 @@ public class ControladorMedicos implements MedicosApi {
 	@Override
 	public ResponseEntity<Void> eliminarMedico(@Valid String id) throws Exception {
 		servicioMedicos.eliminarMedico(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarPacientes(String id, Collection<String> ids) 
+			throws Exception {
+		servicioMedicos.agregarPacientes(id, ids);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarPacientes(String id, Collection<String> ids) 
+			throws Exception {
+		servicioMedicos.eliminarPacientes(id, ids);
 		return ResponseEntity.noContent().build();
 	}
 }

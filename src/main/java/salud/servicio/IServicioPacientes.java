@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import salud.modelo.Alerta;
 import salud.modelo.Especialista;
+import salud.modelo.Medico;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
 import salud.rest.excepciones.EntidadNoEncontrada;
@@ -11,10 +12,12 @@ import salud.rest.excepciones.EntidadNoEncontrada;
 public interface IServicioPacientes {
 	
 	public String altaPaciente(String nombre, String apellidos, String email, 
-			String telefono, String contrasenya, String medicoCabecera) throws EntidadNoEncontrada;
+			String telefono, String contrasenya) throws EntidadNoEncontrada;
 	
 	public void modificarPaciente(String id, String nombre, String apellidos, 
-			String email, String telefono, String medicoCabecera) throws EntidadNoEncontrada;
+			String email, String telefono) throws EntidadNoEncontrada;
+	
+	public void establecerMedico(String id, Medico Medico) throws EntidadNoEncontrada;
 	
 	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada;
 	
