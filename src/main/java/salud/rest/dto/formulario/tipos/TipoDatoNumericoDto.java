@@ -1,21 +1,17 @@
 package salud.rest.dto.formulario.tipos;
 
-import salud.modelo.encuesta.ReglaNumeral;
-
-import javax.validation.constraints.NotEmpty;
-
+import salud.modelo.encuesta.ReglaNumerico;
 import salud.modelo.encuesta.PreguntaEncuesta;
 
-public class TipoDatoNumeralDto {
+public class TipoDatoNumericoDto {
 	
 	// Atributos
 	
-	@NotEmpty(message = "El campo 'pregunta' no debe estar vacío")
 	private String pregunta;
 	
 	// Constructores
 	
-	public TipoDatoNumeralDto() {
+	public TipoDatoNumericoDto() {
 		
 	}
 	
@@ -30,12 +26,12 @@ public class TipoDatoNumeralDto {
 	}
 	
 	public PreguntaEncuesta toPreguntaEncuesta() {
-		PreguntaEncuesta tipo = new PreguntaEncuesta(pregunta, new ReglaNumeral());
+		PreguntaEncuesta tipo = new PreguntaEncuesta(pregunta, new ReglaNumerico());
 		return tipo;
 	}
 	
-	public static TipoDatoNumeralDto from(String pregunta) {
-		TipoDatoNumeralDto dto = new TipoDatoNumeralDto();
+	public static TipoDatoNumericoDto from(String pregunta) {
+		TipoDatoNumericoDto dto = new TipoDatoNumericoDto();
 		dto.setPregunta(pregunta);
 		return dto;
 	}

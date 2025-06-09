@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import salud.modelo.encuesta.PreguntaEncuesta;
 
-@Document(collection = "formularios")
+@Document(collection = "plantillas")
 public class Plantilla {
 	
 	// Atributos

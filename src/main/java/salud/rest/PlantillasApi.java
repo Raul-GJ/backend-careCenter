@@ -17,10 +17,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import salud.modelo.encuesta.PreguntaEncuesta;
 import salud.rest.dto.formulario.PlantillaDto;
 import salud.rest.dto.formulario.tipos.TipoDatoBooleanoDto;
-import salud.rest.dto.formulario.tipos.TipoDatoCadenaDto;
 import salud.rest.dto.formulario.tipos.TipoDatoEnumDto;
-import salud.rest.dto.formulario.tipos.TipoDatoNumeralDto;
+import salud.rest.dto.formulario.tipos.TipoDatoNumericoDto;
 import salud.rest.dto.formulario.tipos.TipoDatoRangoDto;
+import salud.rest.dto.formulario.tipos.TipoDatoTextoDto;
 
 public interface PlantillasApi {
 
@@ -41,14 +41,14 @@ public interface PlantillasApi {
 	@PostMapping("/{id}/datos/cadena")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
-			@Valid @RequestBody TipoDatoCadenaDto preguntaDto,
+			@Valid @RequestBody TipoDatoTextoDto preguntaDto,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pregunta numeral", description = "Agrega una pregunta de tipo numeral a un formulario plantilla")
 	@PostMapping("/{id}/datos/numeral")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
-			@Valid @RequestBody TipoDatoNumeralDto preguntaDto,
+			@Valid @RequestBody TipoDatoNumericoDto preguntaDto,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pregunta booleana", description = "Agrega una pregunta de tipo booleano a un formulario plantilla")
@@ -85,7 +85,7 @@ public interface PlantillasApi {
 	public ResponseEntity<PlantillaDto> obtenerPlantilla(
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener plantilla", description = "Obtiene los datos de todos los formularios plantilla")
+	@Operation(summary = "Obtener plantillas", description = "Obtiene los datos de todos los formularios plantilla")
 	@GetMapping
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Collection<PlantillaDto>> obtenerPlantillas() throws Exception;

@@ -13,10 +13,10 @@ import salud.modelo.Plantilla;
 import salud.modelo.encuesta.PreguntaEncuesta;
 import salud.rest.dto.formulario.PlantillaDto;
 import salud.rest.dto.formulario.tipos.TipoDatoBooleanoDto;
-import salud.rest.dto.formulario.tipos.TipoDatoCadenaDto;
 import salud.rest.dto.formulario.tipos.TipoDatoEnumDto;
-import salud.rest.dto.formulario.tipos.TipoDatoNumeralDto;
+import salud.rest.dto.formulario.tipos.TipoDatoNumericoDto;
 import salud.rest.dto.formulario.tipos.TipoDatoRangoDto;
+import salud.rest.dto.formulario.tipos.TipoDatoTextoDto;
 import salud.servicio.IServicioPlantillas;
 
 @RestController
@@ -64,13 +64,13 @@ public class ControladorPlantillas implements PlantillasApi {
 	}
 	
 	@Override
-	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoCadenaDto preguntaDto,
+	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoTextoDto preguntaDto,
 			String id) throws Exception {
 		return agregarPreguntaFormulario(preguntaDto.toPreguntaEncuesta(), id);
 	}
 	
 	@Override
-	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoNumeralDto preguntaDto,
+	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(TipoDatoNumericoDto preguntaDto,
 			String id) throws Exception {
 		return agregarPreguntaFormulario(preguntaDto.toPreguntaEncuesta(), id);
 	}
