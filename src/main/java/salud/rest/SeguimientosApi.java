@@ -51,7 +51,7 @@ public interface SeguimientosApi {
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Rellenar formulario", description = "Rellena un formulario")
-	@PatchMapping("/{id}/formulario")
+	@PostMapping("/{id}/formulario")
 	@PreAuthorize("hasAuthority('PACIENTE')")
 	public ResponseEntity<Void> rellenarFormulario(
 			@PathVariable String id,

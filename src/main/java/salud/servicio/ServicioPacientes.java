@@ -5,14 +5,12 @@ import java.util.Collection;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import salud.modelo.Alerta;
 import salud.modelo.Especialista;
 import salud.modelo.Medico;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
 import salud.repositorio.RepositorioUsuarios;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionAlertas;
 import salud.servicio.obtencion.IServicioObtencionEspecialistas;
 import salud.servicio.obtencion.IServicioObtencionPacientes;
 import salud.servicio.obtencion.IServicioObtencionSeguimientos;
@@ -26,20 +24,18 @@ public class ServicioPacientes implements IServicioPacientes {
 	
 	private RepositorioUsuarios repositorioUsuarios;
 	private IServicioObtencionPacientes servicioPacientes;
-	private IServicioObtencionAlertas servicioAlertas;
 	private IServicioObtencionEspecialistas servicioEspecialistas;
 	private IServicioObtencionSeguimientos servicioSeguimientos;
 	
 	// Constructores
 	
 	public ServicioPacientes(RepositorioUsuarios repositorioUsuarios, 
-			IServicioObtencionPacientes servicioPacientes, IServicioObtencionAlertas servicioAlertas,
+			IServicioObtencionPacientes servicioPacientes,
 			IServicioObtencionEspecialistas servicioEspecialistas,
 			IServicioObtencionSeguimientos servicioSeguimientos) {
 		super();
 		this.repositorioUsuarios = repositorioUsuarios;
 		this.servicioPacientes = servicioPacientes;
-		this.servicioAlertas = servicioAlertas;
 		this.servicioEspecialistas = servicioEspecialistas;
 		this.servicioSeguimientos = servicioSeguimientos;
 	}
@@ -112,14 +108,6 @@ public class ServicioPacientes implements IServicioPacientes {
 	}
 
 	@Override
-	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
-		Paciente paciente = obtenerPaciente(id);
-		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
-		paciente.agregarAlertas(lista);
-		repositorioUsuarios.save(paciente);
-	}
-
-	@Override
 	public void agregarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Especialista> lista = servicioEspecialistas.obtenerEspecialistas(especialistas);
@@ -132,13 +120,6 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Seguimiento> lista = servicioSeguimientos.obtenerSeguimientos(seguimientos);
 		paciente.agregarSeguimientos(lista);
-		repositorioUsuarios.save(paciente);
-	}
-	
-	@Override
-	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
-		Paciente paciente = obtenerPaciente(id);
-		paciente.agregarAlerta(alerta);
 		repositorioUsuarios.save(paciente);
 	}
 
@@ -157,14 +138,6 @@ public class ServicioPacientes implements IServicioPacientes {
 	}
 
 	@Override
-	public void eliminarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
-		Paciente paciente = obtenerPaciente(id);
-		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
-		paciente.eliminarAlertas(lista);
-		repositorioUsuarios.save(paciente);
-	}
-
-	@Override
 	public void eliminarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Especialista> lista = servicioEspecialistas.obtenerEspecialistas(especialistas);
@@ -177,13 +150,6 @@ public class ServicioPacientes implements IServicioPacientes {
 		Paciente paciente = obtenerPaciente(id);
 		Collection<Seguimiento> lista = servicioSeguimientos.obtenerSeguimientos(seguimientos);
 		paciente.eliminarSeguimientos(lista);
-		repositorioUsuarios.save(paciente);
-	}
-
-	@Override
-	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
-		Paciente paciente = obtenerPaciente(id);
-		paciente.eliminarAlerta(alerta);
 		repositorioUsuarios.save(paciente);
 	}
 

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -99,22 +100,22 @@ public class ControladorEstudios implements EstudiosApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarPacientes(@Valid Collection<String> pacientes, @Valid String id)
+	public ResponseEntity<Void> eliminarPaciente(String idEstudio, String idPaciente)
 			throws Exception {
-		servicioEstudios.eliminarPacientes(id, pacientes);
+		servicioEstudios.eliminarPacientes(idEstudio, List.of(idPaciente));
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
+	public ResponseEntity<Void> eliminarSeguimiento(String idEstudio, String idSeguimiento)
 			throws Exception {
-		servicioEstudios.eliminarSeguimientos(id, seguimientos);
+		servicioEstudios.eliminarSeguimientos(idEstudio, List.of(idSeguimiento));
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
-		servicioEstudios.eliminarAlertas(id, alertas);
+	public ResponseEntity<Void> eliminarAlerta(String idEstudio, String idAlerta) throws Exception {
+		servicioEstudios.eliminarAlertas(idEstudio, List.of(idAlerta));
 		return ResponseEntity.noContent().build();
 	}
 }

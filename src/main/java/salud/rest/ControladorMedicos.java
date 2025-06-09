@@ -2,6 +2,7 @@ package salud.rest;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -70,9 +71,9 @@ public class ControladorMedicos implements MedicosApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarPacientes(String id, Collection<String> ids) 
+	public ResponseEntity<Void> eliminarPacientes(String idMedico, String idPaciente) 
 			throws Exception {
-		servicioMedicos.eliminarPacientes(id, ids);
+		servicioMedicos.eliminarPacientes(idMedico,List.of(idPaciente));
 		return ResponseEntity.noContent().build();
 	}
 }

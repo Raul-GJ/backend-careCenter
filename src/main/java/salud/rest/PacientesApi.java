@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,47 +25,33 @@ public interface PacientesApi {
 			@Valid @RequestBody PacienteDto pacienteDto,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar alertas", description = "Agrega alertas a un paciente")
-	@PatchMapping("/{id}/alertas/agregar")
-	@PreAuthorize("hasAuthority('SANITARIO')")
-	public ResponseEntity<Void> agregarAlertas(
-			@Valid @RequestBody Collection<String> alertas,
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Agregar especialistas", description = "Agrega especialistas a un paciente")
-	@PatchMapping("/{id}/especialistas/agregar")
+	@PostMapping("/{id}/especialistas")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarEspecialistas(
 			@Valid @RequestBody Collection<String> especialistas,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar seguimientos", description = "Agrega seguimientos a un paciente")
-	@PatchMapping("/{id}/seguimientos/agregar")
+	@PostMapping("/{id}/seguimientos")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Eliminar alertas", description = "Elimina alertas de un paciente")
-	@PatchMapping("/{id}/alertas/eliminar")
-	@PreAuthorize("hasAuthority('SNAITARIO')")
-	public ResponseEntity<Void> eliminarAlertas(
-			@Valid @RequestBody Collection<String> alertas,
-			@PathVariable String id) throws Exception;
-	
-	@Operation(summary = "Eliminar especialistas", description = "Elimina especialistas de un paciente")
-	@PatchMapping("/{id}/especialistas/eliminar")
+	@Operation(summary = "Eliminar especialista", description = "Elimina un especialista de un paciente")
+	@DeleteMapping("/{idPaciente}/especialistas/{idEspecialista}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarEspecialistas(
-			@Valid @RequestBody Collection<String> especialistas,
-			@PathVariable String id) throws Exception;
+	public ResponseEntity<Void> eliminarEspecialista(
+			@PathVariable String idPaciente,
+			@PathVariable String idEspecialista) throws Exception;
 	
-	@Operation(summary = "Eliminar seguimientos", description = "Elimina seguimientos de un paciente")
-	@PatchMapping("/{id}/seguimientos/eliminar")
+	@Operation(summary = "Eliminar seguimiento", description = "Elimina un seguimiento de un paciente")
+	@PatchMapping("/{idPaciente}/seguimientos/{idSeguimiento}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarSeguimientos(
-			@Valid @RequestBody Collection<String> seguimientos,
-			@PathVariable String id) throws Exception;
+	public ResponseEntity<Void> eliminarSeguimiento(
+			@PathVariable String idPaciente,
+			@PathVariable String idSeguimiento) throws Exception;
 	
 	@Operation(summary = "Obtener paciente", description = "Obtiene los datos de un paciente")
 	@GetMapping("/{id}")

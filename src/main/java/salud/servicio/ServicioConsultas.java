@@ -8,10 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Alerta;
 import salud.modelo.Consulta;
-import salud.modelo.Especialista;
-import salud.modelo.Medico;
 import salud.modelo.Paciente;
 import salud.modelo.Respuesta;
+import salud.modelo.Sanitario;
 import salud.modelo.Usuario;
 import salud.repositorio.RepositorioConsultas;
 import salud.rest.excepciones.EntidadNoEncontrada;
@@ -25,30 +24,25 @@ public class ServicioConsultas implements IServicioConsultas {
 	
 	private RepositorioConsultas repositorioConsultas;
 	private IServicioObtencionConsultas servicioConsultas;
-	private IServicioPacientes servicioPacientes;
-	private IServicioEspecialistas servicioEspecialistas;
-	private IServicioMedicos servicioMedicos;
 	private IServicioAlertas servicioAlertas;
+	private IServicioUsuarios servicioUsuarios;
 	
 	// Constructores
 	
 	public ServicioConsultas(RepositorioConsultas repositorioConsultas, 
-			IServicioObtencionConsultas servicioConsultas,
-			IServicioPacientes servicioPacientes, IServicioEspecialistas servicioEspecialistas,
-			IServicioMedicos servicioMedicos, IServicioAlertas servicioAlertas) {
+			IServicioObtencionConsultas servicioConsultas, IServicioAlertas servicioAlertas,
+			IServicioUsuarios servicioUsuarios) {
 		super();
 		this.repositorioConsultas = repositorioConsultas;
 		this.servicioConsultas = servicioConsultas;
-		this.servicioPacientes = servicioPacientes;
-		this.servicioEspecialistas = servicioEspecialistas;
-		this.servicioMedicos = servicioMedicos;
 		this.servicioAlertas = servicioAlertas;
+		this.servicioUsuarios = servicioUsuarios;
 	}
 	
 	// Métodos
 	
 	@Override
-	public String altaConsultaMedico(String asunto, String mensaje, String emisor, String receptor) 
+	public String altaConsulta(String asunto, String mensaje, String emisor, String receptor) 
 			throws EntidadNoEncontrada {
 		if (asunto == null || asunto.isEmpty()) {
 			throw new IllegalArgumentException("El asunto no puede ser nulo o vacío");
@@ -57,40 +51,23 @@ public class ServicioConsultas implements IServicioConsultas {
 			throw new IllegalArgumentException("El mensaje no puede ser nulo o vacío");
 		}
 		
-		Paciente paciente = servicioPacientes.obtenerPaciente(emisor);
-		Medico medico  = servicioMedicos.obtenerMedico(receptor);
+		Usuario usrPaciente = servicioUsuarios.obtenerUsuarioPorId(emisor);
+		Usuario usrSanitario = servicioUsuarios.obtenerUsuarioPorId(receptor);
 		
-		Consulta consulta = new Consulta(asunto, mensaje, paciente, medico);
+		if (!(usrPaciente instanceof Paciente))
+			throw new EntidadNoEncontrada("No existe el paciente con id " + emisor);
+		Paciente paciente = (Paciente) usrPaciente;
+		
+		if (!(usrSanitario instanceof Sanitario))
+			throw new EntidadNoEncontrada("No existe el sanitario con id " + receptor);
+		Sanitario sanitario = (Sanitario) usrSanitario;
+		
+		Consulta consulta = new Consulta(asunto, mensaje, paciente, sanitario);
 		String idConsulta = repositorioConsultas.save(consulta).getId();
 		
 		Alerta alerta = generarAlertaConsulta(consulta);
-		String idAlerta = servicioAlertas.altaAlerta(
-				alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
-		servicioMedicos.agregarAlerta(medico.getId(), servicioAlertas.obtenerAlerta(idAlerta));
-		
-		return idConsulta;
-	}
-	
-	@Override
-	public String altaConsultaEspecialista(String asunto, String mensaje, String emisor, String receptor) 
-			throws EntidadNoEncontrada {
-		if (asunto == null || asunto.isEmpty()) {
-			throw new IllegalArgumentException("El asunto no puede ser nulo o vacío");
-		}
-		if (mensaje == null || mensaje.isEmpty()) {
-			throw new IllegalArgumentException("El mensaje no puede ser nulo o vacío");
-		}
-		
-		Paciente paciente = servicioPacientes.obtenerPaciente(emisor);
-		Especialista especialista = servicioEspecialistas.obtenerEspecialista(receptor);
-		
-		Consulta consulta = new Consulta(asunto, mensaje, paciente, especialista);
-		String idConsulta = repositorioConsultas.save(consulta).getId();
-		
-		Alerta alerta = generarAlertaConsulta(consulta);
-		String idAlerta = servicioAlertas.altaAlerta(
-				alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
-		servicioEspecialistas.agregarAlerta(especialista.getId(), servicioAlertas.obtenerAlerta(idAlerta));
+		servicioAlertas.altaAlerta(alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
+		servicioUsuarios.agregarAlerta(sanitario.getId(), alerta);
 		
 		return idConsulta;
 	}
@@ -142,7 +119,7 @@ public class ServicioConsultas implements IServicioConsultas {
 		Alerta alerta = generarAlertaRespuesta(consulta);
 		String idAlerta = servicioAlertas.altaAlerta(
 				alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
-		servicioPacientes.agregarAlerta(consulta.getEmisor().getId(), 
+		servicioUsuarios.agregarAlerta(consulta.getEmisor().getId(), 
 				servicioAlertas.obtenerAlerta(idAlerta));
 	}
 
@@ -157,17 +134,8 @@ public class ServicioConsultas implements IServicioConsultas {
 	}
 
 	@Override
-	public Collection<Consulta> obtenerConsultas(Collection<String> ids) {
-		return servicioConsultas.obtenerConsultas(ids);
-	}
-	
-	@Override
-	public Collection<Consulta> obtenerConsultasPaciente(String id) {
-		return servicioConsultas.obtenerConsultasPaciente(id);
-	}
-
-	@Override
-	public Collection<Consulta> obtenerConsultasSanitario(String id) {
-		return servicioConsultas.obtenerConsultasSanitario(id);
+	public Collection<Consulta> obtenerConsultasUsuario(String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

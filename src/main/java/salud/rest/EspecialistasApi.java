@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,32 +26,32 @@ public interface EspecialistasApi {
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un especialista")
-	@PatchMapping("/{id}/pacientes/agregar")
+	@PostMapping("/{id}/pacientes/")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarPacientes(
 			@Valid @RequestBody Collection<String> ids,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Eliminar pacientes", description = "Elimina pacientes de un especialista")
-	@PatchMapping("/{id}/pacientes/eliminar")
+	@Operation(summary = "Eliminar paciente", description = "Elimina un paciente de un especialista")
+	@DeleteMapping("/{idEspecialista}/pacientes/{idPaciente}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarPacientes(
-			@Valid @RequestBody Collection<String> ids,
-			@PathVariable String id) throws Exception;
+	public ResponseEntity<Void> eliminarPaciente(
+			@PathVariable String idEspecialista,
+			@PathVariable String idPaciente) throws Exception;
 	
 	@Operation(summary = "Agregar plantillas", description = "Agrega plantillas a un especialista")
-	@PatchMapping("/{id}/plantillas/agregar")
+	@PostMapping("/{id}/plantillas/")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarPlantillas(
 			@Valid @RequestBody Collection<String> ids,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Eliminar plantillas", description = "Elimina plantillas de un especialista")
-	@PatchMapping("/{id}/plantillas/eliminar")
+	@Operation(summary = "Eliminar plantilla", description = "Elimina una plantilla de un especialista")
+	@DeleteMapping("/{idEspecialista}/plantillas/{idPlantilla}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarPlantillas(
-			@Valid @RequestBody Collection<String> ids,
-			@PathVariable String id) throws Exception;
+	public ResponseEntity<Void> eliminarPlantilla(
+			@PathVariable String idEspecialista,
+			@PathVariable String idPlantilla) throws Exception;
 	
 	@Operation(summary = "Obtener especialista", description = "Obtiene los datos de un especialista")
 	@GetMapping("/{id}")

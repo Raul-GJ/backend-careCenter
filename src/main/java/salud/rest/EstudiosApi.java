@@ -33,46 +33,46 @@ public interface EstudiosApi {
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un estudio")
-	@PatchMapping("/{id}/pacientes/agregar")
+	@PostMapping("/{id}/pacientes/")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarPacientes(
 			@Valid @RequestBody Collection<String> pacientes,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar seguimientos", description = "Agrega seguimientos a un estudio")
-	@PatchMapping("/{id}/seguimientos/agregar")
+	@PostMapping("/{id}/seguimientos/")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar alertas", description = "Agrega alertas a un estudio")
-	@PatchMapping("/{id}/alertas/agregar")
+	@PostMapping("/{id}/alertas/")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarAlertas(
 			@Valid @RequestBody Collection<String> alertas,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Eliminar pacientes", description = "Elimina pacientes de un estudio")
-	@PatchMapping("/{id}/pacientes/eliminar")
+	@Operation(summary = "Eliminar paciente", description = "Elimina un paciente de un estudio")
+	@DeleteMapping("/{idEstudio}/pacientes/{idPaciente}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarPacientes(
-			@Valid @RequestBody Collection<String> pacientes,
-			@PathVariable String id) throws Exception;
+	public ResponseEntity<Void> eliminarPaciente(
+			@PathVariable String idEstudio,
+			@PathVariable String idPaciente) throws Exception;
 	
-	@Operation(summary = "Eliminar seguimientos", description = "Elimina seguimientos de un estudio")
-	@PatchMapping("/{id}/seguimientos/eliminar")
+	@Operation(summary = "Eliminar seguimiento", description = "Elimina un seguimiento de un estudio")
+	@DeleteMapping("/{idEstudio}/seguimientos/{idSeguimiento}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarSeguimientos(
-			@Valid @RequestBody Collection<String> seguimientos,
-			@PathVariable String id) throws Exception;
+	public ResponseEntity<Void> eliminarSeguimiento(
+			@PathVariable String idEstudio,
+			@PathVariable String idSeguimiento) throws Exception;
 	
-	@Operation(summary = "Eliminar alertas", description = "Elimina alertas de un estudio")
-	@PatchMapping("/{id}/alertas/eliminar")
+	@Operation(summary = "Eliminar alerta", description = "Elimina una alerta de un estudio")
+	@DeleteMapping("/{idEstudio}/alertas/{idAlerta}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarAlertas(
-			@Valid @RequestBody Collection<String> alertas,
-			@PathVariable String id) throws Exception;
+	public ResponseEntity<Void> eliminarAlerta(
+			@PathVariable String idEstudio,
+			@PathVariable String idAlerta) throws Exception;
 	
 	@Operation(summary = "Obtener estudio", description = "Obtiene los datos de un estudio")
 	@GetMapping("/{id}")

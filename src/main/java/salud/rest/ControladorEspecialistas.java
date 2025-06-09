@@ -2,6 +2,7 @@ package salud.rest;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -71,8 +72,8 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarPacientes(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioEspecialistas.eliminarPacientes(id, ids);
+	public ResponseEntity<Void> eliminarPaciente(String idEspecialista, String idPaciente) throws Exception {
+		servicioEspecialistas.eliminarPacientes(idEspecialista, List.of(idPaciente));
 		return ResponseEntity.noContent().build();
 	}
 
@@ -83,8 +84,8 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarPlantillas(@Valid Collection<String> ids, @Valid String id) throws Exception {
-		servicioEspecialistas.eliminarPlantillas(id, ids);
+	public ResponseEntity<Void> eliminarPlantilla(String idEspecialista, String idPlantilla) throws Exception {
+		servicioEspecialistas.eliminarPlantillas(idEspecialista, List.of(idPlantilla));
 		return ResponseEntity.noContent().build();
 	}
 }

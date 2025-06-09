@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,18 +37,18 @@ public interface MedicosApi {
 	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos() throws Exception;
 	
 	@Operation(summary = "Agregar pacientes", description = "Agrega una lista de pacientes a un médico de familia")
-	@PatchMapping("/{id}/pacientes/agregar")
+	@PostMapping("/{id}/pacientes/")
 	@PreAuthorize("hasAuthority('MEDICO')")
 	public ResponseEntity<Void> agregarPacientes(
 			@PathVariable String id,
 			@RequestBody Collection<String> ids) throws Exception;
 	
-	@Operation(summary = "Eliminar pacientes", description = "Elimina una lista de pacientes de un médico de familia")
-	@PatchMapping("/{id}/pacientes/eliminar")
+	@Operation(summary = "Eliminar paciente", description = "Elimina un paciente de un médico de familia")
+	@DeleteMapping("/{idMedico}/pacientes/{idPaciente}")
 	@PreAuthorize("hasAuthority('MEDICO')")
 	public ResponseEntity<Void> eliminarPacientes(
-			@PathVariable String id,
-			@RequestBody Collection<String> ids) throws Exception;
+			@PathVariable String idMedico,
+			@PathVariable String idPaciente) throws Exception;
 	
 	@Operation(summary = "Eliminar médico", description = "Elimina un médico de familia de la base de datos")
 	@DeleteMapping("/{id}")

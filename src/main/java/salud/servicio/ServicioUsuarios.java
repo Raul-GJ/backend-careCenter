@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import salud.modelo.Alerta;
 import salud.modelo.Usuario;
 import salud.repositorio.RepositorioUsuarios;
 import salud.rest.excepciones.EntidadNoEncontrada;
@@ -19,12 +20,14 @@ public class ServicioUsuarios implements IServicioUsuarios {
 	// Atributos
 	
 	private RepositorioUsuarios repositorioUsuarios;
+	private IServicioAlertas servicioAlertas;
 	
 	// Constructores
 	
-	public ServicioUsuarios(RepositorioUsuarios repositorioUsuarios) {
+	public ServicioUsuarios(RepositorioUsuarios repositorioUsuarios, IServicioAlertas servicioAlertas) {
 		super();
 		this.repositorioUsuarios = repositorioUsuarios;
+		this.servicioAlertas = servicioAlertas;
 	}
 	
 	// Métodos
@@ -84,6 +87,52 @@ public class ServicioUsuarios implements IServicioUsuarios {
 	public void eliminarUsuario(String id) throws EntidadNoEncontrada {
 		obtenerUsuarioPorId(id); // Para comprobar que existe
 		repositorioUsuarios.deleteById(id);
+	}
+	
+	@Override
+	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
+		Usuario usuario = obtenerUsuarioPorId(id);
+		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
+		usuario.agregarAlertas(lista);
+		repositorioUsuarios.save(usuario);
+	}
+
+	@Override
+	public void agregarAlerta(String idUsuario, String idAlerta) throws EntidadNoEncontrada {
+		Usuario usuario = obtenerUsuarioPorId(idUsuario);
+		Alerta alerta = servicioAlertas.obtenerAlerta(idAlerta);
+		usuario.agregarAlerta(alerta);
+		repositorioUsuarios.save(usuario);
+	}
+
+	@Override
+	public void agregarAlerta(String idUsuario, Alerta alerta) throws EntidadNoEncontrada {
+		Usuario usuario = obtenerUsuarioPorId(idUsuario);
+		usuario.agregarAlerta(alerta);
+		repositorioUsuarios.save(usuario);
+	}
+	
+	@Override
+	public void eliminarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
+		Usuario usuario = obtenerUsuarioPorId(id);
+		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
+		usuario.eliminarAlertas(lista);
+		repositorioUsuarios.save(usuario);
+	}
+	
+	@Override
+	public void eliminarAlerta(String idUsuario, String idAlerta) throws EntidadNoEncontrada {
+		Usuario usuario = obtenerUsuarioPorId(idUsuario);
+		Alerta alerta = servicioAlertas.obtenerAlerta(idAlerta);
+		usuario.eliminarAlerta(alerta);
+		repositorioUsuarios.save(usuario);
+	}
+
+	@Override
+	public void eliminarAlerta(String idUsuario, Alerta alerta) throws EntidadNoEncontrada {
+		Usuario usuario = obtenerUsuarioPorId(idUsuario);
+		usuario.eliminarAlerta(alerta);
+		repositorioUsuarios.save(usuario);
 	}
 
 }

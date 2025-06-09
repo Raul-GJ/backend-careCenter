@@ -2,6 +2,7 @@ package salud.rest;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -62,12 +63,6 @@ public class ControladorPacientes implements PacientesApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> agregarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
-		servicioPacientes.agregarAlertas(id, alertas);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
 	public ResponseEntity<Void> agregarEspecialistas(@Valid Collection<String> especialistas, @Valid String id)
 			throws Exception {
 		servicioPacientes.agregarEspecialistas(id, especialistas);
@@ -82,22 +77,16 @@ public class ControladorPacientes implements PacientesApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
-		servicioPacientes.eliminarAlertas(id, alertas);
+	public ResponseEntity<Void> eliminarEspecialista(String idPaciente, String idEspecialista)
+			throws Exception {
+		servicioPacientes.eliminarEspecialistas(idPaciente, List.of(idEspecialista));
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	public ResponseEntity<Void> eliminarEspecialistas(@Valid Collection<String> especialistas, @Valid String id)
+	public ResponseEntity<Void> eliminarSeguimiento(String idPaciente, String idSeguimiento)
 			throws Exception {
-		servicioPacientes.eliminarEspecialistas(id, especialistas);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> eliminarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
-			throws Exception {
-		servicioPacientes.eliminarSeguimientos(id, seguimientos);
+		servicioPacientes.eliminarSeguimientos(idPaciente, List.of(idSeguimiento));
 		return ResponseEntity.noContent().build();
 	}
 	
