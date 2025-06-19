@@ -13,6 +13,8 @@ public interface IServicioAlertas {
 	public void modificarAlerta(String id, String asunto, String mensaje, LocalDateTime fecha) 
 			throws EntidadNoEncontrada;
 	
+	public void leerAlerta(String id) throws EntidadNoEncontrada;
+	
 	public Alerta obtenerAlerta(String id) throws EntidadNoEncontrada;
 	
 	public Collection<Alerta> obtenerAlertas();

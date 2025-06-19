@@ -16,6 +16,7 @@ public class Alerta {
 	private String asunto;
 	private String mensaje;
 	private LocalDateTime fecha;
+	private boolean leida;
 	
 	// Constructores
 	
@@ -24,6 +25,7 @@ public class Alerta {
 		this.asunto = asunto;
 		this.mensaje = mensaje;
 		this.fecha = fecha;
+		this.leida = false;
 	}
 	
 	// Métodos
@@ -76,5 +78,13 @@ public class Alerta {
 		Alerta other = (Alerta) obj;
 		return Objects.equals(asunto, other.asunto) && Objects.equals(fecha, other.fecha)
 				&& Objects.equals(id, other.id) && Objects.equals(mensaje, other.mensaje);
+	}
+
+	public boolean isLeida() {
+		return leida;
+	}
+
+	public void setLeida(boolean leida) {
+		this.leida = leida;
 	}
 }

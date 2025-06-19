@@ -2,6 +2,8 @@ package salud.servicio;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +14,6 @@ import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
 import salud.repositorio.RepositorioEstudios;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionAlertas;
-import salud.servicio.obtencion.IServicioObtencionEstudios;
-import salud.servicio.obtencion.IServicioObtencionPacientes;
-import salud.servicio.obtencion.IServicioObtencionSeguimientos;
 
 @Service
 @Transactional
@@ -24,19 +22,17 @@ public class ServicioEstudios implements IServicioEstudios {
 	// Atributos
 	
 	private RepositorioEstudios repositorioEstudios;
-	private IServicioObtencionEstudios servicioEstudios;
-	private IServicioObtencionPacientes servicioPacientes;
-	private IServicioObtencionSeguimientos servicioSeguimientos;
-	private IServicioObtencionAlertas servicioAlertas;
+	private IServicioPacientes servicioPacientes;
+	private IServicioSeguimientos servicioSeguimientos;
+	private IServicioAlertas servicioAlertas;
 	
 	// Constructores
 	
-	public ServicioEstudios(RepositorioEstudios repositorioEstudios, IServicioObtencionEstudios servicioEstudios,
-			IServicioObtencionPacientes servicioPacientes, IServicioObtencionSeguimientos servicioSeguimientos,
-			IServicioObtencionAlertas servicioAlertas) {
+	public ServicioEstudios(RepositorioEstudios repositorioEstudios,
+			IServicioPacientes servicioPacientes, IServicioSeguimientos servicioSeguimientos,
+			IServicioAlertas servicioAlertas) {
 		super();
 		this.repositorioEstudios = repositorioEstudios;
-		this.servicioEstudios = servicioEstudios;
 		this.servicioPacientes = servicioPacientes;
 		this.servicioSeguimientos = servicioSeguimientos;
 		this.servicioAlertas = servicioAlertas;
@@ -190,16 +186,30 @@ public class ServicioEstudios implements IServicioEstudios {
 
 	@Override
 	public Estudio obtenerEstudio(String id) throws EntidadNoEncontrada {
-		return servicioEstudios.obtenerEstudio(id);
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Estudio> optional = repositorioEstudios.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Estudio estudio = optional.get();
+		
+		return estudio;
 	}
-
+	
 	@Override
 	public Collection<Estudio> obtenerEstudios() {
-		return servicioEstudios.obtenerEstudios();
+		Collection<Estudio> estudios = new LinkedList<Estudio>();
+		repositorioEstudios.findAll().forEach(estudio -> estudios.add(estudio));
+		return estudios;
 	}
-
+	
 	@Override
 	public Collection<Estudio> obtenerEstudios(Collection<String> ids) {
-		return servicioEstudios.obtenerEstudios(ids);
+		Collection<Estudio> estudios = new LinkedList<Estudio>();
+		repositorioEstudios.findAllById(ids).forEach(estudio -> estudios.add(estudio));
+		return estudios;
 	}
 }

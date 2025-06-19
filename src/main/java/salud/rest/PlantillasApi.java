@@ -81,7 +81,7 @@ public interface PlantillasApi {
 	
 	@Operation(summary = "Obtener plantilla", description = "Obtiene los datos de un formulario plantilla")
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('ESPECIALISTA')")
+	@PreAuthorize("hasAuthority('USUARIO')")
 	public ResponseEntity<PlantillaDto> obtenerPlantilla(
 			@PathVariable String id) throws Exception;
 	

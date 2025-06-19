@@ -1,6 +1,7 @@
 package salud.servicio;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -10,7 +11,6 @@ import salud.modelo.Plantilla;
 import salud.modelo.encuesta.PreguntaEncuesta;
 import salud.repositorio.RepositorioPlantillas;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionPlantillas;
 
 @Service
 @Transactional
@@ -19,15 +19,12 @@ public class ServicioPlantillas implements IServicioPlantillas {
 	// Atributos
 	
 	private RepositorioPlantillas repositorioPlantillas;
-	private IServicioObtencionPlantillas servicioPlantillas;
 	
 	// Constructores
 	
-	public ServicioPlantillas(RepositorioPlantillas repositorioPlantillas,
-			IServicioObtencionPlantillas servicioPlantillas) {
+	public ServicioPlantillas(RepositorioPlantillas repositorioPlantillas) {
 		super();
 		this.repositorioPlantillas = repositorioPlantillas;
-		this.servicioPlantillas = servicioPlantillas;
 	}
 	
 	// Métodos
@@ -109,16 +106,30 @@ public class ServicioPlantillas implements IServicioPlantillas {
 
 	@Override
 	public Plantilla obtenerPlantilla(String id) throws EntidadNoEncontrada {
-		return servicioPlantillas.obtenerPlantilla(id);
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Plantilla> optional = repositorioPlantillas.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Plantilla formulario = optional.get();
+		
+		return formulario;
 	}
 
 	@Override
 	public Collection<Plantilla> obtenerPlantillas() {
-		return servicioPlantillas.obtenerPlantillas();
+		Collection<Plantilla> formularios = new LinkedList<Plantilla>();
+		repositorioPlantillas.findAll().forEach(f -> formularios.add(f));
+		return formularios;
 	}
-
+	
 	@Override
 	public Collection<Plantilla> obtenerPlantillas(Collection<String> ids) {
-		return servicioPlantillas.obtenerPlantillas(ids);
+		Collection<Plantilla> formularios = new LinkedList<Plantilla>();
+		repositorioPlantillas.findAllById(ids).forEach(f -> formularios.add(f));
+		return formularios;
 	}
 }

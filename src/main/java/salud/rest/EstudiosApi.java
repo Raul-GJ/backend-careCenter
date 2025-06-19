@@ -33,21 +33,21 @@ public interface EstudiosApi {
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un estudio")
-	@PostMapping("/{id}/pacientes/")
+	@PostMapping("/{id}/pacientes")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarPacientes(
 			@Valid @RequestBody Collection<String> pacientes,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar seguimientos", description = "Agrega seguimientos a un estudio")
-	@PostMapping("/{id}/seguimientos/")
+	@PostMapping("/{id}/seguimientos")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar alertas", description = "Agrega alertas a un estudio")
-	@PostMapping("/{id}/alertas/")
+	@PostMapping("/{id}/alertas")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarAlertas(
 			@Valid @RequestBody Collection<String> alertas,

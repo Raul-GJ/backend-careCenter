@@ -13,8 +13,6 @@ import salud.modelo.Estudio;
 import salud.modelo.RolEstudio;
 import salud.repositorio.RepositorioAsignacionEstudio;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionEspecialistas;
-import salud.servicio.obtencion.IServicioObtencionEstudios;
 
 @Service
 @Transactional
@@ -23,14 +21,14 @@ public class ServicioAsignacionEstudio implements IservicioAsignacionEstudio {
 	// Atributos
 	
 	private RepositorioAsignacionEstudio repositorioAsignacion;
-	private IServicioObtencionEspecialistas servicioEspecialistas;
-	private IServicioObtencionEstudios servicioEstudios;
+	private IServicioEspecialistas servicioEspecialistas;
+	private IServicioEstudios servicioEstudios;
 	
 	
 	// Constructores
 	
 	public ServicioAsignacionEstudio(RepositorioAsignacionEstudio repositorioAsignacion,
-			IServicioObtencionEspecialistas servicioEspecialistas, IServicioObtencionEstudios servicioEstudios) {
+			IServicioEspecialistas servicioEspecialistas, IServicioEstudios servicioEstudios) {
 		super();
 		this.repositorioAsignacion = repositorioAsignacion;
 		this.servicioEspecialistas = servicioEspecialistas;

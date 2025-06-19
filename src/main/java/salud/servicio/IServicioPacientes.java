@@ -18,15 +18,11 @@ public interface IServicioPacientes {
 	
 	public void establecerMedico(String id, Medico Medico) throws EntidadNoEncontrada;
 	
-	public void agregarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada;
-	
 	public void agregarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada;
 	
 	public void agregarEspecialista(String id, Especialista especialista) throws EntidadNoEncontrada;
 	
 	public void agregarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada;
-
-	public void eliminarEspecialistas(String id, Collection<String> especialistas) throws EntidadNoEncontrada;
 	
 	public void eliminarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada;
 

@@ -1,6 +1,8 @@
 package salud.servicio;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,10 +11,10 @@ import salud.modelo.Alerta;
 import salud.modelo.Especialista;
 import salud.modelo.Paciente;
 import salud.modelo.Plantilla;
+import salud.modelo.TipoUsuario;
+import salud.modelo.Usuario;
 import salud.repositorio.RepositorioUsuarios;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionAlertas;
-import salud.servicio.obtencion.IServicioObtencionEspecialistas;
 import salud.utils.ValidadorEmail;
 
 @Service
@@ -22,19 +24,17 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	// Atributos
 	
 	private RepositorioUsuarios repositorioUsuarios;
-	private IServicioObtencionEspecialistas servicioEspecialistas;
 	private IServicioPacientes servicioPacientes;
 	private IServicioPlantillas servicioPlantillas;
-	private IServicioObtencionAlertas servicioAlertas;
+	private IServicioAlertas servicioAlertas;
 	
 	// Constructores
 	
 	public ServicioEspecialistas(RepositorioUsuarios repositorioUsuarios,
-			IServicioObtencionEspecialistas servicioEspecialistas, IServicioPacientes servicioPacientes,
-			IServicioPlantillas servicioPlantillas, IServicioObtencionAlertas servicioAlertas) {
+			IServicioPacientes servicioPacientes, IServicioPlantillas servicioPlantillas, 
+			IServicioAlertas servicioAlertas) {
 		super();
 		this.repositorioUsuarios = repositorioUsuarios;
-		this.servicioEspecialistas = servicioEspecialistas;
 		this.servicioPacientes = servicioPacientes;
 		this.servicioPlantillas = servicioPlantillas;
 		this.servicioAlertas = servicioAlertas;
@@ -193,6 +193,7 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
 		Especialista especialista = obtenerEspecialista(id);
 		especialista.eliminarPaciente(paciente);
+		servicioPacientes.eliminarEspecialista(paciente.getId(), especialista);
 		repositorioUsuarios.save(especialista);
 	}
 
@@ -212,16 +213,45 @@ public class ServicioEspecialistas implements IServicioEspecialistas {
 
 	@Override
 	public Especialista obtenerEspecialista(String id) throws EntidadNoEncontrada {
-		return servicioEspecialistas.obtenerEspecialista(id);
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Usuario> optional = repositorioUsuarios.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		if (!optional.get().getTipo().equals(TipoUsuario.ESPECIALISTA)) {
+			throw new IllegalArgumentException("El usuario con id " + id + " no es un especialista");
+		}
+		Especialista especialista = (Especialista) optional.get();
+		return especialista;
 	}
 
 	@Override
 	public Collection<Especialista> obtenerEspecialistas() {
-		return servicioEspecialistas.obtenerEspecialistas();
+		Collection<Especialista> especialistas = new LinkedList<Especialista>();
+		Collection<Usuario> usuarios = repositorioUsuarios.findByTipo(TipoUsuario.ESPECIALISTA);
+		for (Usuario usuario : usuarios) {
+			if (!usuario.getTipo().equals(TipoUsuario.ESPECIALISTA))
+				throw new IllegalArgumentException("El usuario con id " + usuario.getId() + 
+						" no es un especialista");
+			especialistas.add((Especialista) usuario);
+		}
+		return especialistas;
 	}
-
+	
 	@Override
 	public Collection<Especialista> obtenerEspecialistas(Collection<String> ids) {
-		return servicioEspecialistas.obtenerEspecialistas(ids);
+		Collection<Especialista> especialistas = new LinkedList<Especialista>();
+		Collection<Usuario> usuarios = new LinkedList<Usuario>();
+		repositorioUsuarios.findAllById(ids).forEach(u -> usuarios.add(u));
+		for (Usuario usuario : usuarios) {
+			if (!usuario.getTipo().equals(TipoUsuario.ESPECIALISTA))
+				throw new IllegalArgumentException("El usuario con id " + usuario.getId() + 
+						" no es un especialista");
+			especialistas.add((Especialista) usuario);
+		}
+		return especialistas;
 	}
 }

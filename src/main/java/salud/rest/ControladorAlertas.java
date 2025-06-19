@@ -74,4 +74,10 @@ public class ControladorAlertas implements AlertasApi {
 		servicioAlertas.eliminarAlerta(id);
 		return ResponseEntity.noContent().build();
 	}
+
+	@Override
+	public ResponseEntity<Void> leerAlerta(String id) throws Exception {
+		servicioAlertas.leerAlerta(id);
+		return ResponseEntity.noContent().build();
+	}
 }

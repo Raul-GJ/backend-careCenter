@@ -7,12 +7,10 @@ public class AlertaDto {
 	// Atributos
 	
 	private String id;
-	
 	private String asunto;
-	
 	private String mensaje;
-	
 	private String fecha;
+	private boolean leida;
 	
 	// Constructores
 	
@@ -55,12 +53,21 @@ public class AlertaDto {
 		this.fecha = fecha;
 	}
 	
+	public boolean isLeida() {
+		return leida;
+	}
+
+	public void setLeida(boolean leida) {
+		this.leida = leida;
+	}
+	
 	public static AlertaDto from(Alerta alerta) {
 		AlertaDto alertaDto = new AlertaDto();
 		alertaDto.setId(alerta.getId());
 		alertaDto.setAsunto(alerta.getAsunto());
 		alertaDto.setFecha(alerta.getFecha().toString());
 		alertaDto.setMensaje(alerta.getMensaje());
+		alertaDto.setLeida(alerta.isLeida());
 		return alertaDto;
-	}
+	}	
 }

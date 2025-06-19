@@ -32,6 +32,11 @@ public interface AlertasApi {
 			@Valid @RequestBody AlertaDto alertaDto,
 			@PathVariable String id) throws Exception;
 	
+	@Operation(summary = "Leer alerta", description = "Pasa una alerta a estado leido")
+	@PatchMapping("/{id}/leer")
+	@PreAuthorize("hasAuthority('USUARIO')")
+	public ResponseEntity<Void> leerAlerta(@PathVariable String id) throws Exception;
+	
 	@Operation(summary = "Obtener alerta", description = "Obtiene los datos de una alerta")
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('USUARIO')")

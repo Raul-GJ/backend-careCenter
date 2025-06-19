@@ -2,6 +2,8 @@ package salud.servicio;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import salud.modelo.Alerta;
 import salud.repositorio.RepositorioAlertas;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionAlertas;
 
 @Service
 @Transactional
@@ -18,14 +19,12 @@ public class ServicioAlertas implements IServicioAlertas {
 	// Atributos
 	
 	private RepositorioAlertas repositorioAlertas;
-	private IServicioObtencionAlertas servicioAlertas;
 	
 	// Constructores
 	
-	public ServicioAlertas(RepositorioAlertas repositorioAlertas, IServicioObtencionAlertas servicioAlertas) {
+	public ServicioAlertas(RepositorioAlertas repositorioAlertas) {
 		super();
 		this.repositorioAlertas = repositorioAlertas;
-		this.servicioAlertas = servicioAlertas;
 	}
 	
 	// Métodos
@@ -77,16 +76,37 @@ public class ServicioAlertas implements IServicioAlertas {
 
 	@Override
 	public Alerta obtenerAlerta(String id) throws EntidadNoEncontrada {
-		return servicioAlertas.obtenerAlerta(id);
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Alerta> optional = repositorioAlertas.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Alerta alerta = optional.get();
+		
+		return alerta;
 	}
 
 	@Override
 	public Collection<Alerta> obtenerAlertas() {
-		return servicioAlertas.obtenerAlertas();
+		Collection<Alerta> alertas = new LinkedList<Alerta>();
+		repositorioAlertas.findAll().forEach(alerta -> alertas.add(alerta));
+		return alertas;
+	}
+	
+	@Override
+	public Collection<Alerta> obtenerAlertas(Collection<String> ids) {
+		Collection<Alerta> alertas = new LinkedList<Alerta>();
+		repositorioAlertas.findAllById(ids).forEach(alerta -> alertas.add(alerta));
+		return alertas;
 	}
 
 	@Override
-	public Collection<Alerta> obtenerAlertas(Collection<String> ids) {
-		return servicioAlertas.obtenerAlertas(ids);
+	public void leerAlerta(String id) throws EntidadNoEncontrada {
+		Alerta alerta = obtenerAlerta(id);
+		alerta.setLeida(true);
+		repositorioAlertas.save(alerta);
 	}
 }

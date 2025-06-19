@@ -26,7 +26,7 @@ public interface EspecialistasApi {
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un especialista")
-	@PostMapping("/{id}/pacientes/")
+	@PostMapping("/{id}/pacientes")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarPacientes(
 			@Valid @RequestBody Collection<String> ids,
@@ -40,7 +40,7 @@ public interface EspecialistasApi {
 			@PathVariable String idPaciente) throws Exception;
 	
 	@Operation(summary = "Agregar plantillas", description = "Agrega plantillas a un especialista")
-	@PostMapping("/{id}/plantillas/")
+	@PostMapping("/{id}/plantillas")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarPlantillas(
 			@Valid @RequestBody Collection<String> ids,

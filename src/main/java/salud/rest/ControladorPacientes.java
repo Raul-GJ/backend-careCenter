@@ -63,23 +63,9 @@ public class ControladorPacientes implements PacientesApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> agregarEspecialistas(@Valid Collection<String> especialistas, @Valid String id)
-			throws Exception {
-		servicioPacientes.agregarEspecialistas(id, especialistas);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
 	public ResponseEntity<Void> agregarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
 			throws Exception {
 		servicioPacientes.agregarSeguimientos(id, seguimientos);
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
-	public ResponseEntity<Void> eliminarEspecialista(String idPaciente, String idEspecialista)
-			throws Exception {
-		servicioPacientes.eliminarEspecialistas(idPaciente, List.of(idEspecialista));
 		return ResponseEntity.noContent().build();
 	}
 

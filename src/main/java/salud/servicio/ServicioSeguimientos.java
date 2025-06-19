@@ -2,7 +2,9 @@ package salud.servicio;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,6 @@ import salud.modelo.Plantilla;
 import salud.modelo.Seguimiento;
 import salud.repositorio.RepositorioSeguimientos;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionSeguimientos;
 
 @Service
 @Transactional
@@ -21,16 +22,14 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 	// Atributos
 	
 	private RepositorioSeguimientos repositorioSeguimientos;
-	private IServicioObtencionSeguimientos servicioSeguimientos;
 	private IServicioPlantillas servicioPlantillas;
 	
 	// Constructores
 
 	public ServicioSeguimientos(RepositorioSeguimientos repositorioSeguimientos,
-			IServicioObtencionSeguimientos servicioSeguimientos, IServicioPlantillas servicioPlantillas) {
+			IServicioPlantillas servicioPlantillas) {
 		super();
 		this.repositorioSeguimientos = repositorioSeguimientos;
-		this.servicioSeguimientos = servicioSeguimientos;
 		this.servicioPlantillas = servicioPlantillas;
 	}
 	
@@ -103,16 +102,30 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 
 	@Override
 	public Seguimiento obtenerSeguimiento(String id) throws EntidadNoEncontrada {
-		return servicioSeguimientos.obtenerSeguimiento(id);
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Seguimiento> optional = repositorioSeguimientos.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Seguimiento seguimiento = optional.get();
+		
+		return seguimiento;
 	}
 
 	@Override
 	public Collection<Seguimiento> obtenerSeguimientos() {
-		return servicioSeguimientos.obtenerSeguimientos();
+		Collection<Seguimiento> seguimientos = new LinkedList<Seguimiento>();
+		repositorioSeguimientos.findAll().forEach(seguimiento -> seguimientos.add(seguimiento));
+		return seguimientos;
 	}
-
+	
 	@Override
 	public Collection<Seguimiento> obtenerSeguimientos(Collection<String> ids) {
-		return servicioSeguimientos.obtenerSeguimientos(ids);
+		Collection<Seguimiento> seguimientos = new LinkedList<Seguimiento>();
+		repositorioSeguimientos.findAllById(ids).forEach(seguimiento -> seguimientos.add(seguimiento));
+		return seguimientos;
 	}
 }

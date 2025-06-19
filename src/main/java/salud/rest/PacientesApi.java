@@ -25,26 +25,12 @@ public interface PacientesApi {
 			@Valid @RequestBody PacienteDto pacienteDto,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar especialistas", description = "Agrega especialistas a un paciente")
-	@PostMapping("/{id}/especialistas")
-	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> agregarEspecialistas(
-			@Valid @RequestBody Collection<String> especialistas,
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Agregar seguimientos", description = "Agrega seguimientos a un paciente")
 	@PostMapping("/{id}/seguimientos")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> agregarSeguimientos(
 			@Valid @RequestBody Collection<String> seguimientos,
 			@PathVariable String id) throws Exception;
-	
-	@Operation(summary = "Eliminar especialista", description = "Elimina un especialista de un paciente")
-	@DeleteMapping("/{idPaciente}/especialistas/{idEspecialista}")
-	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> eliminarEspecialista(
-			@PathVariable String idPaciente,
-			@PathVariable String idEspecialista) throws Exception;
 	
 	@Operation(summary = "Eliminar seguimiento", description = "Elimina un seguimiento de un paciente")
 	@PatchMapping("/{idPaciente}/seguimientos/{idSeguimiento}")

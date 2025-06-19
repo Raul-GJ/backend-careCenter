@@ -2,6 +2,8 @@ package salud.servicio;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,6 @@ import salud.modelo.Sanitario;
 import salud.modelo.Usuario;
 import salud.repositorio.RepositorioConsultas;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.servicio.obtencion.IServicioObtencionConsultas;
 
 @Service
 @Transactional
@@ -23,18 +24,15 @@ public class ServicioConsultas implements IServicioConsultas {
 	// Atributos
 	
 	private RepositorioConsultas repositorioConsultas;
-	private IServicioObtencionConsultas servicioConsultas;
 	private IServicioAlertas servicioAlertas;
 	private IServicioUsuarios servicioUsuarios;
 	
 	// Constructores
 	
-	public ServicioConsultas(RepositorioConsultas repositorioConsultas, 
-			IServicioObtencionConsultas servicioConsultas, IServicioAlertas servicioAlertas,
+	public ServicioConsultas(RepositorioConsultas repositorioConsultas, IServicioAlertas servicioAlertas,
 			IServicioUsuarios servicioUsuarios) {
 		super();
 		this.repositorioConsultas = repositorioConsultas;
-		this.servicioConsultas = servicioConsultas;
 		this.servicioAlertas = servicioAlertas;
 		this.servicioUsuarios = servicioUsuarios;
 	}
@@ -65,8 +63,10 @@ public class ServicioConsultas implements IServicioConsultas {
 		Consulta consulta = new Consulta(asunto, mensaje, paciente, sanitario);
 		String idConsulta = repositorioConsultas.save(consulta).getId();
 		
-		Alerta alerta = generarAlertaConsulta(consulta);
-		servicioAlertas.altaAlerta(alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
+		Alerta alertaTmp = generarAlertaConsulta(consulta);
+		String idAlerta = servicioAlertas.altaAlerta(alertaTmp.getAsunto(), 
+				alertaTmp.getMensaje(), alertaTmp.getFecha());
+		Alerta alerta = servicioAlertas.obtenerAlerta(idAlerta);
 		servicioUsuarios.agregarAlerta(sanitario.getId(), alerta);
 		
 		return idConsulta;
@@ -83,7 +83,7 @@ public class ServicioConsultas implements IServicioConsultas {
 	
 	private Alerta generarAlertaRespuesta(Consulta consulta) {
 		Usuario receptor = consulta.getReceptor();
-		Usuario emisor = consulta.getReceptor();
+		Usuario emisor = consulta.getEmisor();
 		String asunto = receptor.getNombre() + " " + receptor.getApellidos() + 
 				" ha respondido a tu consulta";
 		String mensaje = "Hola " + 
@@ -125,17 +125,33 @@ public class ServicioConsultas implements IServicioConsultas {
 
 	@Override
 	public Consulta obtenerConsulta(String id) throws EntidadNoEncontrada {
-		return servicioConsultas.obtenerConsulta(id);
+		if (id == null || id.isEmpty()) {
+			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
+		}
+		
+		Optional<Consulta> optional = repositorioConsultas.findById(id);
+		if (optional.isEmpty()) {
+			throw new EntidadNoEncontrada(id);
+		}
+		Consulta consulta = optional.get();
+		return consulta;
 	}
 
 	@Override
 	public Collection<Consulta> obtenerConsultas() {
-		return servicioConsultas.obtenerConsultas();
+		Collection<Consulta> consultas = new LinkedList<Consulta>();
+		repositorioConsultas.findAll().forEach(consulta -> consultas.add(consulta));
+		return consultas;
 	}
 
 	@Override
-	public Collection<Consulta> obtenerConsultasUsuario(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Consulta> obtenerConsultasUsuario(String id) throws EntidadNoEncontrada {
+		Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
+		Collection<Consulta> consultas;
+		if (usuario instanceof Paciente)
+			consultas = repositorioConsultas.findByEmisor(id);
+		else
+			consultas = repositorioConsultas.findByReceptor(id);
+		return consultas;
 	}
 }

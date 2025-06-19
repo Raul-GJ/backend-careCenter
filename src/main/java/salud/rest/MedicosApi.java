@@ -37,7 +37,7 @@ public interface MedicosApi {
 	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos() throws Exception;
 	
 	@Operation(summary = "Agregar pacientes", description = "Agrega una lista de pacientes a un médico de familia")
-	@PostMapping("/{id}/pacientes/")
+	@PostMapping("/{id}/pacientes")
 	@PreAuthorize("hasAuthority('MEDICO')")
 	public ResponseEntity<Void> agregarPacientes(
 			@PathVariable String id,

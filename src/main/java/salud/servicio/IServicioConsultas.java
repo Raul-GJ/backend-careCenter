@@ -14,7 +14,7 @@ public interface IServicioConsultas {
 	
 	public Collection<Consulta> obtenerConsultas();
 	
-	public Collection<Consulta> obtenerConsultasUsuario(String id);
+	public Collection<Consulta> obtenerConsultasUsuario(String id) throws EntidadNoEncontrada;
 	
 	public void eliminarConsulta(String id) throws EntidadNoEncontrada;
 	
