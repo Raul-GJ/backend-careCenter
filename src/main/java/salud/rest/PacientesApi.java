@@ -33,7 +33,7 @@ public interface PacientesApi {
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar seguimiento", description = "Elimina un seguimiento de un paciente")
-	@PatchMapping("/{idPaciente}/seguimientos/{idSeguimiento}")
+	@DeleteMapping("/{idPaciente}/seguimientos/{idSeguimiento}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> eliminarSeguimiento(
 			@PathVariable String idPaciente,
