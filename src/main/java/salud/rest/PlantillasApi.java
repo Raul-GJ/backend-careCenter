@@ -37,15 +37,15 @@ public interface PlantillasApi {
 			@Valid @RequestBody PlantillaDto formularioDto,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar pregunta cadena", description = "Agrega una pregunta de tipo cadena a un formulario plantilla")
-	@PostMapping("/{id}/datos/cadena")
+	@Operation(summary = "Agregar pregunta texto", description = "Agrega una pregunta de tipo texto a un formulario plantilla")
+	@PostMapping("/{id}/datos/texto")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
 			@Valid @RequestBody TipoDatoTextoDto preguntaDto,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Agregar pregunta numeral", description = "Agrega una pregunta de tipo numeral a un formulario plantilla")
-	@PostMapping("/{id}/datos/numeral")
+	@Operation(summary = "Agregar pregunta numerico", description = "Agrega una pregunta de tipo numerico a un formulario plantilla")
+	@PostMapping("/{id}/datos/numerico")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<PreguntaEncuesta> agregarPreguntaFormulario(
 			@Valid @RequestBody TipoDatoNumericoDto preguntaDto,

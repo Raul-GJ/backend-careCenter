@@ -26,7 +26,9 @@ public class ReglaBooleano implements ReglaDatoEncuesta {
 	
 	@Override
 	public boolean test(String value) {
-		return Boolean.parseBoolean(value);
+		if(value.equalsIgnoreCase("TRUE") || value.equalsIgnoreCase("FALSE"))
+			return true;
+		return false;
 	}
 
 	@Override
