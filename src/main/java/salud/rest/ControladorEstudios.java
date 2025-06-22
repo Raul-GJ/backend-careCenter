@@ -49,11 +49,12 @@ public class ControladorEstudios implements EstudiosApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> modificarEstudio(CrearEstudioDto estudioDto, String id) 
+	public ResponseEntity<Void> modificarEstudio(EstudioDto estudioDto, String id) 
 			throws Exception {		
 		servicioEstudios.modificarEstudio(id, 
 				estudioDto.getNombre(), 
-				estudioDto.getDescripcion(), 
+				estudioDto.getDescripcion(),
+				LocalDateTime.parse(estudioDto.getFechaInicio(), DateTimeFormatter.ISO_DATE_TIME),
 				LocalDateTime.parse(estudioDto.getFechaFin(), DateTimeFormatter.ISO_DATE_TIME));
 		
 		return ResponseEntity.noContent().build();

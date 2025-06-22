@@ -12,6 +12,7 @@ import salud.modelo.Especialista;
 import salud.modelo.Estudio;
 import salud.modelo.RolEstudio;
 import salud.repositorio.RepositorioAsignacionEstudio;
+import salud.rest.excepciones.ConflictException;
 import salud.rest.excepciones.EntidadNoEncontrada;
 
 @Service
@@ -53,10 +54,18 @@ public class ServicioAsignacionEstudio implements IservicioAsignacionEstudio {
 		Especialista especialista = servicioEspecialistas.obtenerEspecialista(idEspecialista);
 		Estudio estudio = servicioEstudios.obtenerEstudio(idEstudio);
 		RolEstudio rol;
+		Collection<AsignacionEstudio> asignacionesEspecialista = 
+				repositorioAsignacion.findByEspecialista_Id(idEspecialista);
+		
 		try {
 			rol = RolEstudio.valueOf(rolStr);
 		} catch (Exception e) {
 			throw new IllegalArgumentException("El rol que has introducido no existe");
+		}
+		
+		for (AsignacionEstudio asignacionEstudio : asignacionesEspecialista) {
+			if (asignacionEstudio.getEstudio().getId().equals(idEstudio))
+				throw new ConflictException("Ya te has unido a ese estudio");
 		}
 		
 		AsignacionEstudio asignacion = new AsignacionEstudio(especialista, estudio, rol);

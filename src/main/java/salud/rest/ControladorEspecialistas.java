@@ -1,5 +1,7 @@
 package salud.rest;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,8 +40,13 @@ public class ControladorEspecialistas implements EspecialistasApi {
 				especialistaDto.getNombre(), 
 				especialistaDto.getApellidos(), 
 				especialistaDto.getEmail(), 
-				especialistaDto.getTelefono(), 
+				especialistaDto.getTelefono(),
+				LocalDate.parse(especialistaDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				especialistaDto.getSexo(),
+				especialistaDto.getDireccion(),
+				especialistaDto.getDni(),
 				especialistaDto.getnCol(),
+				especialistaDto.getCentroDeSalud(),
 				especialistaDto.getEspecialidad());
 		
 		return ResponseEntity.noContent().build();

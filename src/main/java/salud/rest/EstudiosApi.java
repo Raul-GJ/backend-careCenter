@@ -29,7 +29,7 @@ public interface EstudiosApi {
 	@PatchMapping("/{id}")
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
 	public ResponseEntity<Void> modificarEstudio(
-			@Valid @RequestBody CrearEstudioDto estudioDto,
+			@Valid @RequestBody EstudioDto estudioDto,
 			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Agregar pacientes", description = "Agrega pacientes a un estudio")

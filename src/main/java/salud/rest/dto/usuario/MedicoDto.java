@@ -25,7 +25,13 @@ public class MedicoDto extends SanitarioDto {
 		dto.setApellidos(medico.getApellidos());
 		dto.setEmail(medico.getEmail());
 		dto.setTelefono(medico.getTelefono());
+		dto.setDni(medico.getDni());
+		dto.setDireccion(medico.getDireccion());
+		dto.setSexo(medico.getSexo());
+		dto.setFechaNacimiento(medico.getFechaNacimiento().toString());
+		
 		dto.setnCol(medico.getNCol());
+		dto.setCentroDeSalud(medico.getCentroDeSalud());
 		
 		Collection<String> alertas = new LinkedList<String>();
 		medico.getAlertas().forEach(a -> alertas.add(a.getId()));

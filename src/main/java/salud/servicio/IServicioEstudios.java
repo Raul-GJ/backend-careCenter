@@ -11,7 +11,7 @@ import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioEstudios {
 
-	public String altaEstudio(String nombre, String descripcion, LocalDateTime fechaAlta, 
+	public String altaEstudio(String nombre, String descripcion, LocalDateTime fechaInicio, 
 			LocalDateTime fechaFin) throws EntidadNoEncontrada;
 	
 	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;
@@ -38,8 +38,8 @@ public interface IServicioEstudios {
 	
 	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
 	
-	public void modificarEstudio(String id, String nombre, String descripcion, LocalDateTime fechaFin)
-			throws EntidadNoEncontrada;
+	public void modificarEstudio(String id, String nombre, String descripcion, LocalDateTime fechaInicio,
+			LocalDateTime fechaFin) throws EntidadNoEncontrada;
 	
 	public Estudio obtenerEstudio(String id) throws EntidadNoEncontrada;
 	

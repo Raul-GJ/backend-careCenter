@@ -44,7 +44,13 @@ public class EspecialistaDto extends SanitarioDto {
 		dto.setApellidos(especialista.getApellidos());
 		dto.setEmail(especialista.getEmail());
 		dto.setTelefono(especialista.getTelefono());
+		dto.setDireccion(especialista.getDireccion());
+		dto.setDni(especialista.getDni());
+		dto.setSexo(especialista.getSexo());
+		dto.setFechaNacimiento(especialista.getFechaNacimiento().toString());
+		
 		dto.setnCol(especialista.getNCol());
+		dto.setCentroDeSalud(especialista.getCentroDeSalud());
 		dto.setEspecialidad(especialista.getEspecialidad());
 		
 		Collection<String> alertas = new LinkedList<String>();

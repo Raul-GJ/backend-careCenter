@@ -1,5 +1,6 @@
 package salud.modelo;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -11,15 +12,18 @@ public abstract class Sanitario extends Usuario {
 	// Atributos
 	
 	private String nCol;
+	private String centroDeSalud;
 	@DBRef
 	private Collection<Paciente> pacientes;
 	
 	// Constructores
 	
-	public Sanitario(String nombre, String apellidos, String email, String telefono,
-			TipoUsuario tipo, String contrasenya, String nCol) {
-		super(nombre, apellidos, email, telefono, tipo, contrasenya);
+	public Sanitario(String nombre, String apellidos, String email, String telefono, LocalDate fechaNacimiento,
+			String sexo, String direccion, String dni, TipoUsuario tipo, String contrasenya, String nCol, 
+			String centroDeSalud) {
+		super(nombre, apellidos, email, telefono, fechaNacimiento, sexo, direccion, dni, tipo, contrasenya);
 		this.nCol = nCol;
+		this.centroDeSalud = centroDeSalud;
 		this.pacientes = new LinkedList<Paciente>();
 	}
 	
@@ -31,6 +35,14 @@ public abstract class Sanitario extends Usuario {
 
 	public void setNCol(String nCol) {
 		this.nCol = nCol;
+	}
+	
+	public String getCentroDeSalud() {
+		return centroDeSalud;
+	}
+
+	public void setCentroDeSalud(String centroDeSalud) {
+		this.centroDeSalud = centroDeSalud;
 	}
 
 	public Collection<Paciente> getPacientes() {
@@ -61,7 +73,7 @@ public abstract class Sanitario extends Usuario {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(nCol);
+		result = prime * result + Objects.hash(centroDeSalud, nCol, pacientes);
 		return result;
 	}
 
@@ -74,8 +86,7 @@ public abstract class Sanitario extends Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Sanitario other = (Sanitario) obj;
-		return Objects.equals(nCol, other.nCol);
+		return Objects.equals(centroDeSalud, other.centroDeSalud) && Objects.equals(nCol, other.nCol)
+				&& Objects.equals(pacientes, other.pacientes);
 	}
-
-	
 }

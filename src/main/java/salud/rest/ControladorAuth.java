@@ -1,6 +1,8 @@
 package salud.rest;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,8 +106,13 @@ public class ControladorAuth implements AuthApi {
 				especialistaDto.getApellidos(), 
 				especialistaDto.getEmail(), 
 				especialistaDto.getTelefono(),
+				LocalDate.parse(especialistaDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				especialistaDto.getSexo(),
+				especialistaDto.getDireccion(),
+				especialistaDto.getDni(),
 				especialistaDto.getContrasenya(),
 				especialistaDto.getnCol(),
+				especialistaDto.getCentroDeSalud(),
 				especialistaDto.getEspecialidad());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
@@ -119,8 +126,13 @@ public class ControladorAuth implements AuthApi {
 				medicoDto.getApellidos(), 
 				medicoDto.getEmail(), 
 				medicoDto.getTelefono(),
+				LocalDate.parse(medicoDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				medicoDto.getSexo(),
+				medicoDto.getDireccion(),
+				medicoDto.getDni(),
 				medicoDto.getContrasenya(),
-				medicoDto.getnCol());
+				medicoDto.getnCol(),
+				medicoDto.getCentroDeSalud());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		
@@ -133,6 +145,11 @@ public class ControladorAuth implements AuthApi {
 				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(),
+				LocalDate.parse(pacienteDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				pacienteDto.getSexo(),
+				pacienteDto.getDireccion(),
+				pacienteDto.getDni(),
+				pacienteDto.getNss(),
 				pacienteDto.getContrasenya());
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();

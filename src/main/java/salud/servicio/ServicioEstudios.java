@@ -13,6 +13,7 @@ import salud.modelo.Estudio;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
 import salud.repositorio.RepositorioEstudios;
+import salud.rest.excepciones.ConflictException;
 import salud.rest.excepciones.EntidadNoEncontrada;
 
 @Service
@@ -41,7 +42,7 @@ public class ServicioEstudios implements IServicioEstudios {
 	// Métodos
 
 	@Override
-	public String altaEstudio(String nombre, String descripcion, LocalDateTime fechaAlta, 
+	public String altaEstudio(String nombre, String descripcion, LocalDateTime fechaInicio, 
 			LocalDateTime fechaFin) throws EntidadNoEncontrada {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
@@ -55,23 +56,27 @@ public class ServicioEstudios implements IServicioEstudios {
 		if (fechaFin.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("La fecha de fin no puede ser anterior al dia de hoy");
 		}
-		if (fechaAlta == null) {
-			throw new IllegalArgumentException("La fecha de alta no puede ser nula");
+		if (fechaInicio == null) {
+			throw new IllegalArgumentException("La fecha de inicio no puede ser nula");
 		}
-		if (fechaAlta.isBefore(LocalDateTime.now())) {
-			throw new IllegalArgumentException("La fecha de alta no puede ser anterior al dia de hoy");
+		if (fechaInicio.isBefore(LocalDateTime.now())) {
+			throw new IllegalArgumentException("La fecha de inicio no puede ser anterior al dia de hoy");
 		}
-		if (fechaFin.isBefore(fechaAlta)) {
-			throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de alta");
+		if (fechaFin.isBefore(fechaInicio)) {
+			throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
 		}
 		
-		Estudio estudio = new Estudio(nombre, descripcion, fechaAlta, fechaFin);
+		Estudio estudio = new Estudio(nombre, descripcion, fechaInicio, fechaFin);
 		return repositorioEstudios.save(estudio).getId();
 	}
 
 	@Override
 	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
+		for (Paciente paciente : estudio.getPacientes()) {
+			if (pacientes.contains(paciente.getId()))
+				throw new ConflictException("No puedes agregar pacientes que ya están dentro de este estudio");
+		}
 		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
 		estudio.agregarPacientes(lista);
 		repositorioEstudios.save(estudio);
@@ -80,6 +85,10 @@ public class ServicioEstudios implements IServicioEstudios {
 	@Override
 	public void agregarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
+		for (Seguimiento seguimiento : estudio.getSeguimientos()) {
+			if (seguimientos.contains(seguimiento.getId()))
+				throw new ConflictException("No puedes agregar seguimientos que ya están dentro de este estudio");
+		}
 		Collection<Seguimiento> lista = servicioSeguimientos.obtenerSeguimientos(seguimientos);
 		estudio.agregarSeguimientos(lista);
 		repositorioEstudios.save(estudio);
@@ -88,6 +97,10 @@ public class ServicioEstudios implements IServicioEstudios {
 	@Override
 	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
+		for (Alerta alerta : estudio.getAlertas()) {
+			if (alertas.contains(alerta.getId()))
+				throw new ConflictException("No puedes agregar alertas que ya están dentro de este estudio");
+		}
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		estudio.agregarAlertas(lista);
 		repositorioEstudios.save(estudio);
@@ -118,14 +131,38 @@ public class ServicioEstudios implements IServicioEstudios {
 	}
 
 	@Override
-	public void modificarEstudio(String id, String nombre, String descripcion, LocalDateTime fechaFin)
+	public void modificarEstudio(String id, String nombre, String descripcion, LocalDateTime fechaInicio,
+			LocalDateTime fechaFin)
 			throws EntidadNoEncontrada {
+		if (nombre == null || nombre.isEmpty()) {
+			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
+		}
+		if (descripcion == null || descripcion.isEmpty()) {
+			throw new IllegalArgumentException("La descripción no puede ser nula o vacía");
+		}
+		if (fechaFin == null) {
+			throw new IllegalArgumentException("La fecha de fin no puede ser nula");
+		}
+		if (fechaFin.isBefore(LocalDateTime.now())) {
+			throw new IllegalArgumentException("La fecha de fin no puede ser anterior al dia de hoy");
+		}
+		if (fechaInicio == null) {
+			throw new IllegalArgumentException("La fecha de inicio no puede ser nula");
+		}
+		if (fechaInicio.isBefore(LocalDateTime.now())) {
+			throw new IllegalArgumentException("La fecha de inicio no puede ser anterior al dia de hoy");
+		}
+		if (fechaFin.isBefore(fechaInicio)) {
+			throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio");
+		}
 		Estudio estudio = obtenerEstudio(id);
 		
 		if (nombre != null && !nombre.isBlank())
 			estudio.setNombre(nombre);
 		if (descripcion != null && !descripcion.isBlank())
 			estudio.setDescripcion(descripcion);
+		if (fechaInicio != null && fechaInicio.isAfter(LocalDateTime.now()))
+			estudio.setFechaFin(fechaFin);
 		if (fechaFin != null && fechaFin.isAfter(LocalDateTime.now()))
 			estudio.setFechaFin(fechaFin);
 		

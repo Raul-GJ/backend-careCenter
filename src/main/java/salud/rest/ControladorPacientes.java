@@ -1,5 +1,7 @@
 package salud.rest;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +39,12 @@ public class ControladorPacientes implements PacientesApi {
 				pacienteDto.getNombre(), 
 				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
-				pacienteDto.getTelefono());
+				pacienteDto.getTelefono(),
+				LocalDate.parse(pacienteDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				pacienteDto.getSexo(),
+				pacienteDto.getDireccion(),
+				pacienteDto.getDni(),
+				pacienteDto.getNss());
 		
 		return ResponseEntity.noContent().build();
 	}

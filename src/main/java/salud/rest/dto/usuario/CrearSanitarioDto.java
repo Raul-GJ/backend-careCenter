@@ -9,6 +9,9 @@ public class CrearSanitarioDto extends CrearUsuarioDto {
 	@NotEmpty(message = "El campo 'nCol' no debe estar vacío")
 	private String nCol;
 	
+	@NotEmpty(message = "El campo 'centroDeSalud' no debe estar vacío")
+	private String centroDeSalud;
+	
 	// Constructores
 
 	public CrearSanitarioDto() {
@@ -23,5 +26,13 @@ public class CrearSanitarioDto extends CrearUsuarioDto {
 
 	public void setnCol(String nCol) {
 		this.nCol = nCol;
+	}
+
+	public String getCentroDeSalud() {
+		return centroDeSalud;
+	}
+
+	public void setCentroDeSalud(String centroDeSalud) {
+		this.centroDeSalud = centroDeSalud;
 	}
 }

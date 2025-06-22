@@ -10,6 +10,7 @@ public class SanitarioDto extends UsuarioDto {
 	// Atributos
 	
 	private String nCol;
+	private String centroDeSalud;
 	private Collection<String> pacientes;
 	
 	// Constructores
@@ -43,6 +44,10 @@ public class SanitarioDto extends UsuarioDto {
 		sanitarioDto.setApellidos(sanitario.getApellidos());
 		sanitarioDto.setEmail(sanitario.getEmail());
 		sanitarioDto.setTelefono(sanitario.getTelefono());
+		sanitarioDto.setDni(sanitario.getDni());
+		sanitarioDto.setDireccion(sanitario.getDireccion());
+		sanitarioDto.setSexo(sanitario.getSexo());
+		sanitarioDto.setFechaNacimiento(sanitario.getFechaNacimiento().toString());
 		
 		Collection<String> alertas = new LinkedList<String>();
 		sanitario.getAlertas().forEach(a -> alertas.add(a.getId()));
@@ -54,7 +59,16 @@ public class SanitarioDto extends UsuarioDto {
 		
 		sanitarioDto.setTipo(sanitario.getTipo().toString());
 		sanitarioDto.setnCol(sanitario.getNCol());
+		sanitarioDto.setCentroDeSalud(sanitario.getCentroDeSalud());
 		
 		return sanitarioDto;
+	}
+
+	public String getCentroDeSalud() {
+		return centroDeSalud;
+	}
+
+	public void setCentroDeSalud(String centroDeSalud) {
+		this.centroDeSalud = centroDeSalud;
 	}
 }

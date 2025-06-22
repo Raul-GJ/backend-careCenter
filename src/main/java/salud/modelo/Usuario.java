@@ -1,5 +1,6 @@
 package salud.modelo;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -19,6 +20,10 @@ public class Usuario {
 	private String apellidos;
 	private String email;
 	private String telefono;
+	private LocalDate fechaNacimiento;
+	private String sexo;
+	private String direccion;
+	private String dni;
 	@DBRef
 	private Collection<Alerta> alertas;
 	private TipoUsuario tipo;
@@ -27,17 +32,21 @@ public class Usuario {
 	
 	// Constructores
 	
-	public Usuario(String nombre, String apellidos, String email, String telefono,
-			TipoUsuario tipo, String contrasenya) {
+	public Usuario(String nombre, String apellidos, String email, String telefono, LocalDate fechaNacimiento,
+			String sexo, String direccion, String dni, TipoUsuario tipo, String contrasenya) {
 		super();
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.email = email;
 		this.telefono = telefono;
+		this.fechaNacimiento = fechaNacimiento;
+		this.sexo = sexo;
+		this.direccion = direccion;
+		this.dni = dni;
 		this.alertas = new LinkedList<Alerta>();
 		this.tipo = tipo;
 		this.eliminado = false;
-		this.setContrasenya(contrasenya);
+		this.contrasenya = contrasenya;
 	}
 	
 	// Métodos
@@ -80,6 +89,38 @@ public class Usuario {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+	
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 	
 	public Collection<Alerta> getAlertas() {
@@ -131,7 +172,8 @@ public class Usuario {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alertas, apellidos, eliminado, email, id, nombre, telefono, tipo);
+		return Objects.hash(alertas, apellidos, contrasenya, direccion, dni, eliminado, email, fechaNacimiento, id,
+				nombre, sexo, telefono, tipo);
 	}
 
 	@Override
@@ -144,8 +186,10 @@ public class Usuario {
 			return false;
 		Usuario other = (Usuario) obj;
 		return Objects.equals(alertas, other.alertas) && Objects.equals(apellidos, other.apellidos)
-				&& eliminado == other.eliminado && Objects.equals(email, other.email) && Objects.equals(id, other.id)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(telefono, other.telefono)
-				&& tipo == other.tipo;
+				&& Objects.equals(contrasenya, other.contrasenya) && Objects.equals(direccion, other.direccion)
+				&& Objects.equals(dni, other.dni) && eliminado == other.eliminado && Objects.equals(email, other.email)
+				&& Objects.equals(fechaNacimiento, other.fechaNacimiento) && Objects.equals(id, other.id)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(sexo, other.sexo)
+				&& Objects.equals(telefono, other.telefono) && tipo == other.tipo;
 	}
 }

@@ -1,5 +1,6 @@
 package salud.modelo;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -16,9 +17,11 @@ public class Especialista extends Sanitario {
 	
 	// Constructores
 	
-	public Especialista(String nombre, String apellidos, String email, String telefono, String contrasenya,
-			String nCol, String especialidad) {
-		super(nombre, apellidos, email, telefono, TipoUsuario.ESPECIALISTA, contrasenya, nCol);
+	public Especialista(String nombre, String apellidos, String email, String telefono, 
+			LocalDate fechaNacimiento, String sexo, String direccion, String dni, 
+			String contrasenya, String nCol, String centroDeSalud, String especialidad) {
+		super(nombre, apellidos, email, telefono, fechaNacimiento, sexo, direccion, dni,
+				TipoUsuario.ESPECIALISTA, contrasenya, nCol, centroDeSalud);
 		this.especialidad = especialidad;
 		this.plantillas = new LinkedList<Plantilla>();
 	}

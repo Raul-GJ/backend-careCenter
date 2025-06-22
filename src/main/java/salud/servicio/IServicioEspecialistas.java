@@ -1,8 +1,8 @@
 package salud.servicio;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
-import salud.modelo.Alerta;
 import salud.modelo.Especialista;
 import salud.modelo.Paciente;
 import salud.modelo.Plantilla;
@@ -13,10 +13,13 @@ public interface IServicioEspecialistas {
 	// Especialistas
 	
 	public String altaEspecialista(String nombre, String apellidos, String email, 
-			String telefono, String contrasenya, String nCol, String especialidad);
+			String telefono, LocalDate fechaNacimiento, String sexo, String direccion, String dni, 
+			String contrasenya, String nCol, String centroDeSalud, String especialidad);
 	
 	public void modificarEspecialista(String id, String nombre, String apellidos, 
-			String email, String telefono, String nCol, String especialidad) throws EntidadNoEncontrada;
+			String email, String telefono, LocalDate fechaNacimiento, String sexo, String direccion, 
+			String dni, String nCol, String centroDeSalud, String especialidad) 
+					throws EntidadNoEncontrada;
 	
 	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada;
 	
@@ -33,14 +36,6 @@ public interface IServicioEspecialistas {
 	public void eliminarPlantillas(String id, Collection<String> plantillas) throws EntidadNoEncontrada;
 	
 	public void eliminarPlantilla(String id, Plantilla plantilla) throws EntidadNoEncontrada;
-	
-	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada;
-	
-	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
-	
-	public void eliminarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada;
-	
-	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada;
 	
 	public Especialista obtenerEspecialista(String id) throws EntidadNoEncontrada;
 	

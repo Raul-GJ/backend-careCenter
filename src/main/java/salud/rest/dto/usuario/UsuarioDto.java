@@ -14,6 +14,10 @@ public class UsuarioDto {
 	private String apellidos;
 	private String email;
 	private String telefono;
+	private String fechaNacimiento;
+	private String sexo;
+	private String direccion;
+	private String dni;
 	private Collection<String> alertas;
 	private String tipo;
 	
@@ -31,6 +35,38 @@ public class UsuarioDto {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public void setFechaNacimiento(String fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}
+
+	public String getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 
 	public String getNombre() {
@@ -88,6 +124,10 @@ public class UsuarioDto {
 		usuarioDto.setApellidos(usuario.getApellidos());
 		usuarioDto.setEmail(usuario.getEmail());
 		usuarioDto.setTelefono(usuario.getTelefono());
+		usuarioDto.setDireccion(usuario.getDireccion());
+		usuarioDto.setDni(usuario.getDni());
+		usuarioDto.setSexo(usuario.getSexo());
+		usuarioDto.setFechaNacimiento(usuario.getFechaNacimiento().toString());
 		
 		Collection<String> alertas = new LinkedList<String>();
 		usuario.getAlertas().forEach(a -> alertas.add(a.getId()));

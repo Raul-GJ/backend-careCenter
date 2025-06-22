@@ -10,8 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import salud.modelo.Alerta;
 import salud.modelo.Usuario;
 import salud.repositorio.RepositorioUsuarios;
+import salud.rest.excepciones.ConflictException;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.utils.ValidadorEmail;
+import salud.utils.ValidadorCampos;
 
 @Service
 @Transactional
@@ -69,7 +70,7 @@ public class ServicioUsuarios implements IServicioUsuarios {
 		if (apellidos != null && !apellidos.isBlank())
 			usuario.setApellidos(apellidos);
 		if (email != null && !email.isBlank()) {
-			if (!ValidadorEmail.esValido(email)) {
+			if (!ValidadorCampos.validarEmail(email)) {
 				throw new IllegalArgumentException("El email debe ser válido");
 			}
 			if (repositorioUsuarios.findByEmail(email).isPresent()) {
@@ -92,6 +93,10 @@ public class ServicioUsuarios implements IServicioUsuarios {
 	@Override
 	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
 		Usuario usuario = obtenerUsuarioPorId(id);
+		for (Alerta alerta : usuario.getAlertas()) {
+			if (alertas.contains(alerta.getId()))
+				throw new ConflictException("No puedes agregar alertas que ya están en tu lista de alertas");
+		}
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		usuario.agregarAlertas(lista);
 		repositorioUsuarios.save(usuario);
@@ -100,6 +105,10 @@ public class ServicioUsuarios implements IServicioUsuarios {
 	@Override
 	public void agregarAlerta(String idUsuario, String idAlerta) throws EntidadNoEncontrada {
 		Usuario usuario = obtenerUsuarioPorId(idUsuario);
+		for (Alerta alerta : usuario.getAlertas()) {
+			if (alerta.getId().equals(idAlerta))
+				throw new ConflictException("No puedes agregar alertas que ya están en tu lista de alertas");
+		}
 		Alerta alerta = servicioAlertas.obtenerAlerta(idAlerta);
 		usuario.agregarAlerta(alerta);
 		repositorioUsuarios.save(usuario);
@@ -108,6 +117,8 @@ public class ServicioUsuarios implements IServicioUsuarios {
 	@Override
 	public void agregarAlerta(String idUsuario, Alerta alerta) throws EntidadNoEncontrada {
 		Usuario usuario = obtenerUsuarioPorId(idUsuario);
+		if (usuario.getAlertas().contains(alerta))
+			throw new ConflictException("No puedes agregar alertas que ya están en tu lista de alertas");
 		usuario.agregarAlerta(alerta);
 		repositorioUsuarios.save(usuario);
 	}

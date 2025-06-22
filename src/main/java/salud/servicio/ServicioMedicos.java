@@ -1,5 +1,6 @@
 package salud.servicio;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -7,14 +8,14 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import salud.modelo.Alerta;
 import salud.modelo.Medico;
 import salud.modelo.Paciente;
 import salud.modelo.TipoUsuario;
 import salud.modelo.Usuario;
 import salud.repositorio.RepositorioUsuarios;
+import salud.rest.excepciones.ConflictException;
 import salud.rest.excepciones.EntidadNoEncontrada;
-import salud.utils.ValidadorEmail;
+import salud.utils.ValidadorCampos;
 
 @Service
 @Transactional
@@ -37,7 +38,8 @@ public class ServicioMedicos implements IServicioMedicos {
 	
 	@Override
 	public String altaMedico(String nombre, String apellidos, String email, String telefono, 
-			String contrasenya, String nCol) {
+			LocalDate fechaNacimiento, String sexo, String direccion, String dni, 
+			String contrasenya, String nCol, String centroDeSalud) {
 		if (nombre == null || nombre.isEmpty()) {
 			throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
 		}
@@ -47,11 +49,35 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("El email no puede ser nulo o vacío");
 		}
-		if (!ValidadorEmail.esValido(email)) {
+		if (!ValidadorCampos.validarEmail(email)) {
 			throw new IllegalArgumentException("El email debe ser válido");
 		}
 		if (repositorioUsuarios.findByEmail(email).isPresent()) {
 			throw new IllegalArgumentException("Ya existe un usuario con ese email");
+		}
+		if (fechaNacimiento == null) {
+			throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula");
+		}
+		if (fechaNacimiento.isAfter(LocalDate.now())) {
+			throw new IllegalArgumentException("La fecha de nacimiento no puede estar en el futuro");
+		}
+		if (sexo == null || sexo.isEmpty()) {
+			throw new IllegalArgumentException("El sexo no puede ser nulo o vacío");
+		}
+		if (!(sexo == "hombre" || sexo == "mujer")) {
+			throw new IllegalArgumentException("El sexo no es valido");
+		}
+		if (direccion == null || direccion.isEmpty()) {
+			throw new IllegalArgumentException("La dirección no puede ser nula o vacía");
+		}
+		if (dni == null || dni.isEmpty()) {
+			throw new IllegalArgumentException("El dni no puede ser nulo o vacío");
+		}
+		if (!ValidadorCampos.validarDni(dni)) {
+			throw new IllegalArgumentException("El dni debe ser válido");
+		}
+		if (repositorioUsuarios.findByDni(dni).isPresent()) {
+			throw new IllegalArgumentException("Ya existe un usuario con ese DNI");
 		}
 		if (contrasenya == null || contrasenya.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
@@ -59,14 +85,25 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (nCol == null || nCol.isEmpty()) {
 			throw new IllegalArgumentException("El nCol no puede ser nulo o vacío");
 		}
+		if (!ValidadorCampos.validarNcol(nCol)) {
+			throw new IllegalArgumentException("El número de colegiado debe ser válido");
+		}
+		if (repositorioUsuarios.findByNCol(nCol).isPresent()) {
+			throw new IllegalArgumentException("Ya existe un usuario con ese número de colegiado");
+		}
+		if (centroDeSalud == null || centroDeSalud.isEmpty()) {
+			throw new IllegalArgumentException("El centro de salud no puede ser nulo o vacío");
+		}
 		
-		Medico medico = new Medico(nombre, apellidos, email, telefono, contrasenya, nCol);
+		Medico medico = new Medico(nombre, apellidos, email, telefono, fechaNacimiento, 
+				sexo, direccion, dni, contrasenya, nCol, centroDeSalud);
 		return repositorioUsuarios.save(medico).getId();
 	}
 
 	@Override
 	public void modificarMedico(String id, String nombre, String apellidos, String email, 
-			String telefono, String nCol) throws EntidadNoEncontrada {	
+			String telefono, LocalDate fechaNacimiento, String sexo, String direccion, String dni,
+			String nCol, String centroDeSalud) throws EntidadNoEncontrada {	
 		Medico medico = obtenerMedico(id);
 		
 		if (nombre != null && !nombre.isBlank())
@@ -74,7 +111,7 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (apellidos != null && !apellidos.isBlank())
 			medico.setApellidos(apellidos);
 		if (email != null && ! email.isBlank()) {
-			if (!ValidadorEmail.esValido(email)) {
+			if (!ValidadorCampos.validarEmail(email)) {
 				throw new IllegalArgumentException("El email debe ser válido");
 			}
 			if (repositorioUsuarios.findByEmail(email).isPresent()) {
@@ -84,8 +121,32 @@ public class ServicioMedicos implements IServicioMedicos {
 		}
 		if (telefono != null && !telefono.isBlank())
 			medico.setTelefono(telefono);
-		if (nCol != null && !nCol.isBlank())
+		if (fechaNacimiento != null && !fechaNacimiento.isAfter(LocalDate.now()))
+			medico.setFechaNacimiento(fechaNacimiento);
+		if (sexo != null && (sexo.toLowerCase() == "hombre" || sexo.toLowerCase() == "mujer"))
+			medico.setSexo(sexo);
+		if (direccion != null && !direccion.isBlank())
+			medico.setDireccion(direccion);
+		if (dni != null && !dni.isBlank()) {
+			if (!ValidadorCampos.validarDni(dni)) {
+				throw new IllegalArgumentException("El dni debe ser válido");
+			}
+			if (repositorioUsuarios.findByDni(dni).isPresent()) {
+				throw new IllegalArgumentException("Ya existe un usuario con ese dni");
+			}
+			medico.setDni(dni);
+		}
+		if (nCol != null && !nCol.isBlank()) {
+			if (!ValidadorCampos.validarNcol(nCol)) {
+				throw new IllegalArgumentException("El número de colegiado debe ser válido");
+			}
+			if (repositorioUsuarios.findByNCol(nCol).isPresent()) {
+				throw new IllegalArgumentException("Ya existe un usuario con ese número de colegiado");
+			}
 			medico.setNCol(nCol);
+		}
+		if (centroDeSalud != null && !centroDeSalud.isBlank())
+			medico.setCentroDeSalud(centroDeSalud);
 		
 		repositorioUsuarios.save(medico);
 	}
@@ -101,6 +162,10 @@ public class ServicioMedicos implements IServicioMedicos {
 	@Override
 	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
 		Medico medico = obtenerMedico(id);
+		for (Paciente paciente : medico.getPacientes()) {
+			if (pacientes.contains(paciente.getId()))
+				throw new ConflictException("No puedes agregar pacientes que ya están en tu lista de pacientes");
+		}
 		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
 		medico.agregarPacientes(lista);
 		for (Paciente paciente : lista) {
@@ -116,6 +181,8 @@ public class ServicioMedicos implements IServicioMedicos {
 	@Override
 	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
 		Medico medico = obtenerMedico(id);
+		if (medico.getPacientes().contains(paciente))
+			throw new ConflictException("No puedes agregar pacientes que ya están en tu lista de pacientes");
 		medico.agregarPaciente(paciente);
 		repositorioUsuarios.save(medico);
 	}
@@ -135,20 +202,6 @@ public class ServicioMedicos implements IServicioMedicos {
 	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
 		Medico medico = obtenerMedico(id);
 		medico.eliminarPaciente(paciente);
-		repositorioUsuarios.save(medico);
-	}
-	
-	@Override
-	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
-		Medico medico = obtenerMedico(id);
-		medico.agregarAlerta(alerta);
-		repositorioUsuarios.save(medico);
-	}
-
-	@Override
-	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
-		Medico medico = obtenerMedico(id);
-		medico.eliminarAlerta(alerta);
 		repositorioUsuarios.save(medico);
 	}
 
