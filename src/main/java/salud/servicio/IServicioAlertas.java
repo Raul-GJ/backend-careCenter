@@ -22,5 +22,7 @@ public interface IServicioAlertas {
 	
 	public Collection<Alerta> obtenerAlertas(Collection<String> ids);
 	
+	public Collection<Alerta> obtenerAlertasUsuario(String id) throws EntidadNoEncontrada;
+	
 	public void eliminarAlerta(String id) throws EntidadNoEncontrada;
 }

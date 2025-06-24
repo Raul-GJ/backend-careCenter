@@ -114,6 +114,12 @@ public class ServicioAlertas implements IServicioAlertas {
 		repositorioAlertas.findAllById(ids).forEach(alerta -> alertas.add(alerta));
 		return alertas;
 	}
+	
+	@Override
+	public Collection<Alerta> obtenerAlertasUsuario(String id) throws EntidadNoEncontrada {
+		servicioUsuarios.obtenerUsuarioPorId(id); // Para lanzar entidad no encontrada
+		return repositorioAlertas.findByEmisor(id);
+	}
 
 	@Override
 	public void leerAlerta(String id) throws EntidadNoEncontrada {

@@ -83,4 +83,12 @@ public class NotaPaciente {
 				&& Objects.equals(id, other.id) && privado == other.privado
 				&& Objects.equals(sanitario, other.sanitario);
 	}
+
+	@Override
+	public String toString() {
+		return "NotaPaciente [id=" + id + ", sanitario=" + sanitario + ", asunto=" + asunto + ", contenido=" + contenido
+				+ ", privado=" + privado + "]";
+	}
+	
+	
 }

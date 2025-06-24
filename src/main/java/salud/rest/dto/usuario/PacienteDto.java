@@ -3,6 +3,7 @@ package salud.rest.dto.usuario;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import salud.modelo.NotaPaciente;
 import salud.modelo.Paciente;
 
 public class PacienteDto extends UsuarioDto {
@@ -148,7 +149,7 @@ public class PacienteDto extends UsuarioDto {
 		paciente.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
 		paciente.getAlergias().forEach(a -> alergias.add(a));
 		paciente.getTratamientos().forEach(t -> tratamientos.add(t));
-		paciente.getNotas().stream().filter(n -> !n.isPrivado()).forEach(
+		paciente.getNotas().stream().filter(n -> n.isPrivado()).forEach(
 				n -> notas.add(NotaPacienteDto.from(n)));
 		
 		dto.setEspecialistas(especialistas);

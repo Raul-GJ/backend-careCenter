@@ -73,7 +73,7 @@ public abstract class Sanitario extends Usuario {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(centroDeSalud, nCol, pacientes);
+		result = prime * result + Objects.hash(centroDeSalud, nCol);
 		return result;
 	}
 
@@ -86,7 +86,6 @@ public abstract class Sanitario extends Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Sanitario other = (Sanitario) obj;
-		return Objects.equals(centroDeSalud, other.centroDeSalud) && Objects.equals(nCol, other.nCol)
-				&& Objects.equals(pacientes, other.pacientes);
+		return Objects.equals(centroDeSalud, other.centroDeSalud) && Objects.equals(nCol, other.nCol);
 	}
 }

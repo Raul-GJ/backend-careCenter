@@ -221,7 +221,7 @@ public class Paciente extends Usuario {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result
-				+ Objects.hash(alergias, especialistas, medicoCabecera, notas, nss, seguimientos, tratamientos);
+				+ Objects.hash(alergias, notas, nss, seguimientos, tratamientos);
 		return result;
 	}
 
@@ -234,8 +234,7 @@ public class Paciente extends Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Paciente other = (Paciente) obj;
-		return Objects.equals(alergias, other.alergias) && Objects.equals(especialistas, other.especialistas)
-				&& Objects.equals(medicoCabecera, other.medicoCabecera) && Objects.equals(notas, other.notas)
+		return Objects.equals(alergias, other.alergias) && Objects.equals(notas, other.notas)
 				&& Objects.equals(nss, other.nss) && Objects.equals(seguimientos, other.seguimientos)
 				&& Objects.equals(tratamientos, other.tratamientos);
 	}

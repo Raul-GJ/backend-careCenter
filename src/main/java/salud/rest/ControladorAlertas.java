@@ -48,17 +48,6 @@ public class ControladorAlertas implements AlertasApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> modificarAlerta(AlertaDto alertaDto, String id) 
-			throws Exception {
-		servicioAlertas.modificarAlerta(id, 
-				alertaDto.getAsunto(),
-				alertaDto.getMensaje(),
-				LocalDateTime.parse(alertaDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME));
-		
-		return ResponseEntity.noContent().build();
-	}
-
-	@Override
 	public ResponseEntity<AlertaDto> obtenerAlerta(String id) throws Exception {
 		AlertaDto alertaDto = AlertaDto.from(servicioAlertas.obtenerAlerta(id));
 		return ResponseEntity.ok(alertaDto);
@@ -76,6 +65,14 @@ public class ControladorAlertas implements AlertasApi {
 	public ResponseEntity<Void> eliminarAlerta(String id) throws Exception {
 		servicioAlertas.eliminarAlerta(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Collection<AlertaDto>> obtenerAlertasUsuario(String id) throws Exception {
+		Collection<Alerta> alertas = servicioAlertas.obtenerAlertasUsuario(id);
+		Collection<AlertaDto> dtos = new LinkedList<AlertaDto>();
+		alertas.forEach(a -> dtos.add(AlertaDto.from(a)));
+		return ResponseEntity.ok(dtos);
 	}
 
 	@Override

@@ -25,13 +25,6 @@ public interface AlertasApi {
 	public ResponseEntity<AlertaDto> crearAlerta(
 			@Valid @RequestBody CrearAlertaDto alertaDto) throws Exception;
 	
-	@Operation(summary = "Modificar alerta", description = "Modifica los datos de una alerta")
-	@PatchMapping("/{id}")
-	@PreAuthorize("hasAuthority('SANITARIO')")
-	public ResponseEntity<Void> modificarAlerta(
-			@Valid @RequestBody AlertaDto alertaDto,
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Leer alerta", description = "Pasa una alerta a estado leido")
 	@PatchMapping("/{id}/leer")
 	@PreAuthorize("hasAuthority('USUARIO')")
@@ -47,6 +40,12 @@ public interface AlertasApi {
 	@GetMapping
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Collection<AlertaDto>> obtenerAlertas() throws Exception;
+	
+	@Operation(summary = "Obtener alertas usuario", description = "Obtiene los todas las alertas de un usuario")
+	@GetMapping("/usuario/{id}")
+	@PreAuthorize("hasAuthority('USUARIO')")
+	public ResponseEntity<Collection<AlertaDto>> obtenerAlertasUsuario(
+			@PathVariable String id) throws Exception;
 	
 	@Operation(summary = "Eliminar alerta", description = "Elimina una alerta de la base de datos")
 	@DeleteMapping("/{id}")

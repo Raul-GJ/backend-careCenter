@@ -4,14 +4,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.NotaPaciente;
 import salud.modelo.Sanitario;
-import salud.modelo.TipoUsuario;
 import salud.modelo.Usuario;
 import salud.repositorio.RepositorioNotas;
 import salud.rest.excepciones.EntidadNoEncontrada;
@@ -80,12 +77,6 @@ public class ServicioNotas implements IServicioNotas {
 			throw new EntidadNoEncontrada(id);
 		}
 		NotaPaciente nota = optional.get();
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		boolean isPaciente = auth.getAuthorities().stream().anyMatch(
-				a -> a.getAuthority().equals(TipoUsuario.PACIENTE.toString()));
-		if (isPaciente && nota.isPrivado())
-			throw new EntidadNoEncontrada(id);
 		
 		return nota;
 	}

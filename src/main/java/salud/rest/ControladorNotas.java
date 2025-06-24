@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.auth.JwtUtils;
 import salud.modelo.NotaPaciente;
 import salud.rest.dto.usuario.CrearNotaPacienteDto;
 import salud.rest.dto.usuario.NotaPacienteDto;
+import salud.rest.excepciones.EntidadNoEncontrada;
 import salud.servicio.IServicioNotas;
 
 @RestController
@@ -58,6 +60,9 @@ public class ControladorNotas implements NotasApi {
 
 	@Override
 	public ResponseEntity<NotaPacienteDto> obtenerNota(String id) throws Exception {
+		if (JwtUtils.isPaciente()) {
+			throw new EntidadNoEncontrada(id);
+		}
 		NotaPacienteDto notaDto = NotaPacienteDto.from(servicioNotas.obtenerNota(id));
 		return ResponseEntity.ok(notaDto);
 	}

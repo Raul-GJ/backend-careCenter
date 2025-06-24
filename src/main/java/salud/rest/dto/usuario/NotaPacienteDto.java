@@ -70,4 +70,12 @@ public class NotaPacienteDto {
 		
 		return dto;
 	}
+
+	@Override
+	public String toString() {
+		return "NotaPacienteDto [id=" + id + ", sanitario=" + sanitario + ", asunto=" + asunto + ", contenido="
+				+ contenido + ", privado=" + privado + "]";
+	}
+	
+	
 }
