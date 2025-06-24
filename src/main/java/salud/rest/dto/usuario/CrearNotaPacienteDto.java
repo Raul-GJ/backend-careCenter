@@ -1,7 +1,6 @@
 package salud.rest.dto.usuario;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 public class CrearNotaPacienteDto {
 	
@@ -13,10 +12,9 @@ public class CrearNotaPacienteDto {
 	@NotEmpty(message = "El campo 'asunto' no debe estar vacío")
 	private String asunto;
 	
-	@NotEmpty(message = "El campo 'nota' no debe estar vacío")
-	private String nota;
+	@NotEmpty(message = "El campo 'contenido' no debe estar vacío")
+	private String contenido;
 	
-	@NotNull(message = "El campo 'privado' no debe ser nulo")
 	private Boolean privado;
 	
 	// Constructores
@@ -43,12 +41,12 @@ public class CrearNotaPacienteDto {
 		this.asunto = asunto;
 	}
 
-	public String getNota() {
-		return nota;
+	public String getContenido() {
+		return contenido;
 	}
 
-	public void setNota(String nota) {
-		this.nota = nota;
+	public void setContenido(String contenido) {
+		this.contenido = contenido;
 	}
 
 	public Boolean getPrivado() {

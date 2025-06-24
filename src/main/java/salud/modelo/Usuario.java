@@ -1,12 +1,9 @@
 package salud.modelo;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "usuarios")
@@ -24,8 +21,6 @@ public class Usuario {
 	private String sexo;
 	private String direccion;
 	private String dni;
-	@DBRef
-	private Collection<Alerta> alertas;
 	private TipoUsuario tipo;
 	boolean eliminado;
 	private String contrasenya;
@@ -43,7 +38,6 @@ public class Usuario {
 		this.sexo = sexo;
 		this.direccion = direccion;
 		this.dni = dni;
-		this.alertas = new LinkedList<Alerta>();
 		this.tipo = tipo;
 		this.eliminado = false;
 		this.contrasenya = contrasenya;
@@ -122,33 +116,6 @@ public class Usuario {
 	public void setDni(String dni) {
 		this.dni = dni;
 	}
-	
-	public Collection<Alerta> getAlertas() {
-		return alertas;
-	}
-
-	public void setAlertas(Collection<Alerta> alertas) {
-		this.alertas = alertas;
-	}
-	
-	public void agregarAlertas(Collection<Alerta> alertas) {
-		for (Alerta alerta : alertas) {
-			agregarAlerta(alerta);
-		}
-	}
-	
-	public void agregarAlerta(Alerta alerta) {
-		if (!this.alertas.contains(alerta))
-			this.alertas.add(alerta);
-	}
-	
-	public void eliminarAlertas(Collection<Alerta> alertas) {
-		this.alertas.removeAll(alertas);
-	}
-	
-	public void eliminarAlerta(Alerta alerta) {
-		this.alertas.remove(alerta);
-	}
 
 	public boolean isEliminado() {
 		return eliminado;
@@ -172,7 +139,7 @@ public class Usuario {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alertas, apellidos, contrasenya, direccion, dni, eliminado, email, fechaNacimiento, id,
+		return Objects.hash(apellidos, contrasenya, direccion, dni, eliminado, email, fechaNacimiento, id,
 				nombre, sexo, telefono, tipo);
 	}
 
@@ -185,7 +152,7 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(alertas, other.alertas) && Objects.equals(apellidos, other.apellidos)
+		return Objects.equals(apellidos, other.apellidos)
 				&& Objects.equals(contrasenya, other.contrasenya) && Objects.equals(direccion, other.direccion)
 				&& Objects.equals(dni, other.dni) && eliminado == other.eliminado && Objects.equals(email, other.email)
 				&& Objects.equals(fechaNacimiento, other.fechaNacimiento) && Objects.equals(id, other.id)

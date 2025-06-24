@@ -33,6 +33,18 @@ public interface IServicioPacientes {
 	
 	public void eliminarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada;
 	
+	public void agregarAlergias(String id, Collection<String> alergias) throws EntidadNoEncontrada;
+	
+	public void eliminarAlergia(String id, String alergia) throws EntidadNoEncontrada;
+	
+	public void agregarTratamientos(String id, Collection<String> tratamientos) throws EntidadNoEncontrada;
+	
+	public void eliminarTratamiento(String id, String tratamiento) throws EntidadNoEncontrada;
+	
+	public void agregarNotas(String id, Collection<String> notas) throws EntidadNoEncontrada;
+	
+	public void eliminarNota(String id, String idNota) throws EntidadNoEncontrada;
+	
 	public Paciente obtenerPaciente(String id) throws EntidadNoEncontrada;
 	
 	public Collection<Paciente> obtenerPacientes(Collection<String> ids);

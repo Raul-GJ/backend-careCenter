@@ -1,6 +1,5 @@
 package salud.rest.dto.usuario;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,15 +32,23 @@ public class MedicoDto extends SanitarioDto {
 		dto.setnCol(medico.getNCol());
 		dto.setCentroDeSalud(medico.getCentroDeSalud());
 		
-		Collection<String> alertas = new LinkedList<String>();
-		medico.getAlertas().forEach(a -> alertas.add(a.getId()));
-		dto.setAlertas(alertas);
-		
 		dto.setTipo(medico.getTipo().toString());
 		
 		List<String> pacientes = new LinkedList<String>();
 		medico.getPacientes().forEach(p -> pacientes.add(p.getId()));
 		dto.setPacientes(pacientes);
+		
+		return dto;
+	}
+	
+	public static MedicoDto construirMedicoPublico(Medico medico) {
+		MedicoDto dto = new MedicoDto();
+		dto.setId(medico.getId());
+		dto.setNombre(medico.getNombre());
+		dto.setApellidos(medico.getApellidos());
+		dto.setSexo(medico.getSexo());
+		dto.setFechaNacimiento(medico.getFechaNacimiento().toString());
+		dto.setCentroDeSalud(medico.getCentroDeSalud());
 		
 		return dto;
 	}

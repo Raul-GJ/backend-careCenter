@@ -39,6 +39,48 @@ public interface PacientesApi {
 			@PathVariable String idPaciente,
 			@PathVariable String idSeguimiento) throws Exception;
 	
+	@Operation(summary = "Agregar alergias", description = "Agrega alergias a un paciente")
+	@PostMapping("/{id}/alergias")
+	@PreAuthorize("hasAuthority('SANITARIO')")
+	public ResponseEntity<Void> agregarAlergias(
+			@Valid @RequestBody Collection<String> alergias,
+			@PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Eliminar alergia", description = "Elimina una alergia de un paciente")
+	@DeleteMapping("/{idPaciente}/alergias/{alergia}")
+	@PreAuthorize("hasAuthority('SANITARIO')")
+	public ResponseEntity<Void> eliminarAlergia(
+			@PathVariable String idPaciente,
+			@PathVariable String alergia) throws Exception;
+	
+	@Operation(summary = "Agregar tratamientos", description = "Agrega tratamientos a un paciente")
+	@PostMapping("/{id}/tratamientos")
+	@PreAuthorize("hasAuthority('SANITARIO')")
+	public ResponseEntity<Void> agregarTratamientos(
+			@Valid @RequestBody Collection<String> tratamientos,
+			@PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Eliminar tratamiento", description = "Elimina un tratamiento de un paciente")
+	@DeleteMapping("/{idPaciente}/tratamientos/{tratamiento}")
+	@PreAuthorize("hasAuthority('SANITARIO')")
+	public ResponseEntity<Void> eliminarTratamiento(
+			@PathVariable String idPaciente,
+			@PathVariable String tratamiento) throws Exception;
+	
+	@Operation(summary = "Agregar notas", description = "Agrega notas a un paciente")
+	@PostMapping("/{id}/notas")
+	@PreAuthorize("hasAuthority('SANITARIO')")
+	public ResponseEntity<Void> agregarNotas(
+			@Valid @RequestBody Collection<String> notas,
+			@PathVariable String id) throws Exception;
+	
+	@Operation(summary = "Eliminar nota", description = "Elimina una nota de un paciente")
+	@DeleteMapping("/{idPaciente}/notas/{idNota}")
+	@PreAuthorize("hasAuthority('SANITARIO')")
+	public ResponseEntity<Void> eliminarNota(
+			@PathVariable String idPaciente,
+			@PathVariable String idNota) throws Exception;
+	
 	@Operation(summary = "Obtener paciente", description = "Obtiene los datos de un paciente")
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('USUARIO')")

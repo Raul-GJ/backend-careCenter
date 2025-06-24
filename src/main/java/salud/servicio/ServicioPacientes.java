@@ -3,13 +3,13 @@ package salud.servicio;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Especialista;
 import salud.modelo.Medico;
+import salud.modelo.NotaPaciente;
 import salud.modelo.Paciente;
 import salud.modelo.Seguimiento;
 import salud.modelo.TipoUsuario;
@@ -26,15 +26,19 @@ public class ServicioPacientes implements IServicioPacientes {
 	// Atributos
 	
 	private RepositorioUsuarios repositorioUsuarios;
+	private IServicioUsuarios servicioUsuarios;
 	private IServicioSeguimientos servicioSeguimientos;
+	private IServicioNotas servicioNotas;
 	
 	// Constructores
 	
-	public ServicioPacientes(RepositorioUsuarios repositorioUsuarios, 
-			IServicioSeguimientos servicioSeguimientos) {
+	public ServicioPacientes(RepositorioUsuarios repositorioUsuarios, IServicioUsuarios servicioUsuarios,
+			IServicioSeguimientos servicioSeguimientos, IServicioNotas servicioNotas) {
 		super();
 		this.repositorioUsuarios = repositorioUsuarios;
+		this.servicioUsuarios = servicioUsuarios;
 		this.servicioSeguimientos = servicioSeguimientos;
+		this.servicioNotas = servicioNotas;
 	}
 	
 	// Métodos
@@ -67,7 +71,7 @@ public class ServicioPacientes implements IServicioPacientes {
 		if (sexo == null || sexo.isEmpty()) {
 			throw new IllegalArgumentException("El sexo no puede ser nulo o vacío");
 		}
-		if (!(sexo == "hombre" || sexo == "mujer")) {
+		if (!sexo.equals("hombre") && !sexo.equals("mujer")) {
 			throw new IllegalArgumentException("El sexo no es valido");
 		}
 		if (direccion == null || direccion.isEmpty()) {
@@ -132,8 +136,12 @@ public class ServicioPacientes implements IServicioPacientes {
 			paciente.setTelefono(telefono);
 		if (fechaNacimiento != null && !fechaNacimiento.isAfter(LocalDate.now()))
 			paciente.setFechaNacimiento(fechaNacimiento);
-		if (sexo != null && (sexo.toLowerCase() == "hombre" || sexo.toLowerCase() == "mujer"))
+		if (sexo != null) {
+			if (!sexo.equals("hombre") && !sexo.equals("mujer")) {
+				throw new IllegalArgumentException("El sexo no es válido");
+			}
 			paciente.setSexo(sexo);
+		}
 		if (direccion != null && !direccion.isBlank())
 			paciente.setDireccion(direccion);
 		if (dni != null && !dni.isBlank()) {
@@ -219,18 +227,10 @@ public class ServicioPacientes implements IServicioPacientes {
 
 	@Override
 	public Paciente obtenerPaciente(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
-		Optional<Usuario> optional = repositorioUsuarios.findById(id);
-		if (optional.isEmpty()) {
+		Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
+		if (!(usuario instanceof Paciente))
 			throw new EntidadNoEncontrada(id);
-		}
-		if (!optional.get().getTipo().equals(TipoUsuario.PACIENTE))
-			throw new IllegalArgumentException("El usuario con id " + id + 
-					" no es un paciente");
-		Paciente paciente = (Paciente) optional.get();
+		Paciente paciente = (Paciente) usuario;
 		return paciente;
 	}
 
@@ -259,5 +259,52 @@ public class ServicioPacientes implements IServicioPacientes {
 			pacientes.add((Paciente) usuario);
 		}
 		return pacientes;
+	}
+
+	@Override
+	public void agregarAlergias(String id, Collection<String> alergias) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
+		paciente.agregarAlergias(alergias);
+		repositorioUsuarios.save(paciente);
+	}
+
+	@Override
+	public void eliminarAlergia(String id, String alergia) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
+		paciente.eliminarAlergia(alergia);
+		repositorioUsuarios.save(paciente);
+	}
+
+	@Override
+	public void agregarTratamientos(String id, Collection<String> tratamientos) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
+		paciente.agregarTratamientos(tratamientos);
+		repositorioUsuarios.save(paciente);
+	}
+
+	@Override
+	public void eliminarTratamiento(String id, String tratamiento) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
+		paciente.eliminarTratamiento(tratamiento);
+		repositorioUsuarios.save(paciente);
+	}
+
+	@Override
+	public void agregarNotas(String id, Collection<String> notas) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
+		for (String idNota : notas) {
+			NotaPaciente nota = servicioNotas.obtenerNota(idNota);
+			paciente.agregarNota(nota);
+		}
+		repositorioUsuarios.save(paciente);
+	}
+
+	@Override
+	public void eliminarNota(String id, String idNota) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
+		NotaPaciente nota = servicioNotas.obtenerNota(idNota);
+		paciente.eliminarNota(nota);
+		servicioNotas.eliminarNota(idNota);
+		repositorioUsuarios.save(paciente);
 	}
 }

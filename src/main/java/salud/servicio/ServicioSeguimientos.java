@@ -13,6 +13,7 @@ import salud.modelo.Formulario;
 import salud.modelo.Plantilla;
 import salud.modelo.Seguimiento;
 import salud.repositorio.RepositorioSeguimientos;
+import salud.rest.excepciones.ConflictException;
 import salud.rest.excepciones.EntidadNoEncontrada;
 
 @Service
@@ -94,6 +95,9 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 	@Override
 	public void rellenarFormulario(String id, List<String> respuestas) throws EntidadNoEncontrada {
 		Seguimiento seguimiento = obtenerSeguimiento(id);
+		if (seguimiento.getFecha().isAfter(LocalDateTime.now()) 
+				&& seguimiento.getPlazo().isBefore(LocalDateTime.now()))
+			throw new ConflictException("No se puede rellenar un formulario fuera de plazo");
 		if (!seguimiento.getFormulario().setRespuestas(respuestas)) {
 			throw new IllegalArgumentException("Los datos introducidos son incorrectos");
 		}

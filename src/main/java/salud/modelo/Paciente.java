@@ -15,6 +15,7 @@ public class Paciente extends Usuario {
 	private String nss; // Número de seguridad social
 	private Collection<String> alergias;
 	private Collection<String> tratamientos;
+	@DBRef
 	private Collection<NotaPaciente> notas;
 	
 	@DBRef
@@ -32,25 +33,12 @@ public class Paciente extends Usuario {
 		super(nombre, apellidos, email, telefono, fechaNacimiento, sexo, direccion, dni,
 				TipoUsuario.PACIENTE, contrasenya);
 		this.medicoCabecera = null;
+		this.nss = nss;
 		this.especialistas = new LinkedList<Especialista>();
 		this.seguimientos = new LinkedList<Seguimiento>();
 		this.alergias = new LinkedList<String>();
 		this.tratamientos = new LinkedList<String>();
 		this.notas = new LinkedList<NotaPaciente>();
-	}
-	
-	public Paciente(String nombre, String apellidos, String email, String telefono, 
-			LocalDate fechaNacimiento, String sexo, String direccion, String dni, String nss, 
-			String contrasenya, Collection<String> alergias, Collection<String> tratamientos, 
-			Collection<NotaPaciente> notas) {
-		super(nombre, apellidos, email, telefono, fechaNacimiento, sexo, direccion, dni,
-				TipoUsuario.PACIENTE, contrasenya);
-		this.medicoCabecera = null;
-		this.especialistas = new LinkedList<Especialista>();
-		this.seguimientos = new LinkedList<Seguimiento>();
-		this.alergias = alergias;
-		this.tratamientos = tratamientos;
-		this.notas = notas;
 	}
 	
 	// Métodos
@@ -149,24 +137,24 @@ public class Paciente extends Usuario {
 		this.alergias = alergias;
 	}
 	
-	public void addAlergia(String alergia) {
+	public void agregarAlergia(String alergia) {
 		if (!this.alergias.contains(alergia))
 			this.alergias.add(alergia);
 	}
 	
-	public void addAlergias(Collection<String> alergias) {
+	public void agregarAlergias(Collection<String> alergias) {
 		for (String alergia : alergias) {
-			addAlergia(alergia);
+			agregarAlergia(alergia);
 		}
 	}
 	
-	public void removeAlergia(String alergia) {
+	public void eliminarAlergia(String alergia) {
 		this.alergias.remove(alergia);
 	}
 	
-	public void removeAlergias(Collection<String> alergias) {
+	public void eliminarAlergias(Collection<String> alergias) {
 		for (String alergia : alergias) {
-			removeAlergia(alergia);
+			eliminarAlergia(alergia);
 		}
 	}
 
@@ -178,24 +166,24 @@ public class Paciente extends Usuario {
 		this.tratamientos = tratamientos;
 	}
 	
-	public void addTratamiento(String tratamiento) {
+	public void agregarTratamiento(String tratamiento) {
 		if (!this.tratamientos.contains(tratamiento))
 			this.tratamientos.add(tratamiento);
 	}
 	
-	public void addTratamientos(Collection<String> tratamientos) {
+	public void agregarTratamientos(Collection<String> tratamientos) {
 		for (String tratamiento : tratamientos) {
-			addTratamiento(tratamiento);
+			agregarTratamiento(tratamiento);
 		}
 	}
 	
-	public void removeTratamiento(String tratamiento) {
+	public void eliminarTratamiento(String tratamiento) {
 		this.tratamientos.remove(tratamiento);
 	}
 	
-	public void removeTratamientos(Collection<String> tratamientos) {
+	public void eliminarTratamientos(Collection<String> tratamientos) {
 		for (String tratamiento : tratamientos) {
-			removeTratamiento(tratamiento);
+			eliminarTratamiento(tratamiento);
 		}
 	}
 	
@@ -207,24 +195,24 @@ public class Paciente extends Usuario {
 		this.notas = notas;
 	}
 	
-	public void addNota(NotaPaciente nota) {
+	public void agregarNota(NotaPaciente nota) {
 		if (!this.notas.contains(nota))
 			this.notas.add(nota);
 	}
 	
-	public void addNotas(Collection<NotaPaciente> notas) {
+	public void agregarNotas(Collection<NotaPaciente> notas) {
 		for (NotaPaciente notaPaciente : notas) {
-			addNota(notaPaciente);
+			agregarNota(notaPaciente);
 		}
 	}
 	
-	public void removeNota(NotaPaciente nota) {
+	public void eliminarNota(NotaPaciente nota) {
 		this.notas.remove(nota);
 	}
 	
-	public void removeNotas(Collection<NotaPaciente> notas) {
+	public void eliminarNotas(Collection<NotaPaciente> notas) {
 		for (NotaPaciente notaPaciente : notas) {
-			removeNota(notaPaciente);
+			eliminarNota(notaPaciente);
 		}
 	}
 

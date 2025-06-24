@@ -23,7 +23,7 @@ public interface AlertasApi {
 	@PostMapping
 	@PreAuthorize("hasAuthority('SANITARIO')")
 	public ResponseEntity<AlertaDto> crearAlerta(
-			@Valid @RequestBody CrearAlertaDto alertaDto);
+			@Valid @RequestBody CrearAlertaDto alertaDto) throws Exception;
 	
 	@Operation(summary = "Modificar alerta", description = "Modifica los datos de una alerta")
 	@PatchMapping("/{id}")

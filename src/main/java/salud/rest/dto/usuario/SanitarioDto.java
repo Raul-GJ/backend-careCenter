@@ -49,10 +49,6 @@ public class SanitarioDto extends UsuarioDto {
 		sanitarioDto.setSexo(sanitario.getSexo());
 		sanitarioDto.setFechaNacimiento(sanitario.getFechaNacimiento().toString());
 		
-		Collection<String> alertas = new LinkedList<String>();
-		sanitario.getAlertas().forEach(a -> alertas.add(a.getId()));
-		sanitarioDto.setAlertas(alertas);
-		
 		Collection<String> pacientes = new LinkedList<String>();
 		sanitario.getPacientes().forEach(p -> pacientes.add(p.getId()));
 		sanitarioDto.setPacientes(pacientes);

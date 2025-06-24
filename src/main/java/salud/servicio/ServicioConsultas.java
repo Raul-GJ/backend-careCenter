@@ -64,10 +64,8 @@ public class ServicioConsultas implements IServicioConsultas {
 		String idConsulta = repositorioConsultas.save(consulta).getId();
 		
 		Alerta alertaTmp = generarAlertaConsulta(consulta);
-		String idAlerta = servicioAlertas.altaAlerta(alertaTmp.getAsunto(), 
+		servicioAlertas.altaAlerta(emisor, receptor, true, alertaTmp.getAsunto(), 
 				alertaTmp.getMensaje(), alertaTmp.getFecha());
-		Alerta alerta = servicioAlertas.obtenerAlerta(idAlerta);
-		servicioUsuarios.agregarAlerta(sanitario.getId(), alerta);
 		
 		return idConsulta;
 	}
@@ -90,7 +88,7 @@ public class ServicioConsultas implements IServicioConsultas {
 				emisor.getNombre() + " " + emisor.getApellidos() + 
 				", tu consulta ha sido respondida, revisa tu buzón de consultas";
 		
-		return new Alerta(asunto, mensaje, LocalDateTime.now());
+		return new Alerta(emisor, receptor, true, asunto, mensaje, LocalDateTime.now());
 	}
 	
 	private Alerta generarAlertaConsulta(Consulta consulta) {
@@ -103,7 +101,7 @@ public class ServicioConsultas implements IServicioConsultas {
 				emisor.getNombre() + " " + emisor.getApellidos() + 
 				", revisa tu buzón de consultas";
 		
-		return new Alerta(asunto, mensaje, LocalDateTime.now());
+		return new Alerta(emisor, receptor, true, asunto, mensaje, LocalDateTime.now());
 	}
 
 	@Override
@@ -117,10 +115,8 @@ public class ServicioConsultas implements IServicioConsultas {
 		
 		repositorioConsultas.save(consulta);
 		Alerta alerta = generarAlertaRespuesta(consulta);
-		String idAlerta = servicioAlertas.altaAlerta(
-				alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
-		servicioUsuarios.agregarAlerta(consulta.getEmisor().getId(), 
-				servicioAlertas.obtenerAlerta(idAlerta));
+		servicioAlertas.altaAlerta(consulta.getEmisor().getId(), consulta.getReceptor().getId(), 
+				true, alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
 	}
 
 	@Override

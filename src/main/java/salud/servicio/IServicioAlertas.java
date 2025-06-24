@@ -8,7 +8,8 @@ import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioAlertas {
 
-	public String altaAlerta(String asunto, String mensaje, LocalDateTime fecha);
+	public String altaAlerta(String idEmisor, String idReceptor, boolean generadaAutomaticamente, 
+			String asunto, String mensaje, LocalDateTime fecha) throws EntidadNoEncontrada;
 	
 	public void modificarAlerta(String id, String asunto, String mensaje, LocalDateTime fecha) 
 			throws EntidadNoEncontrada;

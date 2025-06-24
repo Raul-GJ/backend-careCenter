@@ -13,6 +13,9 @@ public class Alerta {
 	
 	@Id
 	private String id;
+	private Usuario emisor;
+	private Usuario receptor;
+	private boolean generadaAutomaticamente;
 	private String asunto;
 	private String mensaje;
 	private LocalDateTime fecha;
@@ -20,8 +23,12 @@ public class Alerta {
 	
 	// Constructores
 	
-	public Alerta(String asunto, String mensaje, LocalDateTime fecha) {
+	public Alerta(Usuario emisor, Usuario receptor, boolean generadaAutomaticamente, String asunto, 
+			String mensaje, LocalDateTime fecha) {
 		super();
+		this.emisor = emisor;
+		this.receptor = receptor;
+		this.generadaAutomaticamente = generadaAutomaticamente;
 		this.asunto = asunto;
 		this.mensaje = mensaje;
 		this.fecha = fecha;
@@ -36,6 +43,30 @@ public class Alerta {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public Usuario getEmisor() {
+		return emisor;
+	}
+
+	public void setEmisor(Usuario emisor) {
+		this.emisor = emisor;
+	}
+
+	public Usuario getReceptor() {
+		return receptor;
+	}
+
+	public void setReceptor(Usuario receptor) {
+		this.receptor = receptor;
+	}
+
+	public boolean isGeneradaAutomaticamente() {
+		return generadaAutomaticamente;
+	}
+
+	public void setGeneradaAutomaticamente(boolean generadaAutomaticamente) {
+		this.generadaAutomaticamente = generadaAutomaticamente;
 	}
 
 	public String getAsunto() {

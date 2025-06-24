@@ -102,19 +102,55 @@ public class PacienteDto extends UsuarioDto {
 		
 		Collection<String> especialistas = new LinkedList<String>();
 		Collection<String> seguimientos = new LinkedList<String>();
-		Collection<String> alertas = new LinkedList<String>();
 		Collection<String> alergias = new LinkedList<String>();
 		Collection<String> tratamientos = new LinkedList<String>();
 		Collection<NotaPacienteDto> notas = new LinkedList<NotaPacienteDto>(); 
 		
-		paciente.getAlertas().forEach(a -> alertas.add(a.getId()));
 		paciente.getEspecialistas().forEach(e -> especialistas.add(e.getId()));
 		paciente.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
 		paciente.getAlergias().forEach(a -> alergias.add(a));
 		paciente.getTratamientos().forEach(t -> tratamientos.add(t));
 		paciente.getNotas().forEach(n -> notas.add(NotaPacienteDto.from(n)));
 		
-		dto.setAlertas(alertas);
+		dto.setEspecialistas(especialistas);
+		dto.setSeguimientos(seguimientos);
+		dto.setAlergias(alergias);
+		dto.setTratamientos(tratamientos);
+		dto.setNotas(notas);
+		
+		return dto;
+	}
+	
+	public static PacienteDto construirSinNotasPrivadas(Paciente paciente) {
+		PacienteDto dto = new PacienteDto();
+		dto.setId(paciente.getId());
+		dto.setNombre(paciente.getNombre());
+		dto.setApellidos(paciente.getApellidos());
+		dto.setEmail(paciente.getEmail());
+		dto.setTelefono(paciente.getTelefono());
+		dto.setDireccion(paciente.getDireccion());
+		dto.setDni(paciente.getDni());
+		dto.setFechaNacimiento(paciente.getFechaNacimiento().toString());
+		dto.setSexo(paciente.getSexo());
+		
+		dto.setNss(paciente.getNss());
+		if (paciente.getMedicoCabecera() != null)
+			dto.setMedicoCabecera(paciente.getMedicoCabecera().getId());
+		dto.setTipo(paciente.getTipo().toString());
+		
+		Collection<String> especialistas = new LinkedList<String>();
+		Collection<String> seguimientos = new LinkedList<String>();
+		Collection<String> alergias = new LinkedList<String>();
+		Collection<String> tratamientos = new LinkedList<String>();
+		Collection<NotaPacienteDto> notas = new LinkedList<NotaPacienteDto>(); 
+		
+		paciente.getEspecialistas().forEach(e -> especialistas.add(e.getId()));
+		paciente.getSeguimientos().forEach(s -> seguimientos.add(s.getId()));
+		paciente.getAlergias().forEach(a -> alergias.add(a));
+		paciente.getTratamientos().forEach(t -> tratamientos.add(t));
+		paciente.getNotas().stream().filter(n -> !n.isPrivado()).forEach(
+				n -> notas.add(NotaPacienteDto.from(n)));
+		
 		dto.setEspecialistas(especialistas);
 		dto.setSeguimientos(seguimientos);
 		dto.setAlergias(alergias);

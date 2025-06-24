@@ -2,9 +2,6 @@ package salud.rest;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,20 +49,6 @@ public class ControladorUsuarios implements UsuariosApi {
 		}
 		return dto;
 	}
-
-	@Override
-	public ResponseEntity<UsuarioDto> obtenerUsuarioPorId(String id)  throws Exception {
-		Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
-		UsuarioDto dto = obtenerUsuarioConcreto(usuario);
-		return ResponseEntity.ok(dto);
-	}
-
-	@Override
-	public ResponseEntity<UsuarioDto> obtenerUsuarioPorCorreo(String correo) throws Exception {
-		Usuario usuario = servicioUsuarios.obtenerUsuarioPorCorreo(correo);
-		UsuarioDto dto = obtenerUsuarioConcreto(usuario);
-		return ResponseEntity.ok(dto);
-	}
 	
 	@Override
 	public ResponseEntity<Collection<UsuarioDto>> obtenerUsuarios() throws Exception {
@@ -73,32 +56,10 @@ public class ControladorUsuarios implements UsuariosApi {
 		servicioUsuarios.obtenerUsuarios().forEach(u -> dtos.add(obtenerUsuarioConcreto(u)));
 		return ResponseEntity.ok(dtos);
 	}
-	
-	@Override
-	public ResponseEntity<Void> modificarUsuario(@Valid UsuarioDto usuarioDto, String id) throws Exception {
-		servicioUsuarios.modificarUsuario(id, 
-				usuarioDto.getNombre(), 
-				usuarioDto.getApellidos(), 
-				usuarioDto.getEmail(), 
-				usuarioDto.getTelefono());
-		return ResponseEntity.noContent().build();
-	}
 
 	@Override
 	public ResponseEntity<Void> eliminarUsuario(String id) throws Exception {
 		servicioUsuarios.eliminarUsuario(id);
-		return ResponseEntity.noContent().build();
-	}
-	
-	@Override
-	public ResponseEntity<Void> agregarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
-		servicioUsuarios.agregarAlertas(id, alertas);
-		return ResponseEntity.noContent().build();
-	}
-	
-	@Override
-	public ResponseEntity<Void> eliminarAlerta(String idUsuario, String idAlerta) throws Exception {
-		servicioUsuarios.eliminarAlertas(idUsuario, List.of(idAlerta));
 		return ResponseEntity.noContent().build();
 	}
 }

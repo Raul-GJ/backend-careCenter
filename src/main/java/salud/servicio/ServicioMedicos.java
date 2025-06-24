@@ -3,7 +3,6 @@ package salud.servicio;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +23,16 @@ public class ServicioMedicos implements IServicioMedicos {
 	// Atributos
 	
 	private RepositorioUsuarios repositorioUsuarios;
+	private IServicioUsuarios servicioUsuarios;
 	private IServicioPacientes servicioPacientes;
 	
 	// Constructores
 	
-	public ServicioMedicos(RepositorioUsuarios repositorioUsuarios, IServicioPacientes servicioPacientes) {
+	public ServicioMedicos(RepositorioUsuarios repositorioUsuarios, IServicioUsuarios servicioUsuarios,
+			IServicioPacientes servicioPacientes) {
 		super();
 		this.repositorioUsuarios = repositorioUsuarios;
+		this.servicioUsuarios = servicioUsuarios;
 		this.servicioPacientes = servicioPacientes;
 	}
 	
@@ -64,7 +66,7 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (sexo == null || sexo.isEmpty()) {
 			throw new IllegalArgumentException("El sexo no puede ser nulo o vacío");
 		}
-		if (!(sexo == "hombre" || sexo == "mujer")) {
+		if (!sexo.equals("hombre") && !sexo.equals("mujer")) {
 			throw new IllegalArgumentException("El sexo no es valido");
 		}
 		if (direccion == null || direccion.isEmpty()) {
@@ -88,7 +90,7 @@ public class ServicioMedicos implements IServicioMedicos {
 		if (!ValidadorCampos.validarNcol(nCol)) {
 			throw new IllegalArgumentException("El número de colegiado debe ser válido");
 		}
-		if (repositorioUsuarios.findByNCol(nCol).isPresent()) {
+		if (repositorioUsuarios.findBynCol(nCol).isPresent()) {
 			throw new IllegalArgumentException("Ya existe un usuario con ese número de colegiado");
 		}
 		if (centroDeSalud == null || centroDeSalud.isEmpty()) {
@@ -123,8 +125,12 @@ public class ServicioMedicos implements IServicioMedicos {
 			medico.setTelefono(telefono);
 		if (fechaNacimiento != null && !fechaNacimiento.isAfter(LocalDate.now()))
 			medico.setFechaNacimiento(fechaNacimiento);
-		if (sexo != null && (sexo.toLowerCase() == "hombre" || sexo.toLowerCase() == "mujer"))
+		if (sexo != null) {
+			if (!sexo.equals("hombre") && !sexo.equals("mujer")) {
+				throw new IllegalArgumentException("El sexo no es válido");
+			}
 			medico.setSexo(sexo);
+		}
 		if (direccion != null && !direccion.isBlank())
 			medico.setDireccion(direccion);
 		if (dni != null && !dni.isBlank()) {
@@ -140,7 +146,7 @@ public class ServicioMedicos implements IServicioMedicos {
 			if (!ValidadorCampos.validarNcol(nCol)) {
 				throw new IllegalArgumentException("El número de colegiado debe ser válido");
 			}
-			if (repositorioUsuarios.findByNCol(nCol).isPresent()) {
+			if (repositorioUsuarios.findBynCol(nCol).isPresent()) {
 				throw new IllegalArgumentException("Ya existe un usuario con ese número de colegiado");
 			}
 			medico.setNCol(nCol);
@@ -207,18 +213,10 @@ public class ServicioMedicos implements IServicioMedicos {
 
 	@Override
 	public Medico obtenerMedico(String id) throws EntidadNoEncontrada {
-		if (id == null || id.isEmpty()) {
-			throw new IllegalArgumentException("El id no puede ser nulo o vacío");
-		}
-		
-		Optional<Usuario> optional = repositorioUsuarios.findById(id);
-		if (optional.isEmpty()) {
+		Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
+		if (!(usuario instanceof Medico))
 			throw new EntidadNoEncontrada(id);
-		}
-		if (!optional.get().getTipo().equals(TipoUsuario.MEDICO))
-			throw new IllegalArgumentException("El usuario con id " + id + 
-					" no es un médico");
-		Medico medico = (Medico) optional.get();
+		Medico medico = (Medico) usuario;
 		return medico;
 	}
 

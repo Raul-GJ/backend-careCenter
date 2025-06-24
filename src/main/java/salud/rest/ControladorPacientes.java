@@ -8,10 +8,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import salud.auth.JwtUtils;
 import salud.modelo.Paciente;
 import salud.rest.dto.usuario.PacienteDto;
 import salud.servicio.IServicioPacientes;
@@ -35,23 +37,40 @@ public class ControladorPacientes implements PacientesApi {
 
 	@Override
 	public ResponseEntity<Void> modificarPaciente(@Valid PacienteDto pacienteDto, @Valid String id) throws Exception {
-		servicioPacientes.modificarPaciente(id,
+		if (JwtUtils.getIdUsuario().equals(id)) {
+			servicioPacientes.modificarPaciente(id,
 				pacienteDto.getNombre(), 
 				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(),
-				LocalDate.parse(pacienteDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				LocalDate.parse(pacienteDto.getFechaNacimiento(), DateTimeFormatter.ISO_DATE),
 				pacienteDto.getSexo(),
 				pacienteDto.getDireccion(),
 				pacienteDto.getDni(),
 				pacienteDto.getNss());
+		} else {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
 		
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	public ResponseEntity<PacienteDto> obtenerPaciente(@Valid String id) throws Exception {
-		PacienteDto pacienteDto = PacienteDto.from(servicioPacientes.obtenerPaciente(id));
+		Paciente paciente = servicioPacientes.obtenerPaciente(id);
+		PacienteDto pacienteDto;
+		
+		if (JwtUtils.isPaciente()) {
+			// El paciente no debe poder ver las notas privadas que le ponen los especialistas
+			if (JwtUtils.getIdUsuario().equals(id)) {
+				pacienteDto = PacienteDto.construirSinNotasPrivadas(paciente);
+			} else {
+				// Un paciente no tiene acceso a la información de otros pacientes
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+		} else {
+			pacienteDto = PacienteDto.from(paciente);
+		}
 		return ResponseEntity.ok(pacienteDto);
 	}
 
@@ -65,7 +84,11 @@ public class ControladorPacientes implements PacientesApi {
 
 	@Override
 	public ResponseEntity<Void> eliminarPaciente(@Valid String id) throws Exception {
-		servicioPacientes.eliminarPaciente(id);
+		if (JwtUtils.getIdUsuario().equals(id)) {
+			servicioPacientes.eliminarPaciente(id);
+		} else {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
 		return ResponseEntity.noContent().build();
 	}
 
@@ -80,6 +103,44 @@ public class ControladorPacientes implements PacientesApi {
 	public ResponseEntity<Void> eliminarSeguimiento(String idPaciente, String idSeguimiento)
 			throws Exception {
 		servicioPacientes.eliminarSeguimientos(idPaciente, List.of(idSeguimiento));
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarAlergias(@Valid Collection<String> alergias, String id) 
+			throws Exception {
+		servicioPacientes.agregarAlergias(id, alergias);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarAlergia(String idPaciente, String alergia) throws Exception {
+		servicioPacientes.eliminarAlergia(idPaciente, alergia);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarTratamientos(@Valid Collection<String> tratamientos, String id)
+			throws Exception {
+		servicioPacientes.agregarTratamientos(id, tratamientos);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarTratamiento(String idPaciente, String tratamiento) throws Exception {
+		servicioPacientes.eliminarTratamiento(idPaciente, tratamiento);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> agregarNotas(@Valid Collection<String> notas, String id) throws Exception {
+		servicioPacientes.agregarNotas(id, notas);
+		return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public ResponseEntity<Void> eliminarNota(String idPaciente, String idNota) throws Exception {
+		servicioPacientes.eliminarNota(idPaciente, idNota);
 		return ResponseEntity.noContent().build();
 	}
 	

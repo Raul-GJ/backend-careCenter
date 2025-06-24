@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.Alerta;
+import salud.modelo.Usuario;
 import salud.repositorio.RepositorioAlertas;
 import salud.rest.excepciones.EntidadNoEncontrada;
 
@@ -19,10 +20,11 @@ public class ServicioAlertas implements IServicioAlertas {
 	// Atributos
 	
 	private RepositorioAlertas repositorioAlertas;
+	private IServicioUsuarios servicioUsuarios;
 	
 	// Constructores
 	
-	public ServicioAlertas(RepositorioAlertas repositorioAlertas) {
+	public ServicioAlertas(RepositorioAlertas repositorioAlertas, IServicioUsuarios servicioUsuarios) {
 		super();
 		this.repositorioAlertas = repositorioAlertas;
 	}
@@ -30,7 +32,14 @@ public class ServicioAlertas implements IServicioAlertas {
 	// Métodos
 	
 	@Override
-	public String altaAlerta(String asunto, String mensaje, LocalDateTime fecha) {
+	public String altaAlerta(String idEmisor, String idReceptor, boolean generadaAutomaticamente, 
+			String asunto, String mensaje, LocalDateTime fecha) throws EntidadNoEncontrada {
+		if (idEmisor == null || idEmisor.isEmpty()) {
+			throw new IllegalArgumentException("El idEmisor no puede ser nulo o vacío");
+		}
+		if (idReceptor == null || idReceptor.isEmpty()) {
+			throw new IllegalArgumentException("El idReceptor no puede ser nulo o vacío");
+		}
 		if (asunto == null || asunto.isEmpty()) {
 			throw new IllegalArgumentException("El asunto no puede ser nulo o vacío");
 		}
@@ -44,7 +53,10 @@ public class ServicioAlertas implements IServicioAlertas {
 			throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
 		}
 		
-		Alerta alerta = new Alerta(asunto, mensaje, fecha);
+		Usuario emisor = servicioUsuarios.obtenerUsuarioPorId(idEmisor);
+		Usuario receptor = servicioUsuarios.obtenerUsuarioPorId(idReceptor);
+		
+		Alerta alerta = new Alerta(emisor, receptor, generadaAutomaticamente, asunto, mensaje, fecha);
 		
 		return repositorioAlertas.save(alerta).getId();
 	}

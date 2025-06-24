@@ -106,7 +106,7 @@ public class ControladorAuth implements AuthApi {
 				especialistaDto.getApellidos(), 
 				especialistaDto.getEmail(), 
 				especialistaDto.getTelefono(),
-				LocalDate.parse(especialistaDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				LocalDate.parse(especialistaDto.getFechaNacimiento(), DateTimeFormatter.ISO_DATE),
 				especialistaDto.getSexo(),
 				especialistaDto.getDireccion(),
 				especialistaDto.getDni(),
@@ -126,7 +126,7 @@ public class ControladorAuth implements AuthApi {
 				medicoDto.getApellidos(), 
 				medicoDto.getEmail(), 
 				medicoDto.getTelefono(),
-				LocalDate.parse(medicoDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				LocalDate.parse(medicoDto.getFechaNacimiento(), DateTimeFormatter.ISO_DATE),
 				medicoDto.getSexo(),
 				medicoDto.getDireccion(),
 				medicoDto.getDni(),
@@ -145,7 +145,7 @@ public class ControladorAuth implements AuthApi {
 				pacienteDto.getApellidos(), 
 				pacienteDto.getEmail(), 
 				pacienteDto.getTelefono(),
-				LocalDate.parse(pacienteDto.getFechaNacimiento(), DateTimeFormatter.BASIC_ISO_DATE),
+				LocalDate.parse(pacienteDto.getFechaNacimiento(), DateTimeFormatter.ISO_DATE),
 				pacienteDto.getSexo(),
 				pacienteDto.getDireccion(),
 				pacienteDto.getDni(),
@@ -201,23 +201,21 @@ public class ControladorAuth implements AuthApi {
 	
 	private Map<String, Object> verificarCredenciales(Usuario usuario) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("sub", usuario.getNombre());
+		claims.put("sub", usuario.getId());
+		claims.put("email", usuario.getEmail());
+		claims.put("nombre", usuario.getNombre() + " " + usuario.getApellidos());
 		switch (usuario.getTipo()) {
 		case ADMIN:
 	        claims.put("roles", "ADMIN,ESPECIALISTA,MEDICO,SANITARIO,PACIENTE,USUARIO");
-	        claims.put("fullName", "Administrador del Sistema");
 			break;
 		case PACIENTE:
 	        claims.put("roles", "PACIENTE,USUARIO");
-	        claims.put("fullName", "Paciente");
 			break;
 		case MEDICO:
 			claims.put("roles", "MEDICO,SANITARIO,USUARIO");
-	        claims.put("fullName", "Medico de familia");
 			break;
 		case ESPECIALISTA:
 			claims.put("roles", "ESPECIALISTA,SANITARIO,USUARIO");
-	        claims.put("fullName", "Especialista");
 			break;
 		default:
 			return null;

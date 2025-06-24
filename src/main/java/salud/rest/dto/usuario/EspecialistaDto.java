@@ -53,10 +53,6 @@ public class EspecialistaDto extends SanitarioDto {
 		dto.setCentroDeSalud(especialista.getCentroDeSalud());
 		dto.setEspecialidad(especialista.getEspecialidad());
 		
-		Collection<String> alertas = new LinkedList<String>();
-		especialista.getAlertas().forEach(a -> alertas.add(a.getId()));
-		dto.setAlertas(alertas);
-		
 		dto.setTipo(especialista.getTipo().toString());
 		
 		List<String> pacientes = new LinkedList<String>();
@@ -66,6 +62,19 @@ public class EspecialistaDto extends SanitarioDto {
 		List<String> plantillas = new LinkedList<String>();
 		especialista.getPlantillas().forEach(p -> plantillas.add(p.getId()));
 		dto.setPlantillas(plantillas);
+		
+		return dto;
+	}
+	
+	public static EspecialistaDto construirEspecialistaPublico(Especialista especialista) {
+		EspecialistaDto dto = new EspecialistaDto();
+		dto.setId(especialista.getId());
+		dto.setNombre(especialista.getNombre());
+		dto.setApellidos(especialista.getApellidos());
+		dto.setSexo(especialista.getSexo());
+		dto.setFechaNacimiento(especialista.getFechaNacimiento().toString());
+		dto.setCentroDeSalud(especialista.getCentroDeSalud());
+		dto.setEspecialidad(especialista.getEspecialidad());
 		
 		return dto;
 	}

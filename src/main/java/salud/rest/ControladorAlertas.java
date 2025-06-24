@@ -33,8 +33,11 @@ public class ControladorAlertas implements AlertasApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<AlertaDto> crearAlerta(CrearAlertaDto alertaDto) {
+	public ResponseEntity<AlertaDto> crearAlerta(CrearAlertaDto alertaDto) throws Exception {
 		String id = servicioAlertas.altaAlerta(
+				alertaDto.getEmisor(),
+				alertaDto.getReceptor(),
+				false,
 				alertaDto.getAsunto(),
 				alertaDto.getMensaje(),
 				LocalDateTime.parse(alertaDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME));

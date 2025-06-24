@@ -22,5 +22,5 @@ public interface RepositorioUsuarios extends PagingAndSortingRepository<Usuario,
 	
 	public Optional<Paciente> findByNss(String nss);
 	
-	public Optional<Sanitario> findByNCol(String ncol);
+	public Optional<Sanitario> findBynCol(String nCol);
 }
