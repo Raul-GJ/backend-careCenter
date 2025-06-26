@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "alertas")
@@ -13,7 +14,9 @@ public class Alerta {
 	
 	@Id
 	private String id;
+	@DBRef
 	private Usuario emisor;
+	@DBRef
 	private Usuario receptor;
 	private boolean generadaAutomaticamente;
 	private String asunto;

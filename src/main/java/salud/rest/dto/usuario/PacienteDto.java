@@ -3,7 +3,6 @@ package salud.rest.dto.usuario;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import salud.modelo.NotaPaciente;
 import salud.modelo.Paciente;
 
 public class PacienteDto extends UsuarioDto {

@@ -13,6 +13,12 @@ import salud.rest.dto.usuario.UsuarioDto;
 
 public interface UsuariosApi {
 	
+	@Operation(summary = "Obtener usuario", description = "Obtiene los datos de un usuario")
+	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('USUARIO')")
+	public ResponseEntity<UsuarioDto> obtenerUsuario(
+			@PathVariable String id) throws Exception;
+	
 	@Operation(summary = "Obtener usuarios", description = "Obtiene los datos de todos los usuarios")
 	@GetMapping
 	@PreAuthorize("hasAuthority('ADMIN')")

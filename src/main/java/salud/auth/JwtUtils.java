@@ -15,7 +15,7 @@ import salud.modelo.TipoUsuario;
 public class JwtUtils {
 
     private static final String SECRETO = "secreto";
-    private static final long TIEMPO = 3600; // 1 hora
+    private static final long TIEMPO = 86400; // 24 horas
 
     public static String generateToken(Map<String, Object> claims) {
 
@@ -58,6 +58,12 @@ public class JwtUtils {
     	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return auth.getAuthorities().stream().anyMatch(
 				a -> a.getAuthority().equals(TipoUsuario.ESPECIALISTA.toString()));
+    }
+    
+    public static boolean isAdmin() {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth.getAuthorities().stream().anyMatch(
+				a -> a.getAuthority().equals(TipoUsuario.ADMIN.toString()));
     }
 
 }

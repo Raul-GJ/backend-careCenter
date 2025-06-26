@@ -86,8 +86,8 @@ public class ControladorAuth implements AuthApi {
 			Map<String, Object> jsonResponse = new HashMap<>();
 			jsonResponse.put("token", token);
 			jsonResponse.put("id", usuario.getId());
-			// El nombre completo se puede extraer de un repositorio o
-			jsonResponse.put("fullName", claims.get("fullName"));
+			jsonResponse.put("email", claims.get("email"));
+			jsonResponse.put("nombre", claims.get("nombre"));
 			jsonResponse.put("roles", claims.get("roles"));
 
 			return ResponseEntity.ok(jsonResponse);

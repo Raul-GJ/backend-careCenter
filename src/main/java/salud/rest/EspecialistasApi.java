@@ -53,12 +53,6 @@ public interface EspecialistasApi {
 			@PathVariable String idEspecialista,
 			@PathVariable String idPlantilla) throws Exception;
 	
-	@Operation(summary = "Obtener especialista", description = "Obtiene los datos de un especialista")
-	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('USUARIO')")
-	public ResponseEntity<EspecialistaDto> obtenerEspecialista(
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Obtener especialistas", description = "Obtiene los datos de todos los especialistas")
 	@GetMapping
 	@PreAuthorize("hasAuthority('ADMIN')")

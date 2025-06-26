@@ -59,21 +59,6 @@ public class ControladorEspecialistas implements EspecialistasApi {
 	}
 
 	@Override
-	public ResponseEntity<EspecialistaDto> obtenerEspecialista(@Valid String id) throws Exception {
-		Especialista especialista = servicioEspecialistas.obtenerEspecialista(id);
-		EspecialistaDto especialistaDto;
-		
-		if (JwtUtils.getIdUsuario().equals(id)) {
-			// Solo el porpio especialista tiene acceso a toda su información
-			especialistaDto = EspecialistaDto.from(especialista);
-		} else {
-			// Los demás solo tienen acceso a una parte
-			especialistaDto = EspecialistaDto.construirEspecialistaPublico(especialista);
-		}
-		return ResponseEntity.ok(especialistaDto);
-	}
-
-	@Override
 	public ResponseEntity<Collection<EspecialistaDto>> obtenerEspecialistas() throws Exception {
 		Collection<Especialista> especialistas = servicioEspecialistas.obtenerEspecialistas();
 		Collection<EspecialistaDto> dtos = new LinkedList<EspecialistaDto>();

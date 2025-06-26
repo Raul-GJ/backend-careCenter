@@ -93,7 +93,7 @@ public class ServicioConsultas implements IServicioConsultas {
 	
 	private Alerta generarAlertaConsulta(Consulta consulta) {
 		Usuario receptor = consulta.getReceptor();
-		Usuario emisor = consulta.getReceptor();
+		Usuario emisor = consulta.getEmisor();
 		String asunto = "Tienes una nueva consulta";
 		String mensaje = "Hola " + 
 				receptor.getNombre() + " " + receptor.getApellidos() + 

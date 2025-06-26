@@ -75,6 +75,7 @@ public class EspecialistaDto extends SanitarioDto {
 		dto.setFechaNacimiento(especialista.getFechaNacimiento().toString());
 		dto.setCentroDeSalud(especialista.getCentroDeSalud());
 		dto.setEspecialidad(especialista.getEspecialidad());
+		dto.setTipo(especialista.getTipo().toString());
 		
 		return dto;
 	}

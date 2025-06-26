@@ -49,6 +49,7 @@ public class MedicoDto extends SanitarioDto {
 		dto.setSexo(medico.getSexo());
 		dto.setFechaNacimiento(medico.getFechaNacimiento().toString());
 		dto.setCentroDeSalud(medico.getCentroDeSalud());
+		dto.setTipo(medico.getTipo().toString());
 		
 		return dto;
 	}

@@ -59,21 +59,6 @@ public class ControladorMedicos implements MedicosApi {
 	}
 
 	@Override
-	public ResponseEntity<MedicoDto> obtenerMedico(@Valid String id) throws Exception {
-		Medico medico = servicioMedicos.obtenerMedico(id);
-		MedicoDto medicoDto;
-		
-		if (JwtUtils.getIdUsuario().equals(id)) {
-			// Solo el porpio médico tiene acceso a toda su información
-			medicoDto = MedicoDto.from(medico);
-		} else {
-			// Los demás solo tienen acceso a una parte
-			medicoDto = MedicoDto.construirMedicoPublico(medico);
-		}
-		return ResponseEntity.ok(medicoDto);
-	}
-
-	@Override
 	public ResponseEntity<Collection<MedicoDto>> obtenerMedicos() throws Exception {
 		Collection<Medico> medicos = servicioMedicos.obtenerMedicos();
 		Collection<MedicoDto> dtos = new LinkedList<MedicoDto>();

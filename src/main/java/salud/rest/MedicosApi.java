@@ -25,12 +25,6 @@ public interface MedicosApi {
 			@Valid @RequestBody MedicoDto medicoDto,
 			@PathVariable String id) throws Exception;
 	
-	@Operation(summary = "Obtener médico", description = "Obtiene los datos de un médico de familia")
-	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('USUARIO')")
-	public ResponseEntity<MedicoDto> obtenerMedico(
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Obtener médicos", description = "Obtiene los datos de todos los médicos de familia")
 	@GetMapping
 	@PreAuthorize("hasAuthority('ADMIN')")

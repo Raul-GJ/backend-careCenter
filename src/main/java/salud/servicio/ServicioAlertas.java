@@ -27,6 +27,7 @@ public class ServicioAlertas implements IServicioAlertas {
 	public ServicioAlertas(RepositorioAlertas repositorioAlertas, IServicioUsuarios servicioUsuarios) {
 		super();
 		this.repositorioAlertas = repositorioAlertas;
+		this.servicioUsuarios = servicioUsuarios;
 	}
 	
 	// Métodos
@@ -49,7 +50,7 @@ public class ServicioAlertas implements IServicioAlertas {
 		if (fecha == null) {
 			throw new IllegalArgumentException("La fecha no puede ser nula");
 		}
-		if (fecha.isBefore(LocalDateTime.now())) {
+		if (fecha.isBefore(LocalDateTime.now().minusMinutes(1))) { // Se añade cierto márgen de error
 			throw new IllegalArgumentException("La fecha no puede ser anterior al dia de hoy");
 		}
 		
@@ -118,7 +119,7 @@ public class ServicioAlertas implements IServicioAlertas {
 	@Override
 	public Collection<Alerta> obtenerAlertasUsuario(String id) throws EntidadNoEncontrada {
 		servicioUsuarios.obtenerUsuarioPorId(id); // Para lanzar entidad no encontrada
-		return repositorioAlertas.findByEmisor(id);
+		return repositorioAlertas.findByReceptor(id);
 	}
 
 	@Override

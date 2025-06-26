@@ -81,12 +81,6 @@ public interface PacientesApi {
 			@PathVariable String idPaciente,
 			@PathVariable String idNota) throws Exception;
 	
-	@Operation(summary = "Obtener paciente", description = "Obtiene los datos de un paciente")
-	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('USUARIO')")
-	public ResponseEntity<PacienteDto> obtenerPaciente(
-			@PathVariable String id) throws Exception;
-	
 	@Operation(summary = "Obtener pacientes", description = "Obtiene los datos de todos los pacientes")
 	@GetMapping
 	@PreAuthorize("hasAuthority('ADMIN')")

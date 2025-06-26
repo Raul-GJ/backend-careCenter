@@ -56,25 +56,6 @@ public class ControladorPacientes implements PacientesApi {
 	}
 
 	@Override
-	public ResponseEntity<PacienteDto> obtenerPaciente(@Valid String id) throws Exception {
-		Paciente paciente = servicioPacientes.obtenerPaciente(id);
-		PacienteDto pacienteDto;
-		
-		if (JwtUtils.isPaciente()) {
-			// El paciente no debe poder ver las notas privadas que le ponen los especialistas
-			if (JwtUtils.getIdUsuario().equals(id)) {
-				pacienteDto = PacienteDto.construirSinNotasPrivadas(paciente);
-			} else {
-				// Un paciente no tiene acceso a la información de otros pacientes
-				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-			}
-		} else {
-			pacienteDto = PacienteDto.from(paciente);
-		}
-		return ResponseEntity.ok(pacienteDto);
-	}
-
-	@Override
 	public ResponseEntity<Collection<PacienteDto>> obtenerPacientes() throws Exception {
 		Collection<Paciente> pacientes = servicioPacientes.obtenerPacientes();
 		Collection<PacienteDto> dtos = new LinkedList<PacienteDto>();

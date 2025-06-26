@@ -9,4 +9,6 @@ import salud.modelo.Alerta;
 public interface RepositorioAlertasMongo extends RepositorioAlertas, MongoRepository<Alerta, String> {
 
 	public Collection<Alerta> findByEmisor(String emisor);
+	
+	public Collection<Alerta> findByReceptor(String receptor);
 }
