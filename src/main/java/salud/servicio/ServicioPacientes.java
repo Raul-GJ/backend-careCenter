@@ -307,4 +307,21 @@ public class ServicioPacientes implements IServicioPacientes {
 		servicioNotas.eliminarNota(idNota);
 		repositorioUsuarios.save(paciente);
 	}
+
+	@Override
+	public void eliminarSeguimientosGrupo(String id, String idGrupo) throws EntidadNoEncontrada {
+		Paciente paciente = obtenerPaciente(id);
+		Collection<Seguimiento> seguimientos = new LinkedList<Seguimiento>();
+		System.out.println("Entra");
+		for (Seguimiento seguimiento : paciente.getSeguimientos()) {
+			System.out.println("Seguimiento: " + seguimiento);
+			if (seguimiento.getIdGrupo() != null && seguimiento.getIdGrupo().equals(idGrupo)) {
+				System.out.println("Entra 2");
+				seguimientos.add(seguimiento);
+				servicioSeguimientos.eliminarSeguimiento(seguimiento.getId());
+			}
+		}
+		paciente.eliminarSeguimientos(seguimientos);
+		repositorioUsuarios.save(paciente);
+	}
 }

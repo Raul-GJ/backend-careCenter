@@ -23,11 +23,12 @@ public class Alerta {
 	private String mensaje;
 	private LocalDateTime fecha;
 	private boolean leida;
+	private String idGrupo; // Para las alertas de los estudios, en caso de querer eliminarlas todas
 	
 	// Constructores
 	
 	public Alerta(Usuario emisor, Usuario receptor, boolean generadaAutomaticamente, String asunto, 
-			String mensaje, LocalDateTime fecha) {
+			String mensaje, LocalDateTime fecha, String idGrupo) {
 		super();
 		this.emisor = emisor;
 		this.receptor = receptor;
@@ -36,6 +37,7 @@ public class Alerta {
 		this.mensaje = mensaje;
 		this.fecha = fecha;
 		this.leida = false;
+		this.idGrupo = idGrupo;
 	}
 	
 	// Métodos
@@ -95,10 +97,26 @@ public class Alerta {
 	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
+
+	public boolean isLeida() {
+		return leida;
+	}
+
+	public void setLeida(boolean leida) {
+		this.leida = leida;
+	}
+
+	public String getIdGrupo() {
+		return idGrupo;
+	}
+
+	public void setIdGrupo(String idGrupo) {
+		this.idGrupo = idGrupo;
+	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(asunto, fecha, id, mensaje);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -110,15 +128,13 @@ public class Alerta {
 		if (getClass() != obj.getClass())
 			return false;
 		Alerta other = (Alerta) obj;
-		return Objects.equals(asunto, other.asunto) && Objects.equals(fecha, other.fecha)
-				&& Objects.equals(id, other.id) && Objects.equals(mensaje, other.mensaje);
+		return Objects.equals(id, other.id);
 	}
 
-	public boolean isLeida() {
-		return leida;
-	}
-
-	public void setLeida(boolean leida) {
-		this.leida = leida;
+	@Override
+	public String toString() {
+		return "Alerta [id=" + id + ", emisor=" + emisor + ", receptor=" + receptor + ", generadaAutomaticamente="
+				+ generadaAutomaticamente + ", asunto=" + asunto + ", mensaje=" + mensaje + ", fecha=" + fecha
+				+ ", leida=" + leida + ", idGrupo=" + idGrupo + "]";
 	}
 }

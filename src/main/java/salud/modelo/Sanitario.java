@@ -3,7 +3,6 @@ package salud.modelo;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -67,25 +66,5 @@ public abstract class Sanitario extends Usuario {
 	
 	public void eliminarPaciente(Paciente paciente) {
 		this.pacientes.remove(paciente);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(centroDeSalud, nCol);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Sanitario other = (Sanitario) obj;
-		return Objects.equals(centroDeSalud, other.centroDeSalud) && Objects.equals(nCol, other.nCol);
 	}
 }

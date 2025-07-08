@@ -43,7 +43,8 @@ public class ControladorSeguimientos implements SeguimientosApi {
 				LocalDateTime.parse(seguimientoDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME),
 				LocalDateTime.parse(seguimientoDto.getPlazo(), DateTimeFormatter.ISO_DATE_TIME),
 				seguimientoDto.getPlantilla(),
-				seguimientoDto.getMotivo());
+				seguimientoDto.getMotivo(),
+				null);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		

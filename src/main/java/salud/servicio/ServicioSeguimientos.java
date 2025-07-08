@@ -38,7 +38,7 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 	
 	@Override
 	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  
-			String plantilla, String motivo) throws EntidadNoEncontrada {
+			String plantilla, String motivo, String idGrupo) throws EntidadNoEncontrada {
 		if (fecha == null) {
 			throw new IllegalArgumentException("La fecha no puede ser nula");
 		}
@@ -57,7 +57,8 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 		
 		Plantilla formulario = servicioPlantillas.obtenerPlantilla(plantilla);
 		
-		Seguimiento seguimiento = new Seguimiento(fecha, plazo, new Formulario(fecha, formulario), motivo);
+		Seguimiento seguimiento = new Seguimiento(fecha, plazo, new Formulario(fecha, formulario), 
+				motivo, idGrupo);
 		
 		return repositorioSeguimientos.save(seguimiento).getId();
 	}
@@ -131,5 +132,14 @@ public class ServicioSeguimientos implements IServicioSeguimientos {
 		Collection<Seguimiento> seguimientos = new LinkedList<Seguimiento>();
 		repositorioSeguimientos.findAllById(ids).forEach(seguimiento -> seguimientos.add(seguimiento));
 		return seguimientos;
+	}
+
+	@Override
+	public void eliminarSeguimientosGrupo(String idGrupo) {
+		Collection<Seguimiento> seguimientos = 
+				repositorioSeguimientos.findByIdGrupo(idGrupo);
+		for (Seguimiento seguimiento2 : seguimientos) {
+			repositorioSeguimientos.deleteById(seguimiento2.getId());
+		}
 	}
 }

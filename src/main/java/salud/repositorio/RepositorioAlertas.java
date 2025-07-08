@@ -11,4 +11,6 @@ public interface RepositorioAlertas extends PagingAndSortingRepository<Alerta, S
 	public Collection<Alerta> findByEmisor(String emisor);
 	
 	public Collection<Alerta> findByReceptor(String receptor);
+	
+	public Collection<Alerta> findByIdGrupo(String idGrupo);
 }

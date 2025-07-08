@@ -40,7 +40,8 @@ public class ControladorAlertas implements AlertasApi {
 				false,
 				alertaDto.getAsunto(),
 				alertaDto.getMensaje(),
-				LocalDateTime.parse(alertaDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME));
+				LocalDateTime.parse(alertaDto.getFecha(), DateTimeFormatter.ISO_DATE_TIME),
+				null);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path(id).buildAndExpand(id).toUri();
 		

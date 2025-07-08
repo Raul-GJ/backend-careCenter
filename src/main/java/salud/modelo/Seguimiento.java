@@ -17,15 +17,18 @@ public class Seguimiento {
 	private LocalDateTime plazo;
 	private Formulario formulario;
 	private String motivo;
+	private String idGrupo; // Para los seguimientos de los estudios, en caso de querer eliminarlos todas
 	
 	// Constructores
 	
-	public Seguimiento(LocalDateTime fecha, LocalDateTime plazo, Formulario formulario, String motivo) {
+	public Seguimiento(LocalDateTime fecha, LocalDateTime plazo, Formulario formulario, String motivo,
+			String idGrupo) {
 		super();
 		this.fecha = fecha;
 		this.plazo = plazo;
 		this.formulario = formulario;
 		this.motivo = motivo;
+		this.idGrupo = idGrupo;
 	}
 	
 	// Métodos
@@ -69,10 +72,10 @@ public class Seguimiento {
 	public void setMotivo(String motivo) {
 		this.motivo = motivo;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(fecha, formulario, id, plazo, motivo);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -84,15 +87,21 @@ public class Seguimiento {
 		if (getClass() != obj.getClass())
 			return false;
 		Seguimiento other = (Seguimiento) obj;
-		return Objects.equals(fecha, other.fecha) && Objects.equals(formulario, other.formulario)
-				&& Objects.equals(id, other.id) && Objects.equals(plazo, other.plazo)
-				&& Objects.equals(motivo, other.motivo);
+		return Objects.equals(id, other.id);
 	}
 
 	@Override
 	public String toString() {
 		return "Seguimiento [id=" + id + ", fecha=" + fecha + ", plazo=" + plazo + ", formulario=" + formulario
 				+ ", motivo=" + motivo + "]";
+	}
+
+	public String getIdGrupo() {
+		return idGrupo;
+	}
+
+	public void setIdGrupo(String idGrupo) {
+		this.idGrupo = idGrupo;
 	}
 
 	

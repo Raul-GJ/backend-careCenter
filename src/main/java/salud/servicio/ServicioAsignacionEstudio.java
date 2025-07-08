@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import salud.modelo.AsignacionEstudio;
 import salud.modelo.Especialista;
+import salud.modelo.EstadoInvitacion;
 import salud.modelo.Estudio;
 import salud.modelo.RolEstudio;
 import salud.repositorio.RepositorioAsignacionEstudio;
@@ -39,7 +40,7 @@ public class ServicioAsignacionEstudio implements IservicioAsignacionEstudio {
 	// Métodos
 	
 	@Override
-	public String agregarAsignacion(String idEspecialista, String idEstudio, String rolStr)
+	public String invitarEspecialista(String idEspecialista, String idEstudio, String rolStr)
 		throws EntidadNoEncontrada {
 		if (idEspecialista == null || idEspecialista.isEmpty()) {
 			throw new IllegalArgumentException("El especialista no puede ser nulo o vacío");
@@ -70,6 +71,17 @@ public class ServicioAsignacionEstudio implements IservicioAsignacionEstudio {
 		
 		AsignacionEstudio asignacion = new AsignacionEstudio(especialista, estudio, rol);
 		return repositorioAsignacion.save(asignacion).getId();
+	}
+	
+
+	@Override
+	public void responderInvitacion(String id, boolean aceptada) throws EntidadNoEncontrada {
+		AsignacionEstudio asignacion = obtenerAsignacion(id);
+		if (aceptada)
+			asignacion.setEstado(EstadoInvitacion.ACEPTADA);
+		else
+			asignacion.setEstado(EstadoInvitacion.RECHAZADA);
+		repositorioAsignacion.save(asignacion);
 	}
 	
 	@Override

@@ -9,8 +9,8 @@ import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface IServicioSeguimientos {
 
-	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  String plantilla, String motivo)
-		throws EntidadNoEncontrada;
+	public String altaSeguimiento(LocalDateTime fecha, LocalDateTime plazo,  String plantilla, String motivo, 
+			String idGrupo) throws EntidadNoEncontrada;
 	
 	public void modificarSeguimiento(String id, LocalDateTime fecha, LocalDateTime plazo,
 			String plantilla, String motivo) throws EntidadNoEncontrada;
@@ -24,4 +24,6 @@ public interface IServicioSeguimientos {
 	public void eliminarSeguimiento(String id) throws EntidadNoEncontrada;
 	
 	public void rellenarFormulario(String id, List<String> respuestas) throws EntidadNoEncontrada;
+	
+	public void eliminarSeguimientosGrupo(String idGrupo);
 }

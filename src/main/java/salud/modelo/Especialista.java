@@ -3,7 +3,6 @@ package salud.modelo;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Objects;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -64,23 +63,8 @@ public class Especialista extends Sanitario {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(especialidad);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Especialista other = (Especialista) obj;
-		return Objects.equals(especialidad, other.especialidad);
+	public String toString() {
+		return "Especialista [especialidad=" + especialidad + ", plantillas=" + plantillas + "]";
 	}
 	
 }

@@ -156,8 +156,7 @@ public class Estudio {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(alertas, descripcion, fechaInicio, fechaFin, id, nombre, pacientes,
-				seguimientos);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -169,10 +168,13 @@ public class Estudio {
 		if (getClass() != obj.getClass())
 			return false;
 		Estudio other = (Estudio) obj;
-		return Objects.equals(alertas, other.alertas)
-				&& Objects.equals(descripcion, other.descripcion)
-				&& Objects.equals(fechaInicio, other.fechaInicio) && Objects.equals(fechaFin, other.fechaFin)
-				&& Objects.equals(id, other.id) && Objects.equals(nombre, other.nombre)
-				&& Objects.equals(pacientes, other.pacientes) && Objects.equals(seguimientos, other.seguimientos);
+		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Estudio [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fechaInicio="
+				+ fechaInicio + ", fechaFin=" + fechaFin + ", pacientes=" + pacientes + ", seguimientos=" + seguimientos
+				+ ", alertas=" + alertas + "]";
 	}
 }

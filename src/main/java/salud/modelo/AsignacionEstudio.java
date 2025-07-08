@@ -1,5 +1,7 @@
 package salud.modelo;
 
+import java.util.Objects;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +18,7 @@ public class AsignacionEstudio {
 	@DBRef
 	private Estudio estudio;
 	private RolEstudio rol;
+	private EstadoInvitacion estado;
 	
 	// Constructores
 	
@@ -24,6 +27,7 @@ public class AsignacionEstudio {
 		this.especialista = especialista;
 		this.estudio = estudio;
 		this.rol = rol;
+		this.setEstado(EstadoInvitacion.PENDIENTE);
 	}
 	
 	// Métodos
@@ -58,5 +62,36 @@ public class AsignacionEstudio {
 
 	public void setRol(RolEstudio rol) {
 		this.rol = rol;
+	}
+
+	public EstadoInvitacion getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoInvitacion estado) {
+		this.estado = estado;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AsignacionEstudio other = (AsignacionEstudio) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "AsignacionEstudio [id=" + id + ", especialista=" + especialista + ", estudio=" + estudio + ", rol="
+				+ rol + ", estado=" + estado + "]";
 	}
 }

@@ -88,7 +88,7 @@ public class Plantilla {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(descripcion, id, nombre, preguntas, publico);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -100,9 +100,7 @@ public class Plantilla {
 		if (getClass() != obj.getClass())
 			return false;
 		Plantilla other = (Plantilla) obj;
-		return Objects.equals(descripcion, other.descripcion) && Objects.equals(id, other.id)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(preguntas, other.preguntas)
-				&& publico == other.publico;
+		return Objects.equals(id, other.id);
 	}
 
 	@Override

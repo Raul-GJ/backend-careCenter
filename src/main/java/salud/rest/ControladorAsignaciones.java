@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import salud.rest.dto.asignacion.AsignacionEstudioDto;
 import salud.rest.dto.asignacion.CrearAsignacionEstudioDto;
 import salud.rest.dto.asignacion.ModificarAsignacionDto;
+import salud.rest.dto.asignacion.ResponderInvitacionDto;
 import salud.rest.excepciones.EntidadNoEncontrada;
 import salud.servicio.IservicioAsignacionEstudio;
 
@@ -33,9 +34,9 @@ public class ControladorAsignaciones implements AsignacionesApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<Void> agregarAsignacion(CrearAsignacionEstudioDto asignacionDto) 
+	public ResponseEntity<Void> invitarEspecialista(CrearAsignacionEstudioDto asignacionDto) 
 			throws EntidadNoEncontrada {
-		String id = servicioAsignaciones.agregarAsignacion(
+		String id = servicioAsignaciones.invitarEspecialista(
 				asignacionDto.getEspecialista(),
 				asignacionDto.getEstudio(),
 				asignacionDto.getRol());
@@ -46,10 +47,17 @@ public class ControladorAsignaciones implements AsignacionesApi {
 	}
 	
 	@Override
+	public ResponseEntity<Void> responderInvitacion(String id, ResponderInvitacionDto respuestaDto)
+			throws EntidadNoEncontrada {
+		servicioAsignaciones.responderInvitacion(id, respuestaDto.isAceptada());
+		return ResponseEntity.noContent().build();
+	}
+	
+	@Override
 	public ResponseEntity<Void> modificarAsignacion(String id, ModificarAsignacionDto asignacionDto) 
 			throws EntidadNoEncontrada {
 		servicioAsignaciones.modificarAsignacion(id, asignacionDto.getRol());
-		return null;
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override

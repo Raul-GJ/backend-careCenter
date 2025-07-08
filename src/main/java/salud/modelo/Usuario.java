@@ -139,8 +139,7 @@ public class Usuario {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(apellidos, contrasenya, direccion, dni, eliminado, email, fechaNacimiento, id,
-				nombre, sexo, telefono, tipo);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -152,11 +151,6 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(apellidos, other.apellidos)
-				&& Objects.equals(contrasenya, other.contrasenya) && Objects.equals(direccion, other.direccion)
-				&& Objects.equals(dni, other.dni) && eliminado == other.eliminado && Objects.equals(email, other.email)
-				&& Objects.equals(fechaNacimiento, other.fechaNacimiento) && Objects.equals(id, other.id)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(sexo, other.sexo)
-				&& Objects.equals(telefono, other.telefono) && tipo == other.tipo;
+		return Objects.equals(id, other.id);
 	}
 }

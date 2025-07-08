@@ -67,7 +67,7 @@ public class NotaPaciente {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(asunto, contenido, id, privado, sanitario);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -79,9 +79,7 @@ public class NotaPaciente {
 		if (getClass() != obj.getClass())
 			return false;
 		NotaPaciente other = (NotaPaciente) obj;
-		return Objects.equals(asunto, other.asunto) && Objects.equals(contenido, other.contenido)
-				&& Objects.equals(id, other.id) && privado == other.privado
-				&& Objects.equals(sanitario, other.sanitario);
+		return Objects.equals(id, other.id);
 	}
 
 	@Override

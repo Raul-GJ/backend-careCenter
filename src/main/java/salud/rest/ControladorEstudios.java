@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import salud.auth.JwtUtils;
 import salud.modelo.Estudio;
 import salud.rest.dto.estudio.CrearEstudioDto;
 import salud.rest.dto.estudio.EstudioDto;
@@ -83,20 +84,23 @@ public class ControladorEstudios implements EstudiosApi {
 	@Override
 	public ResponseEntity<Void> agregarPacientes(@Valid Collection<String> pacientes, @Valid String id)
 			throws Exception {
-		servicioEstudios.agregarPacientes(id, pacientes);
+		String idEspecialista = JwtUtils.getIdUsuario();
+		servicioEstudios.agregarPacientes(id, idEspecialista, pacientes);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	public ResponseEntity<Void> agregarSeguimientos(@Valid Collection<String> seguimientos, @Valid String id)
 			throws Exception {
-		servicioEstudios.agregarSeguimientos(id, seguimientos);
+		String idEspecialista = JwtUtils.getIdUsuario();
+		servicioEstudios.agregarSeguimientos(id, idEspecialista, seguimientos);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
 	public ResponseEntity<Void> agregarAlertas(@Valid Collection<String> alertas, @Valid String id) throws Exception {
-		servicioEstudios.agregarAlertas(id, alertas);
+		String idEspecialista = JwtUtils.getIdUsuario();
+		servicioEstudios.agregarAlertas(id, idEspecialista, alertas);
 		return ResponseEntity.noContent().build();
 	}
 

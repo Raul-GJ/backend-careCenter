@@ -34,7 +34,7 @@ public class ServicioAlertas implements IServicioAlertas {
 	
 	@Override
 	public String altaAlerta(String idEmisor, String idReceptor, boolean generadaAutomaticamente, 
-			String asunto, String mensaje, LocalDateTime fecha) throws EntidadNoEncontrada {
+			String asunto, String mensaje, LocalDateTime fecha, String idGrupo) throws EntidadNoEncontrada {
 		if (idEmisor == null || idEmisor.isEmpty()) {
 			throw new IllegalArgumentException("El idEmisor no puede ser nulo o vacío");
 		}
@@ -57,7 +57,8 @@ public class ServicioAlertas implements IServicioAlertas {
 		Usuario emisor = servicioUsuarios.obtenerUsuarioPorId(idEmisor);
 		Usuario receptor = servicioUsuarios.obtenerUsuarioPorId(idReceptor);
 		
-		Alerta alerta = new Alerta(emisor, receptor, generadaAutomaticamente, asunto, mensaje, fecha);
+		Alerta alerta = new Alerta(emisor, receptor, generadaAutomaticamente, asunto, mensaje, fecha,
+				idGrupo);
 		
 		return repositorioAlertas.save(alerta).getId();
 	}
@@ -127,5 +128,13 @@ public class ServicioAlertas implements IServicioAlertas {
 		Alerta alerta = obtenerAlerta(id);
 		alerta.setLeida(true);
 		repositorioAlertas.save(alerta);
+	}
+
+	@Override
+	public void eliminarAlertasGrupo(String idGrupo) {
+		Collection<Alerta> alertas = repositorioAlertas.findByIdGrupo(idGrupo);
+		for (Alerta alerta2 : alertas) {
+			repositorioAlertas.deleteById(alerta2.getId());
+		}
 	}
 }

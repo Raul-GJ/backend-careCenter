@@ -65,7 +65,7 @@ public class ServicioConsultas implements IServicioConsultas {
 		
 		Alerta alertaTmp = generarAlertaConsulta(consulta);
 		servicioAlertas.altaAlerta(emisor, receptor, true, alertaTmp.getAsunto(), 
-				alertaTmp.getMensaje(), alertaTmp.getFecha());
+				alertaTmp.getMensaje(), alertaTmp.getFecha(), null);
 		
 		return idConsulta;
 	}
@@ -88,7 +88,7 @@ public class ServicioConsultas implements IServicioConsultas {
 				emisor.getNombre() + " " + emisor.getApellidos() + 
 				", tu consulta ha sido respondida, revisa tu buzón de consultas";
 		
-		return new Alerta(emisor, receptor, true, asunto, mensaje, LocalDateTime.now());
+		return new Alerta(emisor, receptor, true, asunto, mensaje, LocalDateTime.now(), null);
 	}
 	
 	private Alerta generarAlertaConsulta(Consulta consulta) {
@@ -101,7 +101,7 @@ public class ServicioConsultas implements IServicioConsultas {
 				emisor.getNombre() + " " + emisor.getApellidos() + 
 				", revisa tu buzón de consultas";
 		
-		return new Alerta(emisor, receptor, true, asunto, mensaje, LocalDateTime.now());
+		return new Alerta(emisor, receptor, true, asunto, mensaje, LocalDateTime.now(), null);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class ServicioConsultas implements IServicioConsultas {
 		repositorioConsultas.save(consulta);
 		Alerta alerta = generarAlertaRespuesta(consulta);
 		servicioAlertas.altaAlerta(consulta.getEmisor().getId(), consulta.getReceptor().getId(), 
-				true, alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha());
+				true, alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha(), null);
 	}
 
 	@Override

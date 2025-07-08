@@ -93,10 +93,10 @@ public class Consulta {
 		if (this.respuesta == null)
 			this.respuesta = respuesta;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(asunto, fecha, id, mensaje, respuesta);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -108,8 +108,12 @@ public class Consulta {
 		if (getClass() != obj.getClass())
 			return false;
 		Consulta other = (Consulta) obj;
-		return Objects.equals(asunto, other.asunto) && Objects.equals(fecha, other.fecha)
-				&& Objects.equals(id, other.id) && Objects.equals(mensaje, other.mensaje)
-				&& Objects.equals(respuesta, other.respuesta);
+		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Consulta [id=" + id + ", emisor=" + emisor + ", receptor=" + receptor + ", asunto=" + asunto
+				+ ", mensaje=" + mensaje + ", fecha=" + fecha + ", respuesta=" + respuesta + "]";
 	}
 }

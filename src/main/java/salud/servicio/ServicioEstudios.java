@@ -71,7 +71,8 @@ public class ServicioEstudios implements IServicioEstudios {
 	}
 
 	@Override
-	public void agregarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
+	public void agregarPacientes(String id, String idEspecialista, Collection<String> pacientes) 
+			throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
 		for (Paciente paciente : estudio.getPacientes()) {
 			if (pacientes.contains(paciente.getId()))
@@ -79,11 +80,29 @@ public class ServicioEstudios implements IServicioEstudios {
 		}
 		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
 		estudio.agregarPacientes(lista);
+		for (Paciente paciente : lista) {
+			Collection<Seguimiento> seguimientos = estudio.getSeguimientos();
+			Collection<String> seguimientos2 = new LinkedList<String>();
+			for (Seguimiento seguimiento : seguimientos) {
+				// Hacer una copia para asignarla al paciente
+				String idSeguimiento = servicioSeguimientos.altaSeguimiento(
+						seguimiento.getFecha(), seguimiento.getPlazo(), 
+						seguimiento.getFormulario().getPlantilla().getId(), 
+						seguimiento.getMotivo(), seguimiento.getId());
+				seguimientos2.add(idSeguimiento);
+			}
+			servicioPacientes.agregarSeguimientos(paciente.getId(), seguimientos2);
+			for (Alerta alerta : estudio.getAlertas()) {
+				servicioAlertas.altaAlerta(idEspecialista, paciente.getId(), false, 
+						alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha(), alerta.getId());
+			}
+		}
 		repositorioEstudios.save(estudio);
 	}
 
 	@Override
-	public void agregarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada {
+	public void agregarSeguimientos(String id, String idEspecialista, Collection<String> seguimientos) 
+			throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
 		for (Seguimiento seguimiento : estudio.getSeguimientos()) {
 			if (seguimientos.contains(seguimiento.getId()))
@@ -91,11 +110,24 @@ public class ServicioEstudios implements IServicioEstudios {
 		}
 		Collection<Seguimiento> lista = servicioSeguimientos.obtenerSeguimientos(seguimientos);
 		estudio.agregarSeguimientos(lista);
+		for (Paciente paciente : estudio.getPacientes()) {
+			Collection<String> seguimientos2 = new LinkedList<String>();
+			for (Seguimiento seguimiento : lista) {
+				// Hacer una copia para asignarla al paciente
+				String idSeguimiento = servicioSeguimientos.altaSeguimiento(
+						seguimiento.getFecha(), seguimiento.getPlazo(), 
+						seguimiento.getFormulario().getPlantilla().getId(), 
+						seguimiento.getMotivo(), seguimiento.getId());
+				seguimientos2.add(idSeguimiento);
+			}
+			servicioPacientes.agregarSeguimientos(paciente.getId(), seguimientos2);
+		}
 		repositorioEstudios.save(estudio);
 	}
 
 	@Override
-	public void agregarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
+	public void agregarAlertas(String id, String idEspecialista, Collection<String> alertas) 
+			throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
 		for (Alerta alerta : estudio.getAlertas()) {
 			if (alertas.contains(alerta.getId()))
@@ -103,30 +135,71 @@ public class ServicioEstudios implements IServicioEstudios {
 		}
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		estudio.agregarAlertas(lista);
+		for (Paciente paciente : estudio.getPacientes()) {
+			for (Alerta alerta : lista) {
+				servicioAlertas.altaAlerta(idEspecialista, paciente.getId(), false, 
+						alerta.getAsunto(), alerta.getMensaje(), alerta.getFecha(), alerta.getId());
+			}
+		}
 		repositorioEstudios.save(estudio);
 	}
 
 	@Override
 	public void eliminarPacientes(String id, Collection<String> pacientes) throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
+		Collection<String> idPacientes = estudio.getPacientes().stream().map(p -> p.getId()).toList();
+		for (String idPaciente : pacientes) {
+			if (!idPacientes.contains(idPaciente))
+				throw new ConflictException("No puedes eliminar pacientes que no están dentro de este estudio");
+		}
 		Collection<Paciente> lista = servicioPacientes.obtenerPacientes(pacientes);
 		estudio.eliminarPacientes(lista);
+		for (Paciente paciente : lista) {
+			for (Seguimiento seguimiento : estudio.getSeguimientos()) {
+				servicioPacientes.eliminarSeguimientosGrupo(paciente.getId(), seguimiento.getId());
+			}
+			for (Alerta alerta : estudio.getAlertas()) {
+				for (Alerta alerta2 : servicioAlertas.obtenerAlertasUsuario(paciente.getId())) {
+					if (alerta2.getIdGrupo() != null && alerta2.getIdGrupo().equals(alerta.getId()))
+						servicioAlertas.eliminarAlerta(alerta2.getId());
+				}
+			}
+		}
 		repositorioEstudios.save(estudio);
 	}
 
 	@Override
 	public void eliminarSeguimientos(String id, Collection<String> seguimientos) throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
+		Collection<String> idSeguimientos = estudio.getSeguimientos().stream().map(p -> p.getId()).toList();
+		for (String idSeguimiento : seguimientos) {
+			if (!idSeguimientos.contains(idSeguimiento))
+				throw new ConflictException("No puedes eliminar seguimientos que no están dentro de este estudio");
+		}
 		Collection<Seguimiento> lista = servicioSeguimientos.obtenerSeguimientos(seguimientos);
 		estudio.eliminarSeguimientos(lista);
+		for (String idSeguimiento : seguimientos) {
+			for (Paciente paciente : estudio.getPacientes()) {
+				servicioPacientes.eliminarSeguimientosGrupo(paciente.getId(), idSeguimiento);
+			}
+			servicioSeguimientos.eliminarSeguimientosGrupo(idSeguimiento);
+		}
 		repositorioEstudios.save(estudio);
 	}
 
 	@Override
 	public void eliminarAlertas(String id, Collection<String> alertas) throws EntidadNoEncontrada {
 		Estudio estudio = obtenerEstudio(id);
+		Collection<String> idAlertas = estudio.getAlertas().stream().map(p -> p.getId()).toList();
+		for (String idAlerta : alertas) {
+			if (!idAlertas.contains(idAlerta))
+				throw new ConflictException("No puedes eliminar alertas que no están dentro de este estudio");
+		}
 		Collection<Alerta> lista = servicioAlertas.obtenerAlertas(alertas);
 		estudio.eliminarAlertas(lista);
+		for (Alerta alerta : lista) {
+			servicioAlertas.eliminarAlertasGrupo(alerta.getId());
+		}
 		repositorioEstudios.save(estudio);
 	}
 
@@ -177,48 +250,6 @@ public class ServicioEstudios implements IServicioEstudios {
 		}
 		
 		repositorioEstudios.deleteById(id);
-	}
-
-	@Override
-	public void agregarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
-		Estudio estudio = obtenerEstudio(id);
-		estudio.agregarPaciente(paciente);
-		repositorioEstudios.save(estudio);
-	}
-
-	@Override
-	public void agregarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada {
-		Estudio estudio = obtenerEstudio(id);
-		estudio.agregarSeguimiento(seguimiento);
-		repositorioEstudios.save(estudio);
-	}
-
-	@Override
-	public void agregarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
-		Estudio estudio = obtenerEstudio(id);
-		estudio.agregarAlerta(alerta);
-		repositorioEstudios.save(estudio);
-	}
-
-	@Override
-	public void eliminarPaciente(String id, Paciente paciente) throws EntidadNoEncontrada {
-		Estudio estudio = obtenerEstudio(id);
-		estudio.eliminarPaciente(paciente);
-		repositorioEstudios.save(estudio);
-	}
-
-	@Override
-	public void eliminarSeguimiento(String id, Seguimiento seguimiento) throws EntidadNoEncontrada {
-		Estudio estudio = obtenerEstudio(id);
-		estudio.eliminarSeguimiento(seguimiento);
-		repositorioEstudios.save(estudio);
-	}
-
-	@Override
-	public void eliminarAlerta(String id, Alerta alerta) throws EntidadNoEncontrada {
-		Estudio estudio = obtenerEstudio(id);
-		estudio.eliminarAlerta(alerta);
-		repositorioEstudios.save(estudio);
 	}
 
 	@Override

@@ -11,4 +11,6 @@ public interface RepositorioAlertasMongo extends RepositorioAlertas, MongoReposi
 	public Collection<Alerta> findByEmisor(String emisor);
 	
 	public Collection<Alerta> findByReceptor(String receptor);
+	
+	public Collection<Alerta> findByIdGrupo(String idGrupo);
 }

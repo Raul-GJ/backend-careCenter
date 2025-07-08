@@ -9,7 +9,7 @@ import salud.rest.excepciones.EntidadNoEncontrada;
 public interface IServicioAlertas {
 
 	public String altaAlerta(String idEmisor, String idReceptor, boolean generadaAutomaticamente, 
-			String asunto, String mensaje, LocalDateTime fecha) throws EntidadNoEncontrada;
+			String asunto, String mensaje, LocalDateTime fecha, String idGrupo) throws EntidadNoEncontrada;
 	
 	public void modificarAlerta(String id, String asunto, String mensaje, LocalDateTime fecha) 
 			throws EntidadNoEncontrada;
@@ -25,4 +25,6 @@ public interface IServicioAlertas {
 	public Collection<Alerta> obtenerAlertasUsuario(String id) throws EntidadNoEncontrada;
 	
 	public void eliminarAlerta(String id) throws EntidadNoEncontrada;
+	
+	public void eliminarAlertasGrupo(String idGrupo);
 }

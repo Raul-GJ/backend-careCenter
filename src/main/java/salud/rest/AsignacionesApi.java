@@ -17,15 +17,24 @@ import io.swagger.v3.oas.annotations.Operation;
 import salud.rest.dto.asignacion.AsignacionEstudioDto;
 import salud.rest.dto.asignacion.CrearAsignacionEstudioDto;
 import salud.rest.dto.asignacion.ModificarAsignacionDto;
+import salud.rest.dto.asignacion.ResponderInvitacionDto;
 import salud.rest.excepciones.EntidadNoEncontrada;
 
 public interface AsignacionesApi {
 	
-	@Operation(summary = "Agregar asignacion", description = "Crea y guarda una asignación entre un especialista con un rol y un estudio")
+	@Operation(summary = "Invitar especialista", description = "Envia una invitación a un especialista para participar en un estudio")
 	@PostMapping
 	@PreAuthorize("hasAuthority('ESPECIALISTA')")
-	public ResponseEntity<Void> agregarAsignacion(
+	public ResponseEntity<Void> invitarEspecialista(
 			@Valid @RequestBody CrearAsignacionEstudioDto asignacionDto) 
+			throws EntidadNoEncontrada;
+	
+	@Operation(summary = "Responder invitacion", description = "Responde a una invitación de un especialista")
+	@PatchMapping("{id}/respuesta")
+	@PreAuthorize("hasAuthority('ESPECIALISTA')")
+	public ResponseEntity<Void> responderInvitacion(
+			@PathVariable String id,
+			@Valid @RequestBody ResponderInvitacionDto respuestaDto) 
 			throws EntidadNoEncontrada;
 	
 	@Operation(summary = "Modificar asignacion", description = "Modifica los datos de una asignación")

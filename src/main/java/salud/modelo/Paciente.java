@@ -1,7 +1,5 @@
 package salud.modelo;
 
-import java.util.Objects;
-
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDate;
@@ -215,27 +213,11 @@ public class Paciente extends Usuario {
 			eliminarNota(notaPaciente);
 		}
 	}
-
+	
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result
-				+ Objects.hash(alergias, notas, nss, seguimientos, tratamientos);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Paciente other = (Paciente) obj;
-		return Objects.equals(alergias, other.alergias) && Objects.equals(notas, other.notas)
-				&& Objects.equals(nss, other.nss) && Objects.equals(seguimientos, other.seguimientos)
-				&& Objects.equals(tratamientos, other.tratamientos);
+	public String toString() {
+		return "Paciente [nss=" + nss + ", alergias=" + alergias + ", tratamientos=" + tratamientos + ", notas=" + notas
+				+ ", medicoCabecera=" + medicoCabecera + ", especialistas=" + especialistas + ", seguimientos="
+				+ seguimientos + "]";
 	}
 }

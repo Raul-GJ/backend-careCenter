@@ -39,15 +39,34 @@ public class ControladorUsuarios implements UsuariosApi {
 	// Métodos
 	
 	@Override
-	public ResponseEntity<UsuarioDto> obtenerUsuario(@Valid String id) throws Exception {
+	public ResponseEntity<UsuarioDto> obtenerUsuarioPorId(@Valid String id) throws Exception {
 		Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
+		UsuarioDto usuarioDto = obtenerUsuarioConcreto(usuario);
+		if (usuarioDto == null) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
+		return ResponseEntity.ok(usuarioDto);
+	}
+	
+
+	@Override
+	public ResponseEntity<UsuarioDto> obtenerUsuarioPorCorreo(String correo) throws Exception {
+		Usuario usuario = servicioUsuarios.obtenerUsuarioPorCorreo(correo);
+		UsuarioDto usuarioDto = obtenerUsuarioConcreto(usuario);
+		if (usuarioDto == null) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}
+		return ResponseEntity.ok(usuarioDto);
+	}
+
+	
+	private UsuarioDto obtenerUsuarioConcreto(Usuario usuario) {
 		UsuarioDto usuarioDto = new UsuarioDto();
-		
 		// Solo para debug, el admin tiene acceso a todos los datos de cualquier usuario
 		
 		if (JwtUtils.isAdmin()) {
 			usuarioDto = obtenerUsuarioConcreto(usuario);
-			return ResponseEntity.ok(usuarioDto);
+			return usuarioDto;
 		}
 		
 		// Comprobaciones paciente
@@ -56,11 +75,11 @@ public class ControladorUsuarios implements UsuariosApi {
 			Paciente paciente = (Paciente) usuario;
 			if (JwtUtils.isPaciente()) {
 				// El paciente no debe poder ver las notas privadas que le ponen los especialistas
-				if (JwtUtils.getIdUsuario().equals(id)) {
+				if (JwtUtils.getIdUsuario().equals(usuario.getId())) {
 					usuarioDto = PacienteDto.construirSinNotasPrivadas(paciente);
 				} else {
 					// Un paciente no tiene acceso a la información de otros pacientes
-					return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+					return null;
 				}
 			} else {
 				usuarioDto = PacienteDto.from(paciente);
@@ -71,7 +90,7 @@ public class ControladorUsuarios implements UsuariosApi {
 		
 		if (usuario instanceof Medico) {
 			Medico medico = (Medico) usuario;
-			if (JwtUtils.getIdUsuario().equals(id)) {
+			if (JwtUtils.getIdUsuario().equals(usuario.getId())) {
 				// Solo el porpio médico tiene acceso a toda su información
 				usuarioDto = MedicoDto.from(medico);
 			} else {
@@ -84,7 +103,7 @@ public class ControladorUsuarios implements UsuariosApi {
 		
 		if (usuario instanceof Especialista) {
 			Especialista especialista = (Especialista) usuario;
-			if (JwtUtils.getIdUsuario().equals(id)) {
+			if (JwtUtils.getIdUsuario().equals(usuario.getId())) {
 				// Solo el porpio especialista tiene acceso a toda su información
 				usuarioDto = EspecialistaDto.from(especialista);
 			} else {
@@ -93,30 +112,7 @@ public class ControladorUsuarios implements UsuariosApi {
 			}
 		}
 
-		return ResponseEntity.ok(usuarioDto);
-	}
-	
-	
-	public ResponseEntity<UsuarioDto> obtenerUsuarioPorId(String id)  throws Exception {
-		Usuario usuario = servicioUsuarios.obtenerUsuarioPorId(id);
-		UsuarioDto dto = obtenerUsuarioConcreto(usuario);
-		return ResponseEntity.ok(dto);
-	}
-	
-	private UsuarioDto obtenerUsuarioConcreto(Usuario usuario) {
-		UsuarioDto dto = new UsuarioDto();
-		if (usuario instanceof Paciente) {
-			Paciente paciente = (Paciente) usuario;
-			dto = PacienteDto.from(paciente);
-		} else if (usuario instanceof Medico) {
-			Medico medico = (Medico) usuario;
-			dto = MedicoDto.from(medico);
-		} if (usuario instanceof Especialista) {
-			Especialista especialista = (Especialista) usuario;
-			dto = EspecialistaDto.from(especialista);
-			
-		}
-		return dto;
+		return usuarioDto;
 	}
 	
 	@Override
