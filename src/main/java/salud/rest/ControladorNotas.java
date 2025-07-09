@@ -60,10 +60,10 @@ public class ControladorNotas implements NotasApi {
 
 	@Override
 	public ResponseEntity<NotaPacienteDto> obtenerNota(String id) throws Exception {
-		if (JwtUtils.isPaciente()) {
+		NotaPacienteDto notaDto = NotaPacienteDto.from(servicioNotas.obtenerNota(id));
+		if (JwtUtils.isPaciente() && notaDto.isPrivado()) {
 			throw new EntidadNoEncontrada(id);
 		}
-		NotaPacienteDto notaDto = NotaPacienteDto.from(servicioNotas.obtenerNota(id));
 		return ResponseEntity.ok(notaDto);
 	}
 

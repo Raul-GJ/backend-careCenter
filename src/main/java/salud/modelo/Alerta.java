@@ -23,7 +23,7 @@ public class Alerta {
 	private String mensaje;
 	private LocalDateTime fecha;
 	private boolean leida;
-	private String idGrupo; // Para las alertas de los estudios, en caso de querer eliminarlas todas
+	private String idGrupo; // Solo para alertas de estudios
 	
 	// Constructores
 	

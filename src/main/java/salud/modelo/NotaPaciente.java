@@ -17,7 +17,7 @@ public class NotaPaciente {
 	private Sanitario sanitario;
 	private String asunto;
 	private String contenido;
-	private boolean privado; // True = El paciente la puede ver, False = El paciente no la puede ver (otros sanitarios si)
+	private boolean privado; // False = El paciente la puede ver, True = El paciente no la puede ver (otros sanitarios si)
 	
 	// Constructores
 	
